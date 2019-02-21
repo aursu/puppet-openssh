@@ -1,0 +1,5 @@
+---
+openssh::sshkey_name: root@stype4host
+openssh::keys::sshkey_dir: /home/jenkins/.ssh/
+openssh::keys::sshkey_target: /home/jenkins/.ssh/authorized_keys
+openssh::keys::sshkey_user: jenkins

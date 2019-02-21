@@ -1,0 +1,11 @@
+---
+profile::build::base::gitlab_deploy_key: |+
+    -----BEGIN EC PRIVATE KEY-----
+    MIHcAgEBBEIAHLk4NKGPpKCq3LSy88vO7wceTVYFHBISKjrKDK+Yxw1YxxPB3aow
+    ucO4sk7IDlEcoJITvTfE6MdW33K9/6HhnE6gBwYFK4EEACOhgYkDgYYABAGMBDts
+    u9SJgO7Vc1azAU2GkjXzausF0hw446W0GSK0q0Mfs/ohRHBsVKiilqKz/LgjHd9S
+    ky2tNxJ5VvJHXcN50wHPNN62XeHBJOw+l5AAtZtChoAnOz77HgLqY8aCQt903+BM
+    8gVu5m027f/2UR3SstcjcKU9GAWeO66LCZXGYXFqow==
+    -----END EC PRIVATE KEY-----
+profile::build::base::gitlab_deploy_key_type: ecdsa-sha2-nistp521
+profile::build::base::gitlab_deploy_key_prefix: gitlab
