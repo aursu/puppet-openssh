@@ -1,0 +1,14 @@
+#authorized_keys
+<% if @authorized -%>
+<%=
+lines = []
+@authorized.each do |item|
+  string = ''
+  string << item['type'] + ' '
+  string << item['key'] + ' '
+  string << item['name'] + "\n"
+  lines << string
+end
+finalstring = lines.join
+-%>
+<% end -%>
