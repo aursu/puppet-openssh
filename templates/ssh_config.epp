@@ -1,0 +1,30 @@
+<% |
+  Array[Openssh::SshConfig] $ssh_config = [],
+| -%>
+<%
+$host_config = $ssh_config.filter |$config| { 'Host' in $config }
+
+$global_config = $ssh_config.filter |$config| { !('Host' in $config) }
+
+$global_merged_config = $global_config.reduce({}) |$memo, $config| {
+  $memo + $config
+}
+-%>
+<% $global_merged_config.each |$opt, $val| { -%>
+<%= $opt %> <%= $val %>
+<% } -%>
+<%
+$host_config.each |$config| {
+  $host = join([$config['Host']].flatten, ' ')
+  $hostconfig = $config - ['Host']
+-%>
+
+Host <%= $host %>
+<%
+  $hostconfig.each |$opt, $val| {
+-%>
+<%= "    ${opt} ${val}" %>
+<%
+  }
+}
+-%>
