@@ -1,14 +1,4 @@
-#authorized_keys
+# authorized_keys
 <% if @authorized -%>
-<%=
-lines = []
-@authorized.each do |item|
-  string = ''
-  string << item['type'] + ' '
-  string << item['key'] + ' '
-  string << item['name'] + "\n"
-  lines << string
-end
-finalstring = lines.join
--%>
+<%= @authorized.map {|h| h.map{|k, v| [k.to_sym, v] }.to_h}.map{ |kdata| "%{type} %{key} %{name}\n" % kdata }.join -%>
 <% end -%>
