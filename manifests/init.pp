@@ -37,6 +37,4 @@ class openssh (
   Optional[
     Array[String]
   ]       $server_dependencies    = $openssh::params::openssh_server_dependencies,
-) inherits openssh::params
-{
-}
+) inherits openssh::params {}
