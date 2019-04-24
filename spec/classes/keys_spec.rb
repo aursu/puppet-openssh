@@ -37,13 +37,13 @@ describe 'openssh::keys' do
 
         it {
           is_expected.to contain_file('/root/.ssh/authorized_keys')
-            .with_content(%r{^ssh-rsa AAAAB3NzaC1yc2EAAAABI.*7UU4ecXSz2FMFlfxCU8lbXezMA8fpU= root@mail0c75$})
+            .with_content(%r{^ssh-rsa AAAAB3NzaC1yc2EAAAABI.*7UU4ecXSz2FMFlfxCU8lbXezMA8fpU= root@host1$})
 
           is_expected.to contain_file('/root/.ssh/authorized_keys')
-            .with_content(%r{^ssh-rsa AAAAB3NzaC1yc2EAAAABI.*aiaGqpo0PzElJlFUa/kQJqH8XypkBYrzSQ== root@announcer1c75$})
+            .with_content(%r{^ssh-rsa AAAAB3NzaC1yc2EAAAABI.*aiaGqpo0PzElJlFUa/kQJqH8XypkBYrzSQ== root@host2$})
 
           is_expected.to contain_file('/root/.ssh/authorized_keys')
-            .with_content(%r{^ssh-rsa AAAAB3NzaC1yc2EAAAABI.*g0SRN5054sE971E3fOylM2k0uXqjlbdqCyRbLaC85zYw== root@announcer2c75$})
+            .with_content(%r{^ssh-rsa AAAAB3NzaC1yc2EAAAABI.*g0SRN5054sE971E3fOylM2k0uXqjlbdqCyRbLaC85zYw== root@host3$})
         }
       end
     end
