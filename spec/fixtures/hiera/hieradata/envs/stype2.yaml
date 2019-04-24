@@ -1,3 +1,3 @@
 ---
-openssh::keys::sshkey_name: root@stype2host
+openssh::sshkey_name: root@stype2host
 openssh::sshkey_type: ssh-dss

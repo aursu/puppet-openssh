@@ -1,4 +1,4 @@
 ---
-openssh::keys::sshkey_name: root@stype3host
-openssh::keys::sshkey_type: ssh-dss
-openssh::keys::sshkey_target: /etc/ssh/authorized_keys
+openssh::sshkey_name: root@stype3host
+openssh::sshkey_type: ssh-dss
+openssh::sshkey_target: /etc/ssh/authorized_keys

@@ -2,10 +2,10 @@
 openssh::keys::authorized:
 - type: ssh-rsa
   key: AAAAB3NzaC1yc2EAAAABIwAAAIEAskMKlr930vOypNssYQ4QZtZc7ATIMY2pSvQFVrP3FC2qkU2NxiHe/A84fit6iJQh/Xo+WT2Mai1+2RuBOw80G7FOsgBiva2hbgyzOboRtva8kBi/Vju5Bh6//L+Qj75O5N4010Xrejp++7UU4ecXSz2FMFlfxCU8lbXezMA8fpU=
-  name: root@mail0c75
+  name: root@host1
 - type: ssh-rsa
   key: AAAAB3NzaC1yc2EAAAABIwAAAQEAzOx5VAUoWiJist2v8ryuwJYHLiZUQxTXwK5f+fRYy86iloSQe9k1HmhHxQXFm8ADhbnb17PFyXpC9HhlYTWKhJGdrdNldFoBS5LaWpWPIzygdLC0gFZ3GeBj3mzy5RN+62jVQlSmv1Nyhu05/jitCbJPCDQn9FnN04efPPm10MGXXPe13QmZQ7SZL/mbQTyDV4JiE0QwksYpXd4zGGr2QDv+2MbOc/6Pux3oEhKF333uM67htzb/YiJdQV60wbD7cOCpTvmvCeXjFFOcr95BgnOfs9fsPngV6mrJZPRT8ORx6vd8tTQ+aiaGqpo0PzElJlFUa/kQJqH8XypkBYrzSQ==
-  name: root@announcer1c75
+  name: root@host2
 - type: ssh-rsa
   key: AAAAB3NzaC1yc2EAAAABIwAAAQEA0nZrCtu4otiCHPRgy2TwYn2PPVZF5fJjpkhbcLUNe1ZfrudfdFz3QDsTvnhAt4jrFuNkLZk+ZQe4C/f1HuVn57JWxxOSKWEWQ6QudVDhcYtRPSFpuCHnuQc6hF3JYFzEUNhyyPvIZrtIqH2AoUE2hRbSrv/3mD1KGY+ozj9UmRMugOO3kaoasY5WdjF9jXI+Bh5ypEEbovPUF7IMwlHm+u41lVz+/qhJRAbSBMZ6ePkMf4P97AlruLiYcOjy9DoJsQDZrsvzTCCP+kno3OxZrhyiJrHOVpI5qUSokktlo/g0SRN5054sE971E3fOylM2k0uXqjlbdqCyRbLaC85zYw==
-  name: root@announcer2c75
+  name: root@host3
