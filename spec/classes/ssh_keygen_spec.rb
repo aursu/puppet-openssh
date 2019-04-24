@@ -67,7 +67,7 @@ describe 'openssh::ssh_keygen' do
           }
         end
 
-        context 'when openssh::keys::sshkey_name is set' do
+        context 'when openssh::sshkey_name is set' do
           let(:facts) do
             os_facts.merge(
               'sshpubkey_root' => ['ssh-dss', 'AAAAB3NzaC1yc2EAAAADAQABAAABAQD5shIL', 'root@stype2host'],
@@ -88,7 +88,7 @@ describe 'openssh::ssh_keygen' do
           }
         end
 
-        context 'when openssh::keys::sshkey_type is set' do
+        context 'when openssh::sshkey_type is set' do
           let(:facts) do
             os_facts.merge(
               'sshpubkey_root' => ['ssh-dss', 'AAAAB3NzaC1yc2EAAAADAQABAAABAQD5shIL', 'root@stype3host'],
