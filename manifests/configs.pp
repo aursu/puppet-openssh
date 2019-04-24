@@ -24,7 +24,7 @@ class openssh::configs (
           $strict_modes              = $openssh::strict_modes,
   Enum['yes', 'no']
           $gss_api_authentication    = $openssh::gss_api_authentication,
-) inherits openssh::params
+)
 {
   $allow_tcp_forwarding = $sshd_allow_tcp_forwarding
   $permit_root_login = $sshd_permit_root_login
