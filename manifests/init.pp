@@ -15,7 +15,6 @@ class openssh (
   String  $banner,
   Boolean $manage_server_package,
   Boolean $manage_client_package,
-  Boolean $sshkey_enable,
   String  $sshkey_user,
   Optional[String]
           $sshkey_group,

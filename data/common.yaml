@@ -8,7 +8,6 @@ openssh::keys_file: .ssh/authorized_keys
 openssh::banner: 'none'
 openssh::manage_server_package: false
 openssh::manage_client_package: false
-openssh::sshkey_enable: true
 openssh::sshkey_user: 'root'
 openssh::sshkey_group: ~
 openssh::sshkey_dir: '/root/.ssh'
