@@ -1,9 +1,43 @@
 # A description of what this defined type does
 #
-# @summary A short summary of the purpose of this defined type.
+# @summary
+#   Set SSH private key for user.
 #
 # @example
 #   openssh::priv_key { 'namevar': }
+#
+# @param user_name
+#   The name of system user for which private key should be set
+#   Used for SSH directory compilation (either /root/.ssh if user is 'root' or /home/user_name/.ssh)
+#   Used as ownership group if user_group is not specified
+#   Used for SSH public key comment during public key generating
+#
+# @param key_data
+#   SSH private key content
+#
+# @param sshkey_name
+#   SSH public key comment (will be set if specified)
+#
+# @param sshkey_type
+#   Default is 'rsa'
+#   SSH private key type (eg rsa or dsa)
+#   Used for SSH private and public key file name compilation (eg
+#   .ssh/id_<key_id> where key_id is the type of key: dsa | ecdsa | ed25519 | rsa)
+#
+# @param user_group
+#   Private key ownership group
+#
+# @param sshkey_dir
+#   SSH directory which used for SSH keys storage instead of standard one
+#   compiled based on user_name
+#
+# @param generate_public
+#   if set - public key will be generated with suffix .pub based on private key
+#
+# @param key_prefix
+#   if set - used for private and public file name compilation as prefix (eg
+#   git.id_rsa where key_prefix is git)
+#
 define openssh::priv_key (
   String  $user_name,
   String  $key_data,
