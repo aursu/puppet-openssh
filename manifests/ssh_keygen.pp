@@ -47,10 +47,10 @@ class openssh::ssh_keygen (
   }
 
   if $root_key_export and $sshkey_user == 'root' and $::sshpubkey_root {
-    $sshkey_array = $::sshpubkey_root
+    $sshkey = $::sshpubkey_root
 
-    if $sshkey_type in $sshkey_array and $sshkey_name in $sshkey_array {
-      $sshkey_export = $sshkey_array[1]
+    if $sshkey_type in $sshkey and $sshkey_name in $sshkey {
+      $sshkey_export = $sshkey[1]
     }
     else {
       $sshkey_export = undef
