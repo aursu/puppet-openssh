@@ -17,18 +17,15 @@ class openssh::configs (
   Optional[String]
           $keys_file                 = $openssh::keys_file,
   Enum['yes', 'no', 'all', 'local', 'remote']
-          $sshd_allow_tcp_forwarding = $openssh::allow_tcp_forwarding,
+          $allow_tcp_forwarding      = $openssh::allow_tcp_forwarding,
   Enum['yes', 'no', 'without-password', 'prohibit-password', 'forced-commands-only']
-          $sshd_permit_root_login    = $openssh::permit_root_login,
+          $permit_root_login         = $openssh::permit_root_login,
   Enum['yes', 'no']
           $strict_modes              = $openssh::strict_modes,
   Enum['yes', 'no']
           $gss_api_authentication    = $openssh::gss_api_authentication,
 )
 {
-  $allow_tcp_forwarding = $sshd_allow_tcp_forwarding
-  $permit_root_login = $sshd_permit_root_login
-
   file { $config:
     ensure  => present,
     owner   => 'root',
