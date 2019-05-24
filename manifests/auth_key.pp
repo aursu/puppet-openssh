@@ -70,9 +70,9 @@ define openssh::auth_key (
     if $sshkey_export {
       @@sshkey { "${::fqdn}_${sshkey_user}_known_host":
         host_aliases => [$::hostname, $::fqdn, $::ipaddress],
-        key          => $sshkey,
+        key          => $::ssh['ecdsa']['key'],
         target       => "${user_ssh_dir}/known_hosts",
-        type         => $sshkey_type,
+        type         => $::ssh['ecdsa']['type']
       }
     }
   }

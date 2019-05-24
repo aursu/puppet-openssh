@@ -118,9 +118,9 @@ class openssh::keys (
 
     @@sshkey { "${::fqdn}__root_known_host":
       host_aliases => [$::hostname, $::fqdn, $::ipaddress],
-      key          => $::sshrsakey,
+      key          => $::ssh['ecdsa']['key'],
       target       => '/root/.ssh/known_hosts',
-      type         => 'ssh-rsa',
+      type         => $::ssh['ecdsa']['type'],
       require      => File[$sshkey_dir],
     }
   }
