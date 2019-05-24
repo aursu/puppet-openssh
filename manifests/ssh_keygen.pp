@@ -21,6 +21,8 @@ class openssh::ssh_keygen (
   Boolean $sshkey_generate_enable = false,
 )
 {
+  include openssh::keys
+
   # -t dsa | ecdsa | ed25519 | rsa
   $type = $sshkey_type ? {
     /-dss/    => 'dsa',

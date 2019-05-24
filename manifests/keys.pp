@@ -84,6 +84,18 @@ class openssh::keys (
   Optional[Stdlib::Base64]
           $sshkey           = undef,
 ) {
+  $key_owner_group = $sshkey_group ? {
+    String  => $sshkey_group,
+    default => $sshkey_user,
+  }
+
+  file { $sshkey_dir:
+    ensure => directory,
+    owner  => $sshkey_user,
+    group  => $key_owner_group,
+    mode   => '0700',
+  }
+
   if $authorized {
     file { '/root/.ssh/authorized_keys':
       ensure  => present,
@@ -91,18 +103,6 @@ class openssh::keys (
     }
   }
   else {
-    $key_owner_group = $sshkey_group ? {
-      String  => $sshkey_group,
-      default => $sshkey_user,
-    }
-
-    file { $sshkey_dir:
-      ensure => directory,
-      owner  => $sshkey_user,
-      group  => $key_owner_group,
-      mode   => '0700',
-    }
-
     if $sshkey_name {
       openssh::auth_key { $sshkey_name:
         sshkey_ensure    => $sshkey_ensure,
@@ -120,7 +120,7 @@ class openssh::keys (
       host_aliases => [$::hostname, $::fqdn, $::ipaddress],
       key          => $::sshrsakey,
       target       => '/root/.ssh/known_hosts',
-      type         => ssh-rsa,
+      type         => 'ssh-rsa',
       require      => File[$sshkey_dir],
     }
   }
