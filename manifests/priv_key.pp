@@ -44,7 +44,7 @@ define openssh::priv_key (
   Optional[String]
           $sshkey_name     = undef,
   Openssh::KeyType
-          $sshkey_type     = 'rsa',
+          $sshkey_type     = 'ssh-rsa',
   Optional[String]
           $user_group      = undef,
   # in order to support non standard .ssh directory locations

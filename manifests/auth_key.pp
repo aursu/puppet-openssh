@@ -9,7 +9,7 @@ define openssh::auth_key (
   Enum['present', 'absent']
           $sshkey_ensure    = present,
   Openssh::KeyType
-          $sshkey_type      = 'rsa',
+          $sshkey_type      = 'ssh-rsa',
   Optional[String]
           $sshkey_name      = undef,
   Optional[Stdlib::Unixpath]
@@ -50,7 +50,7 @@ define openssh::auth_key (
 
   $pub_key_name = $sshkey_name ? {
     String  => $sshkey_name,
-    default => "${user_name}@${::hostname}",
+    default => "${sshkey_user}@${::hostname}",
   }
 
   if $sshkey_propagate {
