@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'openssh::keys' do
   let(:pre_condition) do
     <<-PRECOND
-    class {'openssh': }
+    class { 'openssh': }
     PRECOND
   end
 

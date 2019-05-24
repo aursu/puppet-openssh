@@ -97,26 +97,22 @@ class openssh::keys (
     }
 
     file { $sshkey_dir:
-        ensure => directory,
-        owner  => $sshkey_user,
-        group  => $key_owner_group,
-        mode   => '0700',
+      ensure => directory,
+      owner  => $sshkey_user,
+      group  => $key_owner_group,
+      mode   => '0700',
     }
 
-    if $sshkey and $sshkey_name {
-      if $sshkey_propagate {
-        Ssh_authorized_key <<| title == $sshkey_name |>>
-      }
-      else {
-        ssh_authorized_key { $sshkey_name:
-          ensure  => $sshkey_ensure,
-          user    => $sshkey_user,
-          type    => $sshkey_type,
-          target  => $sshkey_target,
-          options => $sshkey_options,
-          key     => $sshkey,
-          require => File[$sshkey_dir],
-        }
+    if $sshkey_name {
+      openssh::auth_key { $sshkey_name:
+        sshkey_ensure    => $sshkey_ensure,
+        sshkey_user      => $sshkey_user,
+        sshkey_type      => $sshkey_type,
+        sshkey_target    => $sshkey_target,
+        sshkey_options   => $sshkey_options,
+        sshkey_propagate => $sshkey_propagate,
+        sshkey           => $sshkey,
+        require          => File[$sshkey_dir],
       }
     }
 
