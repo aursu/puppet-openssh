@@ -132,7 +132,7 @@ define openssh::priv_key (
       command     => "ssh-keygen -f ${key_path} -y > ${pub_key}",
       refreshonly => true,
       path        => '/usr/bin:/bin',
-      user        => $user_name,
+      user        => 'root',
       subscribe   => File[$key_path],
     }
     # add comment to public key
@@ -143,9 +143,16 @@ define openssh::priv_key (
         command     => "ssh-keygen -f ${key_path} -c -C ${pub_key_name}",
         refreshonly => true,
         path        => '/usr/bin:/bin',
-        user        => $user_name,
+        user        => 'root',
         subscribe   => Exec["generate ${pub_key}"],
       }
+    }
+
+    file { $pub_key:
+      owner   => $user_name,
+      group   => $key_owner_group,
+      mode    => '0640',
+      require => Exec["generate ${pub_key}"],
     }
   }
 }

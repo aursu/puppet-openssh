@@ -245,8 +245,16 @@ describe 'openssh::priv_key' do
           is_expected.to contain_exec('generate /home/jenkins/.ssh/id_rsa.pub')
             .with_command('ssh-keygen -f /home/jenkins/.ssh/id_rsa -y > /home/jenkins/.ssh/id_rsa.pub')
             .with_refreshonly(true)
-            .with_user('jenkins')
+            .with_user('root')
             .that_subscribes_to('File[/home/jenkins/.ssh/id_rsa]')
+        }
+
+        it {
+          is_expected.to contain_file('/home/jenkins/.ssh/id_rsa.pub')
+            .with_owner('jenkins')
+            .with_group('jenkins')
+            .with_mode('0640')
+            .that_requires('Exec[generate /home/jenkins/.ssh/id_rsa.pub]')
         }
 
         if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
@@ -254,7 +262,7 @@ describe 'openssh::priv_key' do
             is_expected.to contain_exec('add /home/jenkins/.ssh/id_rsa.pub comment')
               .with_command('ssh-keygen -f /home/jenkins/.ssh/id_rsa -c -C jenkins@web0c0')
               .with_refreshonly(true)
-              .with_user('jenkins')
+              .with_user('root')
               .that_subscribes_to('Exec[generate /home/jenkins/.ssh/id_rsa.pub]')
           }
 
