@@ -42,7 +42,7 @@ define openssh::priv_key (
   String  $user_name,
   String  $key_data,
   Optional[String]
-          $sshkey_name     = $name,
+          $sshkey_name     = undef,
   Openssh::KeyType
           $sshkey_type     = 'rsa',
   Optional[String]
