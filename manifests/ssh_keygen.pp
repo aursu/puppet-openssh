@@ -15,11 +15,11 @@ class openssh::ssh_keygen (
           $sshkey_dir             = $openssh::sshkey_dir,
   Array[String]
           $sshkey_options         = $openssh::sshkey_options,
-  Boolean $sshkey_generate_enable = false,
   String  $sshkey_ensure          = present,
   Integer $sshkey_bits            = 2048,
   Boolean $root_key_export        = true,
-) inherits openssh::keys
+  Boolean $sshkey_generate_enable = false,
+)
 {
   # -t dsa | ecdsa | ed25519 | rsa
   $type = $sshkey_type ? {
@@ -45,8 +45,8 @@ class openssh::ssh_keygen (
       require => File[$sshkey_dir],
     }
   }
-
-  if $root_key_export and $sshkey_user == 'root' and $::sshpubkey_root {
+  # Export root user public key
+  elsif $root_key_export and $sshkey_user == 'root' and $::sshpubkey_root {
     $sshkey = $::sshpubkey_root
 
     if $sshkey_type in $sshkey and $sshkey_name in $sshkey {

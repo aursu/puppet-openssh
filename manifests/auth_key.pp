@@ -23,7 +23,7 @@ define openssh::auth_key (
 
   # compile user home directory
   $user_home = $sshkey_user ? {
-    'root' => '/root',
+    'root'  => '/root',
     default => "/home/${sshkey_user}",
   }
 
