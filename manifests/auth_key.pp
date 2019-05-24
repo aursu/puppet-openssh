@@ -8,10 +8,10 @@ define openssh::auth_key (
   String  $sshkey_user,
   Enum['present', 'absent']
           $sshkey_ensure    = present,
-  String  $sshkey_name      = $name,
   Openssh::KeyType
           $sshkey_type      = 'rsa',
-  Boolean $sshkey_propagate = false,
+  Optional[String]
+          $sshkey_name      = undef,
   Optional[Stdlib::Unixpath]
           $sshkey_target    = undef,
   Optional[Array[String]]
@@ -19,6 +19,7 @@ define openssh::auth_key (
   Optional[Stdlib::Base64]
           $sshkey           = undef,
   Boolean $sshkey_export    = false,
+  Boolean $sshkey_propagate = false,
 ) {
 
   # compile user home directory
@@ -47,11 +48,16 @@ define openssh::auth_key (
     creates => $ssh_dir,
   }
 
+  $pub_key_name = $sshkey_name ? {
+    String  => $sshkey_name,
+    default => "${user_name}@${::hostname}",
+  }
+
   if $sshkey_propagate {
-    Ssh_authorized_key <<| title == $sshkey_name |>>
+    Ssh_authorized_key <<| title == $pub_key_name |>>
   }
   elsif $sshkey {
-    ssh_authorized_key { $sshkey_name:
+    ssh_authorized_key { $pub_key_name:
       ensure  => $sshkey_ensure,
       user    => $sshkey_user,
       type    => $sshkey_type,
