@@ -18,6 +18,12 @@
 # @param sshkey_name
 #   SSH public key comment (will be set if specified)
 #
+# @param sshkey_format
+#   Default is 'PEM'
+#   The supported key formats are: "RFC4716" (RFC 4716/SSH2 public or private
+#   key), "PKCS8" (PEM PKCS8 public key) or "PEM" (PEM public key). The default
+#   conversion format for ssh-keygen tool is "RFC4716"
+#
 # @param sshkey_type
 #   Default is 'rsa'
 #   SSH private key type (eg rsa or dsa)
@@ -45,6 +51,8 @@ define openssh::priv_key (
           $sshkey_name     = undef,
   Openssh::KeyType
           $sshkey_type     = 'ssh-rsa',
+  Enum['PEM', 'RFC4716', 'PKCS8']
+          $sshkey_format   = 'PEM',
   Optional[String]
           $user_group      = undef,
   # in order to support non standard .ssh directory locations
@@ -94,12 +102,20 @@ define openssh::priv_key (
     default => "${user_name}@${::hostname}",
   }
 
-  # encapsulation boundary name
-  $eb_name = $id_type ? {
-    'dsa'     => 'DSA',
-    'ecdsa'   => 'EC',
-    'ed25519' => 'OPENSSH',
-    default   => 'RSA',
+  case $sshkey_format {
+    'PEM': {
+      # encapsulation boundary name
+      $eb_name = $id_type ? {
+        'dsa'     => 'DSA',
+        'ecdsa'   => 'EC',
+        'ed25519' => 'OPENSSH',
+        'rsa'     => 'RSA',
+        default   => 'OPENSSH',
+      }
+    }
+    default: {
+      $eb_name = 'OPENSSH'
+    }
   }
 
   # pre- and post-encapsulation boundary
