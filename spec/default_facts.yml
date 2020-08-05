@@ -3,5 +3,27 @@
 # Facts specified here will override the values provided by rspec-puppet-facts.
 ---
 ipaddress: "172.16.254.254"
+hostname: "securehost"
+fqdn: "securehost.securedomain"
 is_pe: false
-macaddress: "AA:AA:AA:AA:AA:AA"
+macaddress: "fa:16:3e:6c:00:00"
+ssh:
+  ecdsa:
+    fingerprints:
+      sha1: "SSHFP 3 1 79b367358905e70a06856ce26ee2dfd70a08e114"
+      sha256: "SSHFP 3 2 1a89a549dcad582ea4c343fbe6213cd1a7e8658a1e86cabb9ab366a6b6d8542e"
+    key: "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLzznbPhkm2Gvm8nDxINPImVpYU94Te4X8v5NP7lntGjth/NocvYmX9Yw99Nu0JAlD3l94PHfXHLpVelUQa4nGo="
+    type: "ecdsa-sha2-nistp256"
+  ed25519:
+    fingerprints:
+      sha1: "SSHFP 4 1 2ddf94ba8d460906242d570e4e75e78cc94799f2"
+      sha256: "SSHFP 4 2 bb01f3691699c8b4bf92432fe62a598984086f92896bff3d63dba7bcd5685be3"
+    key: "AAAAC3NzaC1lZDI1NTE5AAAAIMhF9WDnRBzWaZSuAy2KUmDbcn0Qq7jgPruGLE+7bfdj"
+    type": "ssh-ed25519"
+  rsa:
+    fingerprints:
+      sha1: "SSHFP 1 1 c1d09f0bd720b7cace4b531a427b1dc775760aa6"
+      sha256: "SSHFP 1 2 169307ca63f7a0396666ed77824cb7f2482e3e364446e815b1458d9b050ff5be"
+    key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQDGYJDZBWQusD5J1OhkepabbC/UpxFwL9EVZ8Jr66rNs0hbwTXDVjdhbvZirH0IrSvcjSBtNIMq7sIxfyhEhckJUBFa6XSkIy0oJsv2O1hHeiYM9+IvkavxRS3mPnc1EHD21XlvQECu8J85/9tPIRhRdhnArE5V0CtKFPra57Pt3LdRujZdkG3Z+zjlZ9oAz85WJhsNavvzQ0l2SCuC9n1fRXy/09lscUuwVy1wlQvVbx01AqNlgpH3OZ6MpyGnmLZQigfuG6yOjkEcEJm4eVGi5j8ND9UhUmq0gDVkm4nQYHCjbQJozOo5G0fTZmlq+auvFC0RTgRLcel4zxKe2xgZ"
+    type: "ssh-rsa"
+
