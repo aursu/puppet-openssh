@@ -1,6 +1,6 @@
-# A description of what this class does
+# Manage OpenSSH daemon and client packages
 #
-# @summary A short summary of the purpose of this class
+# @summary Manage OpenSSH daemon and client packages
 #
 # @example
 #   include openssh::package

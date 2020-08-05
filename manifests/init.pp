@@ -1,6 +1,6 @@
-# A description of what this class does
+# @summary Openssh class for variables initialization
 #
-# @summary A short summary of the purpose of this class
+# Openssh class for variables initialization
 #
 # @example
 #   include openssh
