@@ -3,8 +3,8 @@
 # @summary A short summary of the purpose of this class
 #
 # @example
-#   include openssh::packages
-class openssh::packages (
+#   include openssh::package
+class openssh::package (
   String  $package_ensure       = present,
   String  $client_ensure        = present,
   String  $server_ensure        = present,

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'openssh::configs' do
+describe 'openssh::config' do
   let(:pre_condition) do
     <<-PRECOND
     class { 'openssh': }

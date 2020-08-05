@@ -1,10 +1,10 @@
-# A description of what this class does
+# @summary Setup SSHD daemon configuration
 #
-# @summary A short summary of the purpose of this class
+# Setup SSHD daemon configuration based on template
 #
 # @example
-#   include openssh::configs
-class openssh::configs (
+#   include openssh::config
+class openssh::config (
   Stdlib::Unixpath
           $config                    = $openssh::config,
   Stdlib::Port

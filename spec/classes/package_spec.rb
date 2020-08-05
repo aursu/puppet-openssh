@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'openssh::packages' do
+describe 'openssh::package' do
   let(:pre_condition) do
     <<-PRECOND
     class {'openssh': }
