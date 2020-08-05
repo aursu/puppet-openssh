@@ -31,6 +31,29 @@ describe 'openssh::config' do
             .with_content(%r{AuthorizedKeysFile .ssh/authorized_keys})
         }
       end
+
+      context 'when setup host keys' do
+        let(:params) do
+          {
+            setup_host_key: true,
+          }
+        end
+
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{HostKey /etc/ssh/ssh_host_rsa_key})
+        }
+
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{HostKey /etc/ssh/ssh_host_ecdsa_key})
+        }
+
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{HostKey /etc/ssh/ssh_host_ed25519_key})
+        }
+      end
     end
   end
 end

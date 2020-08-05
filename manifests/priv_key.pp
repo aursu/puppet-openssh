@@ -47,7 +47,7 @@ define openssh::priv_key (
   String  $user_name,
   String  $key_data,
   Optional[String]
-          $sshkey_name     = undef,
+          $sshkey_name     = $name,
   Openssh::KeyType
           $sshkey_type     = 'ssh-rsa',
   Enum['PEM', 'RFC4716', 'PKCS8']

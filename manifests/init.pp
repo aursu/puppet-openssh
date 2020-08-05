@@ -25,6 +25,7 @@ class openssh (
   String  $sshkey_target,
   Array[String]
           $sshkey_options,
+  Boolean $setup_host_key,
   Integer $ssh_port               = $openssh::params::ssh_port,
   String  $config                 = $openssh::params::config,
   String  $base_package_name      = $openssh::params::base_package_name,

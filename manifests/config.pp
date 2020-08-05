@@ -24,6 +24,8 @@ class openssh::config (
           $strict_modes              = $openssh::strict_modes,
   Enum['yes', 'no']
           $gss_api_authentication    = $openssh::gss_api_authentication,
+  # whether to add HostKey directives into sshd_config or not
+  Boolean $setup_host_key            = $openssh::setup_host_key,
 )
 {
   file { $config:
@@ -32,5 +34,23 @@ class openssh::config (
     group   => 'root',
     mode    => '0640',
     content => template($config_template),
+  }
+
+  if $setup_host_key {
+    # https://access.redhat.com/solutions/1486393
+    exec {
+      default:
+        path => '/bin:/usr/bin',
+      ;
+      'ssh-keygen -t rsa -P "" -f /etc/ssh/ssh_host_rsa_key':
+        creates => '/etc/ssh/ssh_host_rsa_key',
+      ;
+      'ssh-keygen -t ecdsa -P "" -f /etc/ssh/ssh_host_ecdsa_key':
+        creates => '/etc/ssh/ssh_host_ecdsa_key',
+      ;
+      'ssh-keygen -t ed25519 -P "" -f /etc/ssh/ssh_host_ed25519_key':
+        creates => '/etc/ssh/ssh_host_ed25519_key',
+      ;
+    }
   }
 }

@@ -15,3 +15,4 @@ openssh::sshkey_name: root@%{facts.hostname}
 openssh::sshkey_type: 'ssh-rsa'
 openssh::sshkey_target: '/root/.ssh/authorized_keys'
 openssh::sshkey_options: []
+openssh::setup_host_key: false
