@@ -76,7 +76,7 @@ describe 'openssh::priv_key' do
         it { is_expected.to compile }
 
         it {
-          is_expected.to contain_exec('create /root/.ssh/id_rsa path')
+          is_expected.to contain_exec('mkdir dirname(/root/.ssh/id_rsa)')
             .with_command('mkdir -p /root/.ssh')
             .with_user('root')
         }
@@ -86,7 +86,7 @@ describe 'openssh::priv_key' do
             .with_content(rsa_key_data)
             .with_owner('root')
             .with_group('root')
-            .that_requires('Exec[create /root/.ssh/id_rsa path]')
+            .that_requires('Exec[mkdir dirname(/root/.ssh/id_rsa)]')
         }
       end
 
@@ -109,7 +109,7 @@ describe 'openssh::priv_key' do
         if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
           it {
             is_expected.to contain_exec('add /root/.ssh/id_rsa.pub comment')
-              .with_command('ssh-keygen -f /root/.ssh/id_rsa -c -C root@web0c0')
+              .with_command('ssh-keygen -f /root/.ssh/id_rsa -o -c -C root@web0c0')
               .with_refreshonly(true)
               .with_user('root')
               .that_subscribes_to('Exec[generate /root/.ssh/id_rsa.pub]')
@@ -150,7 +150,7 @@ describe 'openssh::priv_key' do
         if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
           it {
             is_expected.to contain_exec('add /root/.ssh/id_dsa.pub comment')
-              .with_command('ssh-keygen -f /root/.ssh/id_dsa -c -C root@web0c0')
+              .with_command('ssh-keygen -f /root/.ssh/id_dsa -o -c -C root@web0c0')
               .that_subscribes_to('Exec[generate /root/.ssh/id_dsa.pub]')
           }
         end
@@ -171,7 +171,7 @@ describe 'openssh::priv_key' do
           is_expected.to contain_file('/var/lib/jenkins/.ssh/id_rsa')
         }
         it {
-          is_expected.to contain_exec('create /var/lib/jenkins/.ssh/id_rsa path')
+          is_expected.to contain_exec('mkdir dirname(/var/lib/jenkins/.ssh/id_rsa)')
             .with_command('mkdir -p /var/lib/jenkins/.ssh')
             .with_user('jenkins')
         }
@@ -183,7 +183,7 @@ describe 'openssh::priv_key' do
         if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
           it {
             is_expected.to contain_exec('add /var/lib/jenkins/.ssh/id_rsa.pub comment')
-              .with_command('ssh-keygen -f /var/lib/jenkins/.ssh/id_rsa -c -C jenkins@web0c0')
+              .with_command('ssh-keygen -f /var/lib/jenkins/.ssh/id_rsa -o -c -C jenkins@web0c0')
               .that_subscribes_to('Exec[generate /var/lib/jenkins/.ssh/id_rsa.pub]')
           }
         end
@@ -212,7 +212,7 @@ describe 'openssh::priv_key' do
         if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
           it {
             is_expected.to contain_exec('add /var/lib/jenkins/.ssh/gitlab.id_rsa.pub comment')
-              .with_command('ssh-keygen -f /var/lib/jenkins/.ssh/gitlab.id_rsa -c -C jenkins@web0c0')
+              .with_command('ssh-keygen -f /var/lib/jenkins/.ssh/gitlab.id_rsa -o -c -C jenkins@web0c0')
               .that_subscribes_to('Exec[generate /var/lib/jenkins/.ssh/gitlab.id_rsa.pub]')
           }
         end
@@ -228,7 +228,7 @@ describe 'openssh::priv_key' do
         end
 
         it {
-          is_expected.to contain_exec('create /home/jenkins/.ssh/id_rsa path')
+          is_expected.to contain_exec('mkdir dirname(/home/jenkins/.ssh/id_rsa)')
             .with_command('mkdir -p /home/jenkins/.ssh')
             .with_user('jenkins')
         }
@@ -238,7 +238,7 @@ describe 'openssh::priv_key' do
             .with_content(rsa_key_data)
             .with_owner('jenkins')
             .with_group('jenkins')
-            .that_requires('Exec[create /home/jenkins/.ssh/id_rsa path]')
+            .that_requires('Exec[mkdir dirname(/home/jenkins/.ssh/id_rsa)]')
         }
 
         it {
@@ -260,7 +260,7 @@ describe 'openssh::priv_key' do
         if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
           it {
             is_expected.to contain_exec('add /home/jenkins/.ssh/id_rsa.pub comment')
-              .with_command('ssh-keygen -f /home/jenkins/.ssh/id_rsa -c -C jenkins@web0c0')
+              .with_command('ssh-keygen -f /home/jenkins/.ssh/id_rsa -o -c -C jenkins@web0c0')
               .with_refreshonly(true)
               .with_user('root')
               .that_subscribes_to('Exec[generate /home/jenkins/.ssh/id_rsa.pub]')
@@ -275,7 +275,7 @@ describe 'openssh::priv_key' do
 
             it {
               is_expected.to contain_exec('add /home/jenkins/.ssh/id_rsa.pub comment')
-                .with_command('ssh-keygen -f /home/jenkins/.ssh/id_rsa -c -C jenkins@gitlab')
+                .with_command('ssh-keygen -f /home/jenkins/.ssh/id_rsa -o -c -C jenkins@gitlab')
             }
           end
         end
@@ -325,7 +325,7 @@ describe 'openssh::priv_key' do
         it {
           is_expected.to contain_file('/root/.ssh/gitlab.id_ecdsa')
             .with_content(ec_key_data)
-            .that_requires('Exec[create /root/.ssh/gitlab.id_ecdsa path]')
+            .that_requires('Exec[mkdir dirname(/root/.ssh/gitlab.id_ecdsa)]')
         }
       end
     end

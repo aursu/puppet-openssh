@@ -1,7 +1,6 @@
-# A description of what this defined type does
+# @summary Set SSH private key for user.
 #
-# @summary
-#   Set SSH private key for user.
+# Set SSH private key for user.
 #
 # @example
 #   openssh::priv_key { 'namevar': }
@@ -127,7 +126,7 @@ define openssh::priv_key (
     fail("Provided PEM key data is not valid for ${id_type} key")
   }
 
-  exec { "create ${key_path} path":
+  exec { "mkdir dirname(${key_path})":
     command => "mkdir -p ${ssh_dir}",
     path    => '/usr/bin:/bin',
     user    => $user_name,
@@ -139,7 +138,7 @@ define openssh::priv_key (
     owner   => $user_name,
     group   => $key_owner_group,
     mode    => '0600',
-    require => Exec["create ${key_path} path"],
+    require => Exec["mkdir dirname(${key_path})"],
   }
 
   # add public key
@@ -156,7 +155,7 @@ define openssh::priv_key (
     if  $facts['os']['name'] in ['RedHat', 'CentOS'] and
         $facts['os']['release']['major'] in ['7', '8'] {
       exec { "add ${pub_key} comment":
-        command     => "ssh-keygen -f ${key_path} -c -C ${pub_key_name}",
+        command     => "ssh-keygen -f ${key_path} -o -c -C ${pub_key_name}",
         refreshonly => true,
         path        => '/usr/bin:/bin',
         user        => 'root',
