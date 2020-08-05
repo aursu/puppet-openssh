@@ -1,6 +1,6 @@
-# A description of what this class does
-#
 # @summary A short summary of the purpose of this class
+#
+# Generate new OpenSSH private key or export root public key
 #
 # @example
 #   include openssh::ssh_keygen
@@ -39,7 +39,7 @@ class openssh::ssh_keygen (
     # ~/.ssh/id_rsa
     $filename = "${sshkey_dir}/id_${type}"
 
-    exec { "ssh_keygen-${sshkey_user}":
+    exec { "ssh-keygen-${sshkey_user}":
       command => "ssh-keygen -t ${type} -b ${sshkey_bits} -f \"${filename}\" -N '' -C \"${sshkey_name}\"",
       user    => $sshkey_user,
       creates => $filename,

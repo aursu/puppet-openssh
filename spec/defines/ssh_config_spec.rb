@@ -30,7 +30,7 @@ describe 'openssh::ssh_config' do
         let(:params) do
           super().merge(
             'ssh_config' => [{
-              'Host' => ['b1.hostopia.com', 'b3.hostopia.com', 'b1', 'b3'],
+              'Host' => ['serv1.domain.tld', 'serv3.domain.tld', 'serv1', 'serv3'],
               'ControlPath' => '~/.ssh/master-%r@%h:%p',
               'ControlMaster' => 'auto',
             }],
@@ -45,7 +45,7 @@ describe 'openssh::ssh_config' do
 
         it {
           is_expected.to contain_file('/root/.ssh/config')
-            .with_content(%r{^Host b1.hostopia.com b3.hostopia.com b1 b3$})
+            .with_content(%r{^Host serv1.domain.tld serv3.domain.tld serv1 serv3$})
             .with_content(%r{^\s+ControlPath ~/.ssh/master-%r@%h:%p$})
             .with_content(%r{^\s+ControlMaster auto$})
             .with_owner('root')
@@ -60,7 +60,7 @@ describe 'openssh::ssh_config' do
           super().merge(
             'ssh_config' => [
               {
-                'Host' => ['b1.hostopia.com', 'b3.hostopia.com', 'b1', 'b3'],
+                'Host' => ['serv1.domain.tld', 'serv3.domain.tld', 'serv1', 'serv3'],
                 'ControlPath' => '~/.ssh/master-%r@%h:%p',
                 'ControlMaster' => 'auto',
               },
@@ -82,7 +82,7 @@ describe 'openssh::ssh_config' do
 
         it {
           is_expected.to contain_file('/root/.ssh/config')
-            .with_content(%r{^Host b1.hostopia.com b3.hostopia.com b1 b3$})
+            .with_content(%r{^Host serv1.domain.tld serv3.domain.tld serv1 serv3$})
             .with_content(%r{^\s+ControlPath ~/.ssh/master-%r@%h:%p$})
             .with_content(%r{^\s+ControlMaster auto$})
         }
@@ -93,7 +93,7 @@ describe 'openssh::ssh_config' do
           super().merge(
             'ssh_config' => [
               {
-                'Host' => ['b1.hostopia.com', 'b3.hostopia.com', 'b1', 'b3'],
+                'Host' => ['serv1.domain.tld', 'serv3.domain.tld', 'serv1', 'serv3'],
                 'ControlPath' => '~/.ssh/master-%r@%h:%p',
                 'ControlMaster' => 'auto',
               },
@@ -103,7 +103,7 @@ describe 'openssh::ssh_config' do
                 'LogLevel' => 'ERROR',
               },
               {
-                'Host' => 'gitlab1.carrierzone.com',
+                'Host' => 'gitlab1.corp.domain.tld',
                 'IdentityFile' => '~/.ssh/gitlab.id_rsa',
               },
               {
@@ -125,14 +125,14 @@ describe 'openssh::ssh_config' do
 
         it {
           is_expected.to contain_file('/root/.ssh/config')
-            .with_content(%r{^Host b1.hostopia.com b3.hostopia.com b1 b3$})
+            .with_content(%r{^Host b1.domain.tld serv3.domain.tld b1 serv3$})
             .with_content(%r{^\s+ControlPath ~/.ssh/master-%r@%h:%p$})
             .with_content(%r{^\s+ControlMaster auto$})
         }
 
         it {
           is_expected.to contain_file('/root/.ssh/config')
-            .with_content(%r{^Host gitlab1.carrierzone.com$})
+            .with_content(%r{^Host gitlab1.corp.domain.tld$})
             .with_content(%r{^\s+IdentityFile ~/.ssh/gitlab.id_rsa$})
         }
       end

@@ -4,7 +4,7 @@
 #
 # @example
 #   openssh::ssh_config { 'namevar': }
-define openssh::ssh_config(
+define openssh::ssh_config (
     Array[Openssh::SshConfig]
             $ssh_config,
     String  $user_name    = $name,

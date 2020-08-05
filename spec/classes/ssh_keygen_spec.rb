@@ -34,7 +34,7 @@ describe 'openssh::ssh_keygen' do
               'options' => [],
               'type' => 'ssh-rsa',
             )
-          is_expected.not_to contain_exec('ssh_keygen-root')
+          is_expected.not_to contain_exec('ssh-keygen-root')
         }
       end
 
@@ -46,7 +46,7 @@ describe 'openssh::ssh_keygen' do
         end
 
         it {
-          is_expected.to contain_exec('ssh_keygen-root')
+          is_expected.to contain_exec('ssh-keygen-root')
             .with(
               'command' => "ssh-keygen -t rsa -b 2048 -f \"/root/.ssh/id_rsa\" -N '' -C \"root@stype\"",
               'user' => 'root',
