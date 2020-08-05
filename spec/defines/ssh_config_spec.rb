@@ -125,7 +125,7 @@ describe 'openssh::ssh_config' do
 
         it {
           is_expected.to contain_file('/root/.ssh/config')
-            .with_content(%r{^Host b1.domain.tld serv3.domain.tld b1 serv3$})
+            .with_content(%r{^Host serv1.domain.tld serv3.domain.tld serv1 serv3$})
             .with_content(%r{^\s+ControlPath ~/.ssh/master-%r@%h:%p$})
             .with_content(%r{^\s+ControlMaster auto$})
         }
