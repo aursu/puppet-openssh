@@ -4,6 +4,41 @@
 #
 # @example
 #   openssh::auth_key { 'namevar': }
+#
+# @param sshkey_user
+#   The user account in which the SSH key should be installed
+#
+# @param sshkey_ensure
+#
+# @param sshkey_type
+#
+# @param sshkey_name
+#   [Optional] The The SSH key name/comment. In their native habitat, SSH keys usually
+#   appear as a single long line, in the format: <TYPE> <KEY> <NAME/COMMENT>
+#
+# @param sshkey_target
+#
+# @param sshkey_options
+#
+# @param sshkey
+#
+# @param sshkey_export
+#   Boolean flag. If set to true `openssh::auth_key` resource will export ssh
+#   host key via resource `Sshkey` with title equal to
+#   '<fqdn>_<sshkey_user>_known_host'
+#   where <fqdn> is puppet fact $::fqdn and <sshkey_user> is `sshkey_user`
+#   parameter.
+#   The target parameter will be set to ~/.ssh/known_hosts file for user
+#   `sshkey_user` (with home directory /root for user root and
+#   /home/<sshkey_user> for all other users)
+#
+# @param sshkey_propagate
+#   Boolean flag. If set to true `openssh::auth_key` resource will import
+#   `Ssh_authorized_key` resource with title equal:
+#     1) to either parameter `sshkey_name` or
+#     2) to name combined from parameter sshkey_user and fact $::hostname as
+#       string '<sshkey_user>@<hostname>'
+#
 define openssh::auth_key (
   String  $sshkey_user,
   Enum['present', 'absent']
@@ -18,18 +53,19 @@ define openssh::auth_key (
           $sshkey_options   = undef,
   Optional[Stdlib::Base64]
           $sshkey           = undef,
-  Boolean $sshkey_export    = false,
+  Boolean $sshkey_export    = true,
   Boolean $sshkey_propagate = false,
 ) {
-
-  # compile user home directory
+  # find out user home directory
   $user_home = $sshkey_user ? {
     'root'  => '/root',
     default => "/home/${sshkey_user}",
   }
 
+  # user ssh configuration directory (usually ~/.ssh)
   $user_ssh_dir = "${user_home}/.ssh"
 
+  # directory that contains authorized_keys file
   $ssh_dir = $sshkey_target ? {
     Stdlib::Unixpath => dirname($sshkey_target),
     default          => $user_ssh_dir,
@@ -41,7 +77,7 @@ define openssh::auth_key (
     default          => "${ssh_dir}/authorized_keys",
   }
 
-  exec { "create ${auth_target} path":
+  exec { "mkdir dirname(${auth_target})":
     command => "mkdir -p ${ssh_dir}",
     path    => '/usr/bin:/bin',
     user    => $sshkey_user,
@@ -64,16 +100,16 @@ define openssh::auth_key (
       target  => $sshkey_target,
       options => $sshkey_options,
       key     => $sshkey,
-      require => Exec["create ${auth_target} path"],
+      require => Exec["mkdir dirname(${auth_target})"],
     }
+  }
 
-    if $sshkey_export {
-      @@sshkey { "${::fqdn}_${sshkey_user}_known_host":
-        host_aliases => [$::hostname, $::fqdn, $::ipaddress],
-        key          => $::ssh['ecdsa']['key'],
-        target       => "${user_ssh_dir}/known_hosts",
-        type         => $::ssh['ecdsa']['type']
-      }
+  if $sshkey_export {
+    @@sshkey { "${::fqdn}_${sshkey_user}_known_host":
+      host_aliases => [$::hostname, $::fqdn, $::ipaddress],
+      key          => $::ssh['ecdsa']['key'],
+      target       => "${user_ssh_dir}/known_hosts",
+      type         => $::ssh['ecdsa']['type']
     }
   }
 }
