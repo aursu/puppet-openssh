@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'openssh::services' do
+describe 'openssh::service' do
   let(:pre_condition) do
     <<-PRECOND
     class {'openssh': }

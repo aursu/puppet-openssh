@@ -1,10 +1,10 @@
-# A description of what this class does
+# Manage SSHd daemon service
 #
-# @summary A short summary of the purpose of this class
+# @summary Manage SSHd daemon service
 #
 # @example
-#   include openssh::services
-class openssh::services (
+#   include openssh::service
+class openssh::service (
   Boolean $service_enabled  = true,
   String  $service_ensure   = running,
   String  $service_name     = $openssh::params::service_name,
