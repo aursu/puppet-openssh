@@ -10,6 +10,11 @@
 #   The user account in which the SSH key should be installed. The resource
 #   will autorequire this user if it is being managed as a user resource.
 #
+# @param authorized
+#   If provided - it is exact list of SSH public keys to be added into user
+#   root account
+#   All other settings will be ignored except sshkey_dir
+#
 # @param sshkey
 #   The public key itself; generally a long string of hex characters. The key
 #   attribute may not contain whitespace.
@@ -50,11 +55,6 @@
 #   Key options; see sshd(8) for possible values. Multiple values should be
 #   specified as an array.
 #
-# @param authorized
-#   If provided - it is exact list of SSH public keys to be added into user
-#   root account
-#   All other settings will be ignored
-#
 class openssh::keys (
   Optional[
     Array[
@@ -65,6 +65,8 @@ class openssh::keys (
       }]
     ]
   ]       $authorized       = undef,
+  Optional[Stdlib::Base64]
+          $sshkey           = undef,
   Enum['present', 'absent']
           $sshkey_ensure    = present,
   Boolean $sshkey_propagate = false,
@@ -81,8 +83,7 @@ class openssh::keys (
           $sshkey_target    = $openssh::sshkey_target,
   Array[String]
           $sshkey_options   = $openssh::sshkey_options,
-  Optional[Stdlib::Base64]
-          $sshkey           = undef,
+
 ) {
   $key_owner_group = $sshkey_group ? {
     String  => $sshkey_group,
@@ -97,31 +98,30 @@ class openssh::keys (
   }
 
   if $authorized {
-    file { '/root/.ssh/authorized_keys':
+    file { "${sshkey_dir}/authorized_keys":
       ensure  => present,
       content => template('openssh/authorized_keys.erb'),
-    }
-  }
-  else {
-    if $sshkey_name {
-      openssh::auth_key { $sshkey_name:
-        sshkey_ensure    => $sshkey_ensure,
-        sshkey_user      => $sshkey_user,
-        sshkey_type      => $sshkey_type,
-        sshkey_target    => $sshkey_target,
-        sshkey_options   => $sshkey_options,
-        sshkey_propagate => $sshkey_propagate,
-        sshkey           => $sshkey,
-        require          => File[$sshkey_dir],
-      }
+      require => File[$sshkey_dir],
     }
 
-    @@sshkey { "${::fqdn}__root_known_host":
+    @@sshkey { "${::fqdn}_root_known_host":
       host_aliases => [$::hostname, $::fqdn, $::ipaddress],
       key          => $::ssh['ecdsa']['key'],
       target       => '/root/.ssh/known_hosts',
       type         => $::ssh['ecdsa']['type'],
-      require      => File[$sshkey_dir],
+    }
+  }
+  elsif $sshkey_name {
+    openssh::auth_key { $sshkey_name:
+      sshkey_ensure    => $sshkey_ensure,
+      sshkey_user      => $sshkey_user,
+      sshkey_type      => $sshkey_type,
+      sshkey_target    => $sshkey_target,
+      sshkey_options   => $sshkey_options,
+      sshkey_propagate => $sshkey_propagate,
+      sshkey           => $sshkey,
+      sshkey_export    => true,
+      require          => File[$sshkey_dir],
     }
   }
 }
