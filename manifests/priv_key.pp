@@ -145,9 +145,10 @@ define openssh::priv_key (
   if $generate_public {
     exec { "generate ${pub_key}":
       command     => "ssh-keygen -f ${key_path} -y > ${pub_key}",
-      refreshonly => true,
       path        => '/usr/bin:/bin',
       user        => 'root',
+      creates     => $pub_key,
+      refreshonly => true,
       subscribe   => File[$key_path],
     }
     # add comment to public key
