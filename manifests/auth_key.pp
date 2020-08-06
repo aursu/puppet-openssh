@@ -25,19 +25,19 @@
 # @param sshkey_export
 #   Boolean flag. If set to true `openssh::auth_key` resource will export ssh
 #   host key via resource `Sshkey` with title equal to
-#   '<fqdn>_<sshkey_user>_known_host'
-#   where <fqdn> is puppet fact $::fqdn and <sshkey_user> is `sshkey_user`
+#   `<fqdn>_<sshkey_user>_known_host`
+#   where `<fqdn>` is puppet fact `$::fqdn` and `<sshkey_user>` is `sshkey_user`
 #   parameter.
-#   The target parameter will be set to ~/.ssh/known_hosts file for user
-#   `sshkey_user` (with home directory /root for user root and
-#   /home/<sshkey_user> for all other users)
+#   The `Sshkey` resource's `target` parameter will be set to
+#   `~/.ssh/known_hosts` file for user `sshkey_user` (with home directory
+#   `/root` for user `root` and `/home/<sshkey_user>` for all other users)
 #
 # @param sshkey_propagate
 #   Boolean flag. If set to true `openssh::auth_key` resource will import
 #   `Ssh_authorized_key` resource with title equal:
 #     1) to either parameter `sshkey_name` or
-#     2) to name combined from parameter sshkey_user and fact $::hostname as
-#       string '<sshkey_user>@<hostname>'
+#     2) to name combined from parameter `sshkey_user` and fact `$::hostname` as
+#       string `<sshkey_user>@<hostname>`
 #
 define openssh::auth_key (
   String  $sshkey_user,
