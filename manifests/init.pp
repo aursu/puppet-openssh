@@ -1,4 +1,4 @@
-# @summary Openssh class for variables initialization
+# @summary openssh main class (internal variables initialization)
 #
 # Openssh class for variables initialization
 #

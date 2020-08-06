@@ -1,3 +1,7 @@
+# @summary openssh module parameters
+#
+# Openssh module parameters
+#
 # @example
 #   include openssh::params
 class openssh::params {
