@@ -13,8 +13,8 @@
 # @param sshkey_type
 #
 # @param sshkey_name
-#   [Optional] The The SSH key name/comment. In their native habitat, SSH keys usually
-#   appear as a single long line, in the format: <TYPE> <KEY> <NAME/COMMENT>
+#   The The SSH key name/comment. In their native habitat, SSH keys usually
+#   appear as a single long line, in the format: `<TYPE>` `<KEY>` `<NAME/COMMENT>`
 #
 # @param sshkey_target
 #
@@ -29,7 +29,7 @@
 #   where `<fqdn>` is puppet fact `$::fqdn` and `<sshkey_user>` is `sshkey_user`
 #   parameter.
 #   The `Sshkey` resource's `target` parameter will be set to
-#   `~/.ssh/known_hosts` file for user `sshkey_user` (with home directory
+#   `~/.ssh/known_hosts` path for user `sshkey_user` (with home directory
 #   `/root` for user `root` and `/home/<sshkey_user>` for all other users)
 #
 # @param sshkey_propagate

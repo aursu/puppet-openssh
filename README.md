@@ -717,8 +717,8 @@ Default value: `'ssh-rsa'`
 
 Data type: `Optional[String]`
 
-[Optional] The The SSH key name/comment. In their native habitat, SSH keys usually
-appear as a single long line, in the format: <TYPE> <KEY> <NAME/COMMENT>
+The The SSH key name/comment. In their native habitat, SSH keys usually
+appear as a single long line, in the format: `<TYPE>` `<KEY>` `<NAME/COMMENT>`
 
 Default value: ``undef``
 
@@ -756,7 +756,7 @@ host key via resource `Sshkey` with title equal to
 where `<fqdn>` is puppet fact `$::fqdn` and `<sshkey_user>` is `sshkey_user`
 parameter.
 The `Sshkey` resource's `target` parameter will be set to
-`~/.ssh/known_hosts` file for user `sshkey_user` (with home directory
+`~/.ssh/known_hosts` path for user `sshkey_user` (with home directory
 `/root` for user `root` and `/home/<sshkey_user>` for all other users)
 
 Default value: ``true``
