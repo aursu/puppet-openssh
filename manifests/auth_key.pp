@@ -104,12 +104,12 @@ define openssh::auth_key (
     }
   }
 
-  if $sshkey_export {
+  if $sshkey_export and $facts['ssh'] and $facts['ssh']['ecdsa'] {
     @@sshkey { "${::fqdn}_${sshkey_user}_known_host":
       host_aliases => [$::hostname, $::fqdn, $::ipaddress],
-      key          => $::ssh['ecdsa']['key'],
+      key          => $facts['ssh']['ecdsa']['key'],
       target       => "${user_ssh_dir}/known_hosts",
-      type         => $::ssh['ecdsa']['type']
+      type         => $facts['ssh']['ecdsa']['type']
     }
   }
 }
