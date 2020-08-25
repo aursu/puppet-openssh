@@ -1,6 +1,6 @@
-# @summary A short summary of the purpose of this defined type.
+# @summary Setup authorized keys for system user
 #
-# A description of what this defined type does
+# Setup authorized keys for system user
 #
 # @example
 #   openssh::auth_key { 'namevar': }
