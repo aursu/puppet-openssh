@@ -4,8 +4,8 @@
   "author": "aursu",
   "summary": "Manage OpenSSH server/client/keys",
   "license": "Apache-2.0",
-  "source": "https://aur5u@bitbucket.org/aursu-2017/openssh.git",
-  "project_page": "https://bitbucket.org/aursu-2017/openssh",
+  "source": "https://github.com/aursu/puppet-openssh.git",
+  "project_page": "https://github.com/aursu/puppet-openssh",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
