@@ -17,7 +17,7 @@ class openssh::profile::server (
           $sshkey      = lookup('openssh::keys::sshkey', String)
 )
 {
-  class { 'openssh': }
+  include openssh
   class { 'openssh::package':
     manage_client => true,
     manage_server => true,
