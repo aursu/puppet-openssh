@@ -29,4 +29,6 @@ class openssh::profile::server (
     sshkey           => $sshkey,
   }
   class { 'openssh::service': }
+
+  Class['openssh::config'] ~> Class['openssh::service']
 }
