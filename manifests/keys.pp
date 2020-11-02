@@ -65,6 +65,15 @@ class openssh::keys (
       }]
     ]
   ]       $authorized       = undef,
+  Optional[
+    Array[
+      Struct[{
+        type => String,
+        key  => String,
+        name => String,
+      }]
+    ]
+  ]       $custom_ssh_keys  = $authorized,
   Optional[Stdlib::Base64]
           $sshkey           = undef,
   Enum['present', 'absent']
@@ -97,7 +106,7 @@ class openssh::keys (
     mode   => '0700',
   }
 
-  if $authorized {
+  if $custom_ssh_keys {
     file { "${sshkey_dir}/authorized_keys":
       ensure  => present,
       content => template('openssh/authorized_keys.erb'),
