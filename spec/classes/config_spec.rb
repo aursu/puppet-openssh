@@ -18,7 +18,7 @@ describe 'openssh::config' do
           is_expected.to contain_file('/etc/ssh/sshd_config')
             .with_content(%r{Port 22})
           is_expected.to contain_file('/etc/ssh/sshd_config')
-            .with_content(%r{PermitRootLogin without-password})
+            .with_content(%r{PermitRootLogin no})
           is_expected.to contain_file('/etc/ssh/sshd_config')
             .with_content(%r{StrictModes yes})
           is_expected.to contain_file('/etc/ssh/sshd_config')

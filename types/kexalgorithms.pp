@@ -1,7 +1,7 @@
 type Openssh::KexAlgorithms = Enum[
   'curve25519-sha256',
   'curve25519-sha256@libssh.org',
-  'diffie-hellman-group1-sha1'
+  'diffie-hellman-group1-sha1',
   'diffie-hellman-group14-sha1',
   'diffie-hellman-group14-sha256',
   'diffie-hellman-group16-sha512',
