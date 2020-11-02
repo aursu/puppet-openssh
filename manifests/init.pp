@@ -2,6 +2,18 @@
 #
 # Openssh class for variables initialization
 #
+# @param hostbased_authentication
+#   Specifies whether rhosts or /etc/hosts.equiv authentication together with
+#   successful public key client host authentication is allowed (host-based
+#   authentication).  This option is similar to RhostsRSAAuthentication and
+#   applies to protocol version 2 only.  The default is "no".
+#
+# @param challenge_response_authentication
+#   Specifies whether challenge-response authentication is allowed (e.g. via
+#   PAM or though authentication styles supported in login.conf(5)) The default
+#   is "yes".
+#   see also https://access.redhat.com/solutions/336773
+#
 # @example
 #   include openssh
 class openssh (
@@ -9,7 +21,12 @@ class openssh (
   String $permit_root_login,
   String $strict_modes,
   String $gss_api_authentication,
+  String $hostbased_authentication,
+  String $challenge_response_authentication,
   String $config_template,
+  String $use_privilege_separation,
+  String $permit_tunnel,
+  String $password_authentication,
   Optional[String]
           $keys_file,
   String  $banner,
@@ -36,4 +53,22 @@ class openssh (
   Optional[
     Array[String]
   ]       $server_dependencies    = $openssh::params::openssh_server_dependencies,
+  Optional[
+    Variant[
+      String,
+      Array[Openssh::MACs]
+    ]
+  ]       $macs,
+  Optional[
+    Variant[
+      String,
+      Array[Openssh::Ciphers]
+    ]
+  ]       $ciphers,
+  Optional[
+    Variant[
+      String,
+      Array[Openssh::KexAlgorithms]
+    ]
+  ]       $kexalgorithms,
 ) inherits openssh::params {}

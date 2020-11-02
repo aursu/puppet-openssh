@@ -6,26 +6,54 @@
 #   include openssh::config
 class openssh::config (
   Stdlib::Unixpath
-          $config                    = $openssh::config,
+          $config                             = $openssh::config,
   Stdlib::Port
-          $ssh_port                  = $openssh::ssh_port,
-  String  $config_template           = $openssh::config_template,
+          $ssh_port                           = $openssh::ssh_port,
+  String  $config_template                    = $openssh::config_template,
   Variant[
     Enum['none'],
     Stdlib::Unixpath
-  ]       $banner                    = $openssh::banner,
+  ]       $banner                             = $openssh::banner,
   Optional[String]
-          $keys_file                 = $openssh::keys_file,
+          $keys_file                          = $openssh::keys_file,
   Enum['yes', 'no', 'all', 'local', 'remote']
-          $allow_tcp_forwarding      = $openssh::allow_tcp_forwarding,
+          $allow_tcp_forwarding               = $openssh::allow_tcp_forwarding,
   Enum['yes', 'no', 'without-password', 'prohibit-password', 'forced-commands-only']
-          $permit_root_login         = $openssh::permit_root_login,
+          $permit_root_login                  = $openssh::permit_root_login,
   Enum['yes', 'no']
-          $strict_modes              = $openssh::strict_modes,
+          $strict_modes                       = $openssh::strict_modes,
   Enum['yes', 'no']
-          $gss_api_authentication    = $openssh::gss_api_authentication,
+          $gss_api_authentication             = $openssh::gss_api_authentication,
+  Enum['yes', 'no']
+          $hostbased_authentication           = $openssh::hostbased_authentication,
+  Enum['yes', 'no']
+          $challenge_response_authentication  = $openssh::challenge_response_authentication,
+  Enum['yes', 'no']
+          $password_authentication            = $openssh::password_authentication,
+  Enum['yes', 'no', 'sandbox']
+          $use_privilege_separation           = $openssh::use_privilege_separation,
+  Enum['yes', 'point-to-point', 'ethernet', 'no']
+          $permit_tunnel                      = $openssh::permit_tunnel,
+  Optional[
+    Variant[
+      String,
+      Array[Openssh::MACs]
+    ]
+  ]       $macs                               = $openssh::macs,
+  Optional[
+    Variant[
+      String,
+      Array[Openssh::Ciphers]
+    ]
+  ]       $ciphers                            = $openssh::ciphers,
+  Optional[
+    Variant[
+      String,
+      Array[Openssh::KexAlgorithms]
+    ]
+  ]       $kexalgorithms                      = $openssh::kexalgorithms,
   # whether to add HostKey directives into sshd_config or not
-  Boolean $setup_host_key            = $openssh::setup_host_key,
+  Boolean $setup_host_key                     = $openssh::setup_host_key,
 )
 {
   file { $config:

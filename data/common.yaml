@@ -1,8 +1,13 @@
 ---
 openssh::allow_tcp_forwarding: 'no'
-openssh::permit_root_login: 'without-password'
+openssh::permit_root_login: 'no'
 openssh::strict_modes: 'yes'
 openssh::gss_api_authentication: 'yes'
+openssh::hostbased_authentication: 'no'
+openssh::challenge_response_authentication: 'yes'
+openssh::password_authentication: 'yes'
+openssh::use_privilege_separation: 'sandbox'
+openssh::permit_tunnel: 'no'
 openssh::config_template: openssh/sshd_config.erb
 openssh::keys_file: .ssh/authorized_keys
 openssh::banner: 'none'
@@ -16,3 +21,6 @@ openssh::sshkey_type: 'ssh-rsa'
 openssh::sshkey_target: '/root/.ssh/authorized_keys'
 openssh::sshkey_options: []
 openssh::setup_host_key: false
+openssh::ciphers: ~
+openssh::macs: ~
+openssh::kexalgorithms: ~

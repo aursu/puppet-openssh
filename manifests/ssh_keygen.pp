@@ -48,8 +48,8 @@ class openssh::ssh_keygen (
     }
   }
   # Export root user public key
-  elsif $root_key_export and $sshkey_user == 'root' and $::sshpubkey_root {
-    $sshkey = $::sshpubkey_root
+  elsif $root_key_export and $sshkey_user == 'root' and $facts['sshpubkey_root'] {
+    $sshkey = $facts['sshpubkey_root']
 
     if $sshkey_type in $sshkey and $sshkey_name in $sshkey {
       $sshkey_export = $sshkey[1]
