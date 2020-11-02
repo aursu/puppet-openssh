@@ -26,6 +26,8 @@ class openssh (
   String  $config_template,
   Optional[String]
           $use_privilege_separation,
+  Optional[Integer[1,2]]
+          $protocol,
   String  $permit_tunnel,
   String  $password_authentication,
   Optional[String]

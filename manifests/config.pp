@@ -9,6 +9,8 @@ class openssh::config (
           $config                             = $openssh::config,
   Stdlib::Port
           $ssh_port                           = $openssh::ssh_port,
+  Optional[Integer[1,2]]
+          $protocol                           = $openssh::protocol,
   String  $config_template                    = $openssh::config_template,
   Variant[
     Enum['none'],

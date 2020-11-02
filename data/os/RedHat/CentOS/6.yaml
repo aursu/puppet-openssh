@@ -7,3 +7,11 @@
 #   privilege escalation by containing any corruption within the unprivileged
 #   processes.  The default is "yes".
 openssh::use_privilege_separation: 'yes'
+
+# Protocol
+#   Specifies the protocol versions sshd(8) supports. The possible values are
+#   '1' and '2'. Multiple versions must be comma-separated. The default is
+#   "2,1".  Note that the order of the protocol list does not indicate
+#   preference, because the client selects among multiple protocol versions
+#   offered by the server.  Specifying "2,1" is identical to "1,2"
+openssh::protocol: 2
