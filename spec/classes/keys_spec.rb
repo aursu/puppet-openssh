@@ -57,6 +57,29 @@ describe 'openssh::keys' do
         }
       end
 
+      context 'check custom_ssh_keys setup' do
+        let(:facts) do
+          os_facts.merge(
+            'stype' => 'stype8',
+          )
+        end
+
+        it {
+          is_expected.to contain_file('/root/.ssh/authorized_keys')
+            .with_content(%r{^ssh-rsa AAAAB3NzaC1yc2EAAAABI.*7UU4ecXSz2FMFlfxCU8lbXezMA8fpU= root@host1$})
+        }
+
+        it {
+          is_expected.to contain_file('/root/.ssh/authorized_keys')
+            .with_content(%r{^ssh-rsa AAAAB3NzaC1yc2EAAAABI.*aiaGqpo0PzElJlFUa/kQJqH8XypkBYrzSQ== root@host2$})
+        }
+
+        it {
+          is_expected.to contain_file('/root/.ssh/authorized_keys')
+            .with_content(%r{^ssh-rsa AAAAB3NzaC1yc2EAAAABI.*g0SRN5054sE971E3fOylM2k0uXqjlbdqCyRbLaC85zYw== root@host3$})
+        }
+      end
+
       context 'check sshkey_name propagation' do
         # rubocop:disable Metrics/LineLength
         let(:sshkey) { 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC728q/0r0BAdDbWp4gjCsW4NxcLFSj5sFZOPSsNLw6eNdaUKZnJsvSvX7IhwY/suuolzHY+x0OLPerOvhZrrviM2HX3PlY29QLuY2wVDYw7Z10n1v8Q0//xLU1oskfINfbjFWxklhxQZ8+jsJGZYkHtSmkHxR1srYmTg+nmoczxyg+bRMzE8BDXOQBwvFIC9uygH5eI35f/GFk5ycUUaG8j3V53YxzrUkK0JBxbCr9plN2L79sQuCj9yRgDLVZE1B2p92f+z07Mk3ytye8Twe248DLtqqvk5ZsjLHR9q5LcHRhMqMaczexEq7Y9QFjl5oeyfONxiGrmTl5hvDpfA+N' }
