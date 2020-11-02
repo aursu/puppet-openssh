@@ -56,6 +56,28 @@ describe 'openssh::config' do
           }
         end
       end
+
+      context 'check UsePrivilegeSeparation is set properly' do
+        it { is_expected.to contain_file('/etc/ssh/sshd_config') }
+
+        case os
+        when 'centos-6-x86_64'
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .with_content(%r{UsePrivilegeSeparation yes})
+          }
+        when 'centos-7-x86_64'
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .with_content(%r{UsePrivilegeSeparation sandbox})
+          }
+        else
+          it {
+            is_expected.not_to contain_file('/etc/ssh/sshd_config')
+              .with_content(%r{UsePrivilegeSeparation})
+          }
+        end
+      end
     end
   end
 end

@@ -17,16 +17,17 @@
 # @example
 #   include openssh
 class openssh (
-  String $allow_tcp_forwarding,
-  String $permit_root_login,
-  String $strict_modes,
-  String $gss_api_authentication,
-  String $hostbased_authentication,
-  String $challenge_response_authentication,
-  String $config_template,
-  String $use_privilege_separation,
-  String $permit_tunnel,
-  String $password_authentication,
+  String  $allow_tcp_forwarding,
+  String  $permit_root_login,
+  String  $strict_modes,
+  String  $gss_api_authentication,
+  String  $hostbased_authentication,
+  String  $challenge_response_authentication,
+  String  $config_template,
+  Optional[String]
+          $use_privilege_separation,
+  String  $permit_tunnel,
+  String  $password_authentication,
   Optional[String]
           $keys_file,
   String  $banner,

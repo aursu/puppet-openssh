@@ -27,7 +27,9 @@ GSSAPIAuthentication <%= @gss_api_authentication %>
 GSSAPICleanupCredentials yes
 UsePAM yes
 X11Forwarding no
+<% if @use_privilege_separation %>
 UsePrivilegeSeparation <%= @use_privilege_separation %>
+<% end %>
 
 AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
 AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT

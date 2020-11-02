@@ -30,7 +30,7 @@ class openssh::config (
           $challenge_response_authentication  = $openssh::challenge_response_authentication,
   Enum['yes', 'no']
           $password_authentication            = $openssh::password_authentication,
-  Enum['yes', 'no', 'sandbox']
+  Optional[Enum['yes', 'no', 'sandbox']]
           $use_privilege_separation           = $openssh::use_privilege_separation,
   Enum['yes', 'point-to-point', 'ethernet', 'no']
           $permit_tunnel                      = $openssh::permit_tunnel,
