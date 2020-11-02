@@ -56,6 +56,13 @@ class openssh::config (
   Boolean $setup_host_key                     = $openssh::setup_host_key,
 )
 {
+  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6'] {
+    $ed25519_key_generate = false
+  }
+  else {
+    $ed25519_key_generate = true
+  }
+
   file { $config:
     ensure  => present,
     owner   => 'root',
@@ -76,9 +83,13 @@ class openssh::config (
       'ssh-keygen -t ecdsa -P "" -f /etc/ssh/ssh_host_ecdsa_key':
         creates => '/etc/ssh/ssh_host_ecdsa_key',
       ;
-      'ssh-keygen -t ed25519 -P "" -f /etc/ssh/ssh_host_ed25519_key':
+    }
+
+    if $ed25519_key_generate {
+      exec { 'ssh-keygen -t ed25519 -P "" -f /etc/ssh/ssh_host_ed25519_key':
         creates => '/etc/ssh/ssh_host_ed25519_key',
-      ;
+        path    => '/bin:/usr/bin',
+      }
     }
   }
 }

@@ -49,10 +49,12 @@ describe 'openssh::config' do
             .with_content(%r{HostKey /etc/ssh/ssh_host_ecdsa_key})
         }
 
-        it {
-          is_expected.to contain_file('/etc/ssh/sshd_config')
-            .with_content(%r{HostKey /etc/ssh/ssh_host_ed25519_key})
-        }
+        if ['centos-7-x86_64', 'centos-8-x86_64'].include? (os)
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .with_content(%r{HostKey /etc/ssh/ssh_host_ed25519_key})
+          }
+        end
       end
     end
   end

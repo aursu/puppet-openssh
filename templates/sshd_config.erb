@@ -3,7 +3,9 @@
 <% if @setup_host_key %>
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_ecdsa_key
+<% if @ed25519_key_generate %>
 HostKey /etc/ssh/ssh_host_ed25519_key
+<% end %>
 
 <% end %>
 SyslogFacility AUTHPRIV

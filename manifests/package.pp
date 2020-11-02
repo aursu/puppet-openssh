@@ -21,7 +21,7 @@ class openssh::package (
 )
 {
   package { $package_name :
-    ensure => $package_ensure,
+    ensure   => $package_ensure,
     provider => 'yum',
   }
 
