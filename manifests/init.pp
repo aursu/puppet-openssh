@@ -43,6 +43,9 @@ class openssh (
   Array[String]
           $sshkey_options,
   Boolean $setup_host_key,
+  String  $package_ensure,
+  String  $client_package_ensure  = $package_ensure,
+  String  $server_package_ensure  = $package_ensure,
   Integer $ssh_port               = $openssh::params::ssh_port,
   String  $config                 = $openssh::params::config,
   String  $base_package_name      = $openssh::params::base_package_name,

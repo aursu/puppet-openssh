@@ -1,6 +1,6 @@
 ---
 openssh::allow_tcp_forwarding: 'no'
-openssh::permit_root_login: 'no'
+openssh::permit_root_login: 'without-password'
 openssh::strict_modes: 'yes'
 openssh::gss_api_authentication: 'yes'
 openssh::hostbased_authentication: 'no'
@@ -13,6 +13,9 @@ openssh::keys_file: .ssh/authorized_keys
 openssh::banner: 'none'
 openssh::manage_server_package: false
 openssh::manage_client_package: false
+openssh::package_ensure: installed
+openssh::client_package_ensure: installed
+openssh::server_package_ensure: installed
 openssh::sshkey_user: 'root'
 openssh::sshkey_group: 'root'
 openssh::sshkey_dir: '/root/.ssh'

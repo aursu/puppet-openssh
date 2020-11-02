@@ -5,9 +5,9 @@
 # @example
 #   include openssh::package
 class openssh::package (
-  String  $package_ensure       = present,
-  String  $client_ensure        = present,
-  String  $server_ensure        = present,
+  String  $package_ensure       = $openssh::package_ensure,
+  String  $client_ensure        = $openssh::client_package_ensure,
+  String  $server_ensure        = $openssh::server_package_ensure,
   String  $package_name         = $openssh::base_package_name,
   Boolean $manage_client        = $openssh::manage_client_package,
   Optional[String]
@@ -22,6 +22,7 @@ class openssh::package (
 {
   package { $package_name :
     ensure => $package_ensure,
+    provider => 'yum',
   }
 
   if $manage_client and $client_package {
@@ -33,7 +34,7 @@ class openssh::package (
   if $manage_server and $server_package {
     if $server_dependencies {
       package { $server_dependencies:
-        ensure => $server_ensure,
+        ensure => 'present',
       }
     }
     package { $server_package:

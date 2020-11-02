@@ -13,6 +13,11 @@ describe 'openssh::package' do
 
       it { is_expected.to compile }
 
+      it {
+        is_expected.to contain_package('openssh')
+          .with_ensure('installed')
+      }
+
       context 'check client package management' do
         let(:params) do
           {
@@ -22,7 +27,7 @@ describe 'openssh::package' do
 
         it {
           is_expected.to contain_package('openssh-clients')
-            .with_ensure('present')
+            .with_ensure('installed')
         }
       end
 
@@ -35,7 +40,7 @@ describe 'openssh::package' do
 
         it {
           is_expected.to contain_package('openssh-server')
-            .with_ensure('present')
+            .with_ensure('installed')
         }
 
         if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
