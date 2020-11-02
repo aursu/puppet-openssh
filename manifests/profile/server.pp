@@ -14,7 +14,10 @@ class openssh::profile::server (
   Optional[String]
           $sshkey_name = lookup('openssh::sshkey_name',  String),
   Optional[String]
-          $sshkey      = lookup('openssh::keys::sshkey', String)
+          $sshkey      = lookup({
+                                  'name'          => 'openssh::keys::sshkey',
+                                  'default_value' => undef
+                                })
 )
 {
   include openssh
