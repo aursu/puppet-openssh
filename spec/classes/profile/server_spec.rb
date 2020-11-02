@@ -5,11 +5,7 @@ require 'spec_helper'
 describe 'openssh::profile::server' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
-      let(:facts) do
-        os_facts.merge(
-          'stype' => 'stype7',
-        )
-      end
+      let(:facts) { os_facts }
 
       it { is_expected.to compile }
     end
