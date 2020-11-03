@@ -1,4 +1,4 @@
 # authorized_keys
 <% if @custom_ssh_keys -%>
-<%= @custom_ssh_keys.map {|h| h.map{|k, v| [k.to_sym, v] }.to_h}.map{ |kdata| "%{type} %{key} %{name}\n" % kdata }.join -%>
+<%= @custom_ssh_keys.map { |h| Hash[h.map { |k, v| [k.to_sym, v] }] }.map { |kdata| "%{type} %{key} %{name}\n" % kdata }.join -%>
 <% end -%>
