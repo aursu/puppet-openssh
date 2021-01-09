@@ -19,3 +19,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.4.6
+
+**Features**
+
+* Set sshkey_name to defined resource title for uniquness
+
+**Bugfixes**
+
+**Known Issues**

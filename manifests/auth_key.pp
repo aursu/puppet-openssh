@@ -46,7 +46,7 @@ define openssh::auth_key (
   Openssh::KeyType
           $sshkey_type          = 'ssh-rsa',
   Optional[String]
-          $sshkey_name          = undef,
+          $sshkey_name          = $name,
   Optional[Stdlib::Unixpath]
           $sshkey_target        = undef,
   Boolean $manage_sshkey_target = true,
