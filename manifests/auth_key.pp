@@ -54,7 +54,7 @@ define openssh::auth_key (
           $sshkey_options       = undef,
   Optional[Stdlib::Base64]
           $sshkey               = undef,
-  Boolean $sshkey_export        = true,
+  Boolean $sshkey_export        = false,
   Boolean $sshkey_propagate     = false,
 ) {
   # find out user home directory

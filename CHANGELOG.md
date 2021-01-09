@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 **Features**
 
 * Set sshkey_name to defined resource title for uniquness
+* Disable sshkey_export by default
 
 **Bugfixes**
 
