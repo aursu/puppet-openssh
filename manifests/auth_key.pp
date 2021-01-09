@@ -78,18 +78,18 @@ define openssh::auth_key (
     default          => "${ssh_dir}/authorized_keys",
   }
 
+  $pub_key_name = $sshkey_name ? {
+    String  => $sshkey_name,
+    default => "${sshkey_user}@${::hostname}",
+  }
+
   if $manage_sshkey_target {
-    exec { "mkdir dirname(${auth_target})":
+    exec { "mkdir dirname(${auth_target}) for ${pub_key_name}":
       command => "mkdir -p ${ssh_dir}",
       path    => '/usr/bin:/bin',
       user    => $sshkey_user,
       creates => $ssh_dir,
     }
-  }
-
-  $pub_key_name = $sshkey_name ? {
-    String  => $sshkey_name,
-    default => "${sshkey_user}@${::hostname}",
   }
 
   if $sshkey_propagate {
