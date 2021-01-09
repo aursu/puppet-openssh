@@ -42,19 +42,20 @@
 define openssh::auth_key (
   String  $sshkey_user,
   Enum['present', 'absent']
-          $sshkey_ensure    = present,
+          $sshkey_ensure        = present,
   Openssh::KeyType
-          $sshkey_type      = 'ssh-rsa',
+          $sshkey_type          = 'ssh-rsa',
   Optional[String]
-          $sshkey_name      = undef,
+          $sshkey_name          = undef,
   Optional[Stdlib::Unixpath]
-          $sshkey_target    = undef,
+          $sshkey_target        = undef,
+  Boolean $manage_sshkey_target = true,
   Optional[Array[String]]
-          $sshkey_options   = undef,
+          $sshkey_options       = undef,
   Optional[Stdlib::Base64]
-          $sshkey           = undef,
-  Boolean $sshkey_export    = true,
-  Boolean $sshkey_propagate = false,
+          $sshkey               = undef,
+  Boolean $sshkey_export        = true,
+  Boolean $sshkey_propagate     = false,
 ) {
   # find out user home directory
   $user_home = $sshkey_user ? {
@@ -77,11 +78,13 @@ define openssh::auth_key (
     default          => "${ssh_dir}/authorized_keys",
   }
 
-  exec { "mkdir dirname(${auth_target})":
-    command => "mkdir -p ${ssh_dir}",
-    path    => '/usr/bin:/bin',
-    user    => $sshkey_user,
-    creates => $ssh_dir,
+  if $manage_sshkey_target {
+    exec { "mkdir dirname(${auth_target})":
+      command => "mkdir -p ${ssh_dir}",
+      path    => '/usr/bin:/bin',
+      user    => $sshkey_user,
+      creates => $ssh_dir,
+    }
   }
 
   $pub_key_name = $sshkey_name ? {
