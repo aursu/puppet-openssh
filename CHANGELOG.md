@@ -29,4 +29,6 @@ All notable changes to this project will be documented in this file.
 
 **Bugfixes**
 
+* Bugfix for dependency on sshkey_target directory management Exec
+
 **Known Issues**

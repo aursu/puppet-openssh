@@ -84,7 +84,7 @@ define openssh::auth_key (
   }
 
   if $manage_sshkey_target {
-    exec { "mkdir dirname(${auth_target}) for ${pub_key_name}":
+    exec { "mkdir ${ssh_dir} for ${pub_key_name}":
       command => "mkdir -p ${ssh_dir}",
       path    => '/usr/bin:/bin',
       user    => $sshkey_user,
@@ -103,7 +103,10 @@ define openssh::auth_key (
       target  => $sshkey_target,
       options => $sshkey_options,
       key     => $sshkey,
-      require => Exec["mkdir dirname(${auth_target})"],
+    }
+
+    if $manage_sshkey_target {
+      Exec["mkdir ${ssh_dir} for ${pub_key_name}"] -> Ssh_authorized_key[$pub_key_name]
     }
   }
 
