@@ -10,7 +10,7 @@ class openssh::params {
   if $facts['os']['name'] in ['RedHat', 'CentOS'] {
     $server_package_name = 'openssh-server'
     $client_package_name = 'openssh-clients'
-    if $facts['os']['release']['major'] in ['7', '8'] {
+    if $facts['os']['release']['major'] == '7' {
       $openssh_server_dependencies = ['initscripts']
     }
     else {
