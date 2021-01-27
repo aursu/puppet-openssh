@@ -17,7 +17,7 @@ class openssh::package (
           $server_package       = $openssh::server_package_name,
   Optional[
     Array[String]
-  ]       $server_dependencies  = $openssh::openssh_server_dependencies,
+  ]       $server_dependencies  = $openssh::server_dependencies,
 )
 {
   package { $package_name :

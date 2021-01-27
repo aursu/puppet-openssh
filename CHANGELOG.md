@@ -32,3 +32,13 @@ All notable changes to this project will be documented in this file.
 * Bugfix for dependency on sshkey_target directory management Exec
 
 **Known Issues**
+
+## Release 0.4.7
+
+**Features**
+
+**Bugfixes**
+
+* Corrected parameter name in openssh::package
+
+**Known Issues**

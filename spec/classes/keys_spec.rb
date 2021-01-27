@@ -91,7 +91,7 @@ describe 'openssh::keys' do
         end
 
         it {
-          is_expected.to contain_exec('mkdir dirname(/root/.ssh/authorized_keys)')
+          is_expected.to contain_exec('mkdir /root/.ssh for root@securehost')
         }
 
         it {
@@ -106,7 +106,7 @@ describe 'openssh::keys' do
 
         it {
           is_expected.to contain_ssh_authorized_key('root@securehost')
-            .that_requires('Exec[mkdir dirname(/root/.ssh/authorized_keys)]')
+            .that_requires('Exec[mkdir /root/.ssh for root@securehost]')
         }
 
         it {

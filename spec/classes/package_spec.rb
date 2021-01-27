@@ -49,6 +49,22 @@ describe 'openssh::package' do
               .with_ensure('present')
           }
         end
+
+        context 'check dependencies management' do
+          let(:pre_condition) do
+            <<-PRECOND
+            class { 'openssh':
+              server_dependencies => [],
+            }
+            PRECOND
+          end
+
+          if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+            it {
+              is_expected.not_to contain_package('initscripts')
+            }
+          end
+        end
       end
     end
   end
