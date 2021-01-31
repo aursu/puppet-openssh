@@ -22,7 +22,8 @@ class openssh (
   String  $strict_modes,
   String  $gss_api_authentication,
   String  $hostbased_authentication,
-  String  $challenge_response_authentication,
+  Openssh::Switch
+          $challenge_response_authentication,
   String  $config_template,
   Optional[String]
           $use_privilege_separation,

@@ -28,7 +28,7 @@ class openssh::config (
           $gss_api_authentication             = $openssh::gss_api_authentication,
   Enum['yes', 'no']
           $hostbased_authentication           = $openssh::hostbased_authentication,
-  Enum['yes', 'no']
+  Openssh::Switch
           $challenge_response_authentication  = $openssh::challenge_response_authentication,
   Openssh::Switch
           $password_authentication            = $openssh::password_authentication,

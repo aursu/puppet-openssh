@@ -58,6 +58,8 @@ All notable changes to this project will be documented in this file.
 **Features**
 
 * Added Openssh::Switch type to use true/false for some parameters
+* Added boolean to challenge_response_authentication and password_authentication
+  parameter
 
 **Bugfixes**
 

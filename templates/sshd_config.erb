@@ -38,7 +38,7 @@ AuthorizedKeysFile <%= @keys_file %>
 
 PasswordAuthentication <%= value2config(@password_authentication) %>
 PermitEmptyPasswords no
-ChallengeResponseAuthentication <%= @challenge_response_authentication %>
+ChallengeResponseAuthentication <%= value2config(@challenge_response_authentication) %>
 GSSAPIAuthentication <%= @gss_api_authentication %>
 GSSAPICleanupCredentials yes
 UsePAM yes
