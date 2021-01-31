@@ -29,7 +29,8 @@ class openssh (
   Optional[Integer[1,2]]
           $protocol,
   String  $permit_tunnel,
-  String  $password_authentication,
+  Openssh::Switch
+          $password_authentication,
   Optional[String]
           $keys_file,
   String  $banner,

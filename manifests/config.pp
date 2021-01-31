@@ -30,7 +30,7 @@ class openssh::config (
           $hostbased_authentication           = $openssh::hostbased_authentication,
   Enum['yes', 'no']
           $challenge_response_authentication  = $openssh::challenge_response_authentication,
-  Enum['yes', 'no']
+  Openssh::Switch
           $password_authentication            = $openssh::password_authentication,
   Optional[Enum['yes', 'no', 'sandbox']]
           $use_privilege_separation           = $openssh::use_privilege_separation,
