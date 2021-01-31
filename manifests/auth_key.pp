@@ -54,8 +54,9 @@ define openssh::auth_key (
           $sshkey_options       = undef,
   Optional[Stdlib::Base64]
           $sshkey               = undef,
-  Boolean $sshkey_export        = false,
   Boolean $sshkey_propagate     = false,
+  Boolean $sshkey_export        = false,
+  String  $sshkey_export_tag    = 'sshkey',
 ) {
   # find out user home directory
   $user_home = $sshkey_user ? {
@@ -114,8 +115,9 @@ define openssh::auth_key (
     @@sshkey { "${::fqdn}_${sshkey_user}_known_host":
       host_aliases => [$::hostname, $::fqdn, $::ipaddress],
       key          => $facts['ssh']['ecdsa']['key'],
-      target       => "${user_ssh_dir}/known_hosts",
-      type         => $facts['ssh']['ecdsa']['type']
+      target       => "${ssh_dir}/known_hosts",
+      type         => $facts['ssh']['ecdsa']['type'],
+      tag          => [$sshkey_export_tag, "${sshkey_user}_known_host"],
     }
   }
 }

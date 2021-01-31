@@ -42,3 +42,13 @@ All notable changes to this project will be documented in this file.
 * Corrected parameter name in openssh::package
 
 **Known Issues**
+
+## Release 0.4.8
+
+**Features**
+
+* Added ability to tag exported sshkey resources
+
+**Bugfixes**
+
+**Known Issues**
