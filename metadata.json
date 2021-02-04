@@ -1,6 +1,6 @@
 {
   "name": "aursu-openssh",
-  "version": "0.4.10",
+  "version": "0.5.0",
   "author": "aursu",
   "summary": "Manage OpenSSH server/client/keys",
   "license": "Apache-2.0",

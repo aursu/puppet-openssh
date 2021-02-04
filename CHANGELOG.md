@@ -74,3 +74,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.5.0
+
+**Features**
+
+**Bugfixes**
+
+* Fixed sshd config template to properly interpret switch  parameters
+
+**Known Issues**
