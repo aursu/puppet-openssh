@@ -64,3 +64,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.4.10
+
+**Features**
+
+* Added hardening for OpenSSH binaries
+
+**Bugfixes**
+
+**Known Issues**
