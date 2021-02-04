@@ -7,6 +7,8 @@
 class openssh::hardening {
   file {
     default: mode => 'o=';
+    '/etc/ssh': mode => '0750';
+
     # sshd
     '/usr/sbin/sshd': ;
     '/usr/sbin/sshd-keygen': ;
