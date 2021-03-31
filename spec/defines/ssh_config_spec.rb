@@ -16,8 +16,8 @@ describe 'openssh::ssh_config' do
         it { is_expected.to compile }
 
         it {
-          is_expected.not_to contain_exec('create /root/.ssh/config path')
-          is_expected.not_to contain_exec('create /etc/ssh/ssh_config path')
+          is_expected.not_to contain_exec('/root/.ssh/config')
+          is_expected.not_to contain_exec('/etc/ssh/ssh_config')
         }
 
         it {
@@ -38,7 +38,7 @@ describe 'openssh::ssh_config' do
         end
 
         it {
-          is_expected.to contain_exec('create /root/.ssh/config path')
+          is_expected.to contain_exec('/root/.ssh/config')
             .with_command('mkdir -p /root/.ssh')
             .with_user('root')
         }
@@ -51,8 +51,31 @@ describe 'openssh::ssh_config' do
             .with_owner('root')
             .with_group('root')
             .with_mode('0600')
-            .that_requires('Exec[create /root/.ssh/config path]')
+            .that_requires('Exec[/root/.ssh/config]')
         }
+
+        context 'with user root and single Host config' do
+          let(:params) do
+            super().merge(
+              system_wide: true,
+              system_path: '/etc/ssh/ssh_config.d/04-multiplexing.conf',
+            )
+          end
+
+          it {
+            is_expected.not_to contain_exec('/etc/ssh/ssh_config.d/04-multiplexing.conf')
+          }
+
+          it {
+            is_expected.to contain_file('/etc/ssh/ssh_config.d/04-multiplexing.conf')
+              .with_content(%r{^Host serv1.domain.tld serv3.domain.tld serv1 serv3$})
+              .with_content(%r{^\s+ControlPath ~/.ssh/master-%r@%h:%p$})
+              .with_content(%r{^\s+ControlMaster auto$})
+              .with_owner('root')
+              .with_group('root')
+              .with_mode('0644')
+          }
+        end
       end
 
       context 'with global options' do
@@ -161,8 +184,8 @@ describe 'openssh::ssh_config' do
         }
 
         it {
-          is_expected.not_to contain_exec('create /root/.ssh/config path')
-          is_expected.not_to contain_exec('create /etc/ssh/ssh_config path')
+          is_expected.not_to contain_exec('/root/.ssh/config')
+          is_expected.not_to contain_exec('/etc/ssh/ssh_config')
         }
       end
     end

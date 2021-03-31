@@ -13,6 +13,8 @@ define openssh::ssh_config (
     # only when user_name is 'root'
     Boolean $system_wide  = false,
     Optional[Stdlib::Unixpath]
+            $system_path  = undef,
+    Optional[Stdlib::Unixpath]
             $sshkey_dir   = undef,
 )
 {
@@ -29,14 +31,20 @@ define openssh::ssh_config (
         default          => $user_ssh_dir,
     }
 
-    $set_global_config = ($user_name == 'root' and $system_wide)
-    if $set_global_config {
-        $config_path = '/etc/ssh/ssh_config'
-        $config_owner_group = 'root'
-        $config_mode = '0644'
-    }
-    elsif $system_wide {
-        fail("You can setup system SSH config /etc/ssh/ssh_config only for user root (not ${user_name})")
+    if $system_wide {
+        if $user_name == 'root' {
+            if $system_path {
+                $config_path = $system_path
+            }
+            else {
+                $config_path = '/etc/ssh/ssh_config'
+            }
+            $config_owner_group = 'root'
+            $config_mode = '0644'
+        }
+        else {
+            fail("You can setup system SSH config /etc/ssh/ssh_config only for user root (not ${user_name})")
+        }
     }
     else {
         $config_path = "${ssh_dir}/config"
@@ -45,19 +53,20 @@ define openssh::ssh_config (
             default => $user_name,
         }
         $config_mode = '0600'
+
+        if $ssh_config[0] {
+            exec { $config_path:
+                command => "mkdir -p ${ssh_dir}",
+                path    => '/usr/bin:/bin',
+                user    => $user_name,
+                creates => $ssh_dir,
+                before  => File[$config_path],
+            }
+        }
     }
 
     # if $ssh_config is not empty
     if $ssh_config[0] {
-        unless $set_global_config {
-          exec { "create ${config_path} path":
-              command => "mkdir -p ${ssh_dir}",
-              path    => '/usr/bin:/bin',
-              user    => $user_name,
-              creates => $ssh_dir,
-              before  => File[$config_path],
-          }
-        }
         file { $config_path:
             content =>  epp( 'openssh/ssh_config.epp',
                             {

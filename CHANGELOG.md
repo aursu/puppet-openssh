@@ -84,3 +84,14 @@ All notable changes to this project will be documented in this file.
 * Fixed sshd config template to properly interpret switch  parameters
 
 **Known Issues**
+
+## Release 0.6.0
+
+**Features**
+
+* Added custom path to system wide SSH configuration file
+  to allow setting up /etc/ssh/ssh_config.d/*.conf
+
+**Bugfixes**
+
+**Known Issues**
