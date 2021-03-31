@@ -126,7 +126,7 @@ define openssh::priv_key (
     fail("Provided PEM key data is not valid for ${id_type} key")
   }
 
-  exec { "mkdir dirname(${key_path})":
+  exec { $key_path:
     command => "mkdir -p ${ssh_dir}",
     path    => '/usr/bin:/bin',
     user    => $user_name,
@@ -138,7 +138,7 @@ define openssh::priv_key (
     owner   => $user_name,
     group   => $key_owner_group,
     mode    => '0600',
-    require => Exec["mkdir dirname(${key_path})"],
+    require => Exec[$key_path],
   }
 
   # add public key

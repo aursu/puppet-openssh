@@ -76,7 +76,7 @@ describe 'openssh::priv_key' do
         it { is_expected.to compile }
 
         it {
-          is_expected.to contain_exec('mkdir dirname(/root/.ssh/id_rsa)')
+          is_expected.to contain_exec('/root/.ssh/id_rsa')
             .with_command('mkdir -p /root/.ssh')
             .with_user('root')
         }
@@ -86,7 +86,7 @@ describe 'openssh::priv_key' do
             .with_content(rsa_key_data)
             .with_owner('root')
             .with_group('root')
-            .that_requires('Exec[mkdir dirname(/root/.ssh/id_rsa)]')
+            .that_requires('Exec[/root/.ssh/id_rsa]')
         }
       end
 
@@ -171,7 +171,7 @@ describe 'openssh::priv_key' do
           is_expected.to contain_file('/var/lib/jenkins/.ssh/id_rsa')
         }
         it {
-          is_expected.to contain_exec('mkdir dirname(/var/lib/jenkins/.ssh/id_rsa)')
+          is_expected.to contain_exec('/var/lib/jenkins/.ssh/id_rsa')
             .with_command('mkdir -p /var/lib/jenkins/.ssh')
             .with_user('jenkins')
         }
@@ -228,7 +228,7 @@ describe 'openssh::priv_key' do
         end
 
         it {
-          is_expected.to contain_exec('mkdir dirname(/home/jenkins/.ssh/id_rsa)')
+          is_expected.to contain_exec('/home/jenkins/.ssh/id_rsa')
             .with_command('mkdir -p /home/jenkins/.ssh')
             .with_user('jenkins')
         }
@@ -238,7 +238,7 @@ describe 'openssh::priv_key' do
             .with_content(rsa_key_data)
             .with_owner('jenkins')
             .with_group('jenkins')
-            .that_requires('Exec[mkdir dirname(/home/jenkins/.ssh/id_rsa)]')
+            .that_requires('Exec[/home/jenkins/.ssh/id_rsa]')
         }
 
         it {
@@ -325,7 +325,7 @@ describe 'openssh::priv_key' do
         it {
           is_expected.to contain_file('/root/.ssh/gitlab.id_ecdsa')
             .with_content(ec_key_data)
-            .that_requires('Exec[mkdir dirname(/root/.ssh/gitlab.id_ecdsa)]')
+            .that_requires('Exec[/root/.ssh/gitlab.id_ecdsa]')
         }
       end
     end
