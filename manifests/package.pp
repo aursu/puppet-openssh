@@ -26,11 +26,6 @@ class openssh::package (
       provider => 'yum',
     }
   }
-  else {
-    package { $package_name :
-      ensure   => $package_ensure,
-    }
-  }
 
   if $manage_client and $client_package {
     package { $client_package:
