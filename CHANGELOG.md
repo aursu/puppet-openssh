@@ -95,3 +95,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.6.2
+
+**Features**
+
+**Bugfixes**
+
+* Bugfix for Ubuntu
+
+**Known Issues**

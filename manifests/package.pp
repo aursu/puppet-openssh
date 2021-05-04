@@ -20,9 +20,16 @@ class openssh::package (
   ]       $server_dependencies  = $openssh::server_dependencies,
 )
 {
-  package { $package_name :
-    ensure   => $package_ensure,
-    provider => 'yum',
+  if $facts['os']['name'] in ['RedHat', 'CentOS'] {
+    package { $package_name :
+      ensure   => $package_ensure,
+      provider => 'yum',
+    }
+  }
+  else {
+    package { $package_name :
+      ensure   => $package_ensure,
+    }
   }
 
   if $manage_client and $client_package {
