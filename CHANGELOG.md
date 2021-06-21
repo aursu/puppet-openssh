@@ -118,3 +118,15 @@ All notable changes to this project will be documented in this file.
 * Added some Ubuntu 18.04 support
 
 **Known Issues**
+
+## Release 0.6.4
+
+**Features**
+
+* Added type Openssh::SshKey
+
+**Bugfixes**
+
+* Corrected `custom_ssh_keys` parameter type for profile `openssh::profile::server`
+
+**Known Issues**

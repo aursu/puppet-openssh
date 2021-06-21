@@ -1,6 +1,6 @@
 {
   "name": "aursu-openssh",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "author": "aursu",
   "summary": "Manage OpenSSH server/client/keys",
   "license": "Apache-2.0",
@@ -9,11 +9,11 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.1.0 < 7.0.0"
+      "version_requirement": ">= 4.1.0 < 8.0.0"
     },
     {
       "name": "camptocamp/systemd",
-      "version_requirement": ">= 2.0.0 < 3.0.0"
+      "version_requirement": ">= 2.0.0 < 4.0.0"
     }
   ],
   "operatingsystem_support": [
