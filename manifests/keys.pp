@@ -56,24 +56,10 @@
 #   specified as an array.
 #
 class openssh::keys (
-  Optional[
-    Array[
-      Struct[{
-        type => String,
-        key  => String,
-        name => String,
-      }]
-    ]
-  ]       $authorized       = undef,
-  Optional[
-    Array[
-      Struct[{
-        type => String,
-        key  => String,
-        name => String,
-      }]
-    ]
-  ]       $custom_ssh_keys  = $authorized,
+  Optional[Array[Openssh::SshKey]]
+          $authorized       = undef,
+  Optional[Array[Openssh::SshKey]]
+          $custom_ssh_keys  = $authorized,
   Optional[Stdlib::Base64]
           $sshkey           = undef,
   Enum['present', 'absent']
