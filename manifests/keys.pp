@@ -113,11 +113,13 @@ class openssh::keys (
       require => File[$sshkey_dir],
     }
 
-    @@sshkey { "${::fqdn}_root_known_host":
-      host_aliases => [$::hostname, $::fqdn, $::ipaddress],
-      key          => $::ssh['ecdsa']['key'],
-      target       => '/root/.ssh/known_hosts',
-      type         => $::ssh['ecdsa']['type'],
+    if $facts['ssh'] and $facts['ssh']['ecdsa'] {
+      @@sshkey { "${::fqdn}_root_known_host":
+        host_aliases => [$::hostname, $::fqdn, $::ipaddress],
+        key          => $facts['ssh']['ecdsa']['key'],
+        target       => '/root/.ssh/known_hosts',
+        type         => $facts['ssh']['ecdsa']['type'],
+      }
     }
   }
   elsif $sshkey_name {

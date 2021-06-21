@@ -105,3 +105,16 @@ All notable changes to this project will be documented in this file.
 * Bugfix for Ubuntu
 
 **Known Issues**
+
+## Release 0.6.3
+
+**Features**
+
+* Added ability to define custom_ssh_keys for profile openssh::profile::server
+
+**Bugfixes**
+
+* Improved user root key export integrity
+* Added some Ubuntu 18.04 support
+
+**Known Issues**
