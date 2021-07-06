@@ -15,7 +15,9 @@ describe 'openssh::profile::server' do
             custom_ssh_keys: [
               {
                 type: 'ssh-rsa',
+                # rubocop:disable Metrics/LineLength
                 key: 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDRzUkiTj2vWKNrdQtXV8KIVQ74+mBkS5E+fKIdRy6F/8N79Jqli0sx64O916YOGOwD+G7kRjjtXBVcL9xZ/Ur+OCpgAXgEGF8mPnP+mIBofE+OCxXnSbiLFuEiZybyh7MEiHpFaAn7pTLrbuU6gLO2nIs3bnM6FDYajoM0vhZPkKwuRUfE5gNG5sGDDYD2fhwafFsGBjnMjH0atakrKno9lQXkQMDg/hvELgHbbSglq3/h9R2gtKVk6R+tCBn+7b9iKFS2lw3vvb90uVwSOpLIOxefJ1acBspKzRFJrrDP2Obp3jLEzL+fSWGWXudGKsS0NkcV15p2wtRaTEAt9ryf',
+                # rubocop:enable Metrics/LineLength
                 name: 'Generated-by-Nova',
               },
             ],

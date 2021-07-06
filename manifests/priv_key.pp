@@ -155,12 +155,21 @@ define openssh::priv_key (
     # on CentOS 6 ssh-keygen could edit only RSA1 keys
     if  $facts['os']['name'] in ['RedHat', 'CentOS'] and
         $facts['os']['release']['major'] in ['7', '8'] {
+      file { "${key_path}.comm":
+        content => $key_data,
+        owner   => $user_name,
+        group   => $key_owner_group,
+        mode    => '0600',
+        require => File[$key_path],
+      }
+
       exec { "add ${pub_key} comment":
-        command     => "ssh-keygen -f ${key_path} -o -c -C ${pub_key_name}",
+        command     => "ssh-keygen -f ${key_path}.comm -o -c -C ${pub_key_name}",
         refreshonly => true,
         path        => '/usr/bin:/bin',
         user        => 'root',
         subscribe   => Exec["generate ${pub_key}"],
+        require     => File["${key_path}.comm"],
       }
     }
 

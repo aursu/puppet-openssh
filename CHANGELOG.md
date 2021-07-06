@@ -130,3 +130,13 @@ All notable changes to this project will be documented in this file.
 * Corrected `custom_ssh_keys` parameter type for profile `openssh::profile::server`
 
 **Known Issues**
+
+## Release 0.6.5
+
+**Features**
+
+**Bugfixes**
+
+* Added workaround for SSH public key comment setup
+
+**Known Issues**
