@@ -136,6 +136,7 @@ define openssh::priv_key (
       path    => '/usr/bin:/bin',
       user    => $user_name,
       creates => $ssh_dir,
+      before  => File[$key_path],
     }
   }
 
@@ -145,7 +146,6 @@ define openssh::priv_key (
     owner   => $user_name,
     group   => $key_owner_group,
     mode    => '0600',
-    require => Exec[$key_path],
   }
 
   # add public key
@@ -158,6 +158,7 @@ define openssh::priv_key (
         creates     => $pub_key,
         refreshonly => true,
         subscribe   => File[$key_path],
+        before      => File[$pub_key],
       }
     }
 
@@ -187,11 +188,10 @@ define openssh::priv_key (
     }
 
     file { $pub_key:
-      ensure  => $sshkey_ensure,
-      owner   => $user_name,
-      group   => $key_owner_group,
-      mode    => '0640',
-      require => Exec["generate ${pub_key}"],
+      ensure => $sshkey_ensure,
+      owner  => $user_name,
+      group  => $key_owner_group,
+      mode   => '0640',
     }
   }
 }

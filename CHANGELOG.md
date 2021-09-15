@@ -152,3 +152,13 @@ All notable changes to this project will be documented in this file.
 * Added $sshkey_enable to manage exec resources in openssh::auth_key
 
 **Known Issues**
+
+## Release 0.6.7
+
+**Features**
+
+**Bugfixes**
+
+* Fixed resource dependencies
+
+**Known Issues**
