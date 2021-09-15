@@ -46,6 +46,8 @@
 define openssh::priv_key (
   String  $user_name,
   String  $key_data,
+  Enum['present', 'absent']
+          $sshkey_ensure   = present,
   Optional[String]
           $sshkey_name     = $name,
   Openssh::KeyType
@@ -62,6 +64,8 @@ define openssh::priv_key (
           $key_prefix      = undef,
 )
 {
+  $sshkey_enable = ($sshkey_ensure == 'present')
+
   # compile user home directory
   $user_home = $user_name ? {
     'root' => '/root',
@@ -126,14 +130,17 @@ define openssh::priv_key (
     fail("Provided PEM key data is not valid for ${id_type} key")
   }
 
-  exec { $key_path:
-    command => "mkdir -p ${ssh_dir}",
-    path    => '/usr/bin:/bin',
-    user    => $user_name,
-    creates => $ssh_dir,
+  if $sshkey_enable {
+    exec { $key_path:
+      command => "mkdir -p ${ssh_dir}",
+      path    => '/usr/bin:/bin',
+      user    => $user_name,
+      creates => $ssh_dir,
+    }
   }
 
   file { $key_path:
+    ensure  => $sshkey_ensure,
     content => $key_data,
     owner   => $user_name,
     group   => $key_owner_group,
@@ -143,19 +150,23 @@ define openssh::priv_key (
 
   # add public key
   if $generate_public {
-    exec { "generate ${pub_key}":
-      command     => "ssh-keygen -f ${key_path} -y > ${pub_key}",
-      path        => '/usr/bin:/bin',
-      user        => 'root',
-      creates     => $pub_key,
-      refreshonly => true,
-      subscribe   => File[$key_path],
+    if $sshkey_enable {
+      exec { "generate ${pub_key}":
+        command     => "ssh-keygen -f ${key_path} -y > ${pub_key}",
+        path        => '/usr/bin:/bin',
+        user        => 'root',
+        creates     => $pub_key,
+        refreshonly => true,
+        subscribe   => File[$key_path],
+      }
     }
+
     # add comment to public key
     # on CentOS 6 ssh-keygen could edit only RSA1 keys
     if  $facts['os']['name'] in ['RedHat', 'CentOS'] and
         $facts['os']['release']['major'] in ['7', '8'] {
       file { "${key_path}.comm":
+        ensure  => $sshkey_ensure,
         content => $key_data,
         owner   => $user_name,
         group   => $key_owner_group,
@@ -163,17 +174,20 @@ define openssh::priv_key (
         require => File[$key_path],
       }
 
-      exec { "add ${pub_key} comment":
-        command     => "ssh-keygen -f ${key_path}.comm -o -c -C ${pub_key_name}",
-        refreshonly => true,
-        path        => '/usr/bin:/bin',
-        user        => 'root',
-        subscribe   => Exec["generate ${pub_key}"],
-        require     => File["${key_path}.comm"],
+      if $sshkey_enable {
+        exec { "add ${pub_key} comment":
+          command     => "ssh-keygen -f ${key_path}.comm -o -c -C ${pub_key_name}",
+          refreshonly => true,
+          path        => '/usr/bin:/bin',
+          user        => 'root',
+          subscribe   => Exec["generate ${pub_key}"],
+          require     => File["${key_path}.comm"],
+        }
       }
     }
 
     file { $pub_key:
+      ensure  => $sshkey_ensure,
       owner   => $user_name,
       group   => $key_owner_group,
       mode    => '0640',

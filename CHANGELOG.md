@@ -140,3 +140,15 @@ All notable changes to this project will be documented in this file.
 * Added workaround for SSH public key comment setup
 
 **Known Issues**
+
+## Release 0.6.6
+
+**Features**
+
+* Added $sshkey_ensure flag for openssh::priv_key
+
+**Bugfixes**
+
+* Added $sshkey_enable to manage exec resources in openssh::auth_key
+
+**Known Issues**

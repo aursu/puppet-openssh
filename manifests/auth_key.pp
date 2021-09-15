@@ -58,6 +58,8 @@ define openssh::auth_key (
   Boolean $sshkey_export        = false,
   String  $sshkey_export_tag    = 'sshkey',
 ) {
+  $sshkey_enable = ($sshkey_ensure == 'present')
+
   # find out user home directory
   $user_home = $sshkey_user ? {
     'root'  => '/root',
@@ -84,7 +86,7 @@ define openssh::auth_key (
     default => "${sshkey_user}@${::hostname}",
   }
 
-  if $manage_sshkey_target {
+  if $manage_sshkey_target and $sshkey_enable {
     exec { "mkdir ${ssh_dir} for ${pub_key_name}":
       command => "mkdir -p ${ssh_dir}",
       path    => '/usr/bin:/bin',
@@ -106,7 +108,7 @@ define openssh::auth_key (
       key     => $sshkey,
     }
 
-    if $manage_sshkey_target {
+    if $manage_sshkey_target and $sshkey_enable {
       Exec["mkdir ${ssh_dir} for ${pub_key_name}"] -> Ssh_authorized_key[$pub_key_name]
     }
   }
