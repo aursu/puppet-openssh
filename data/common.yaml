@@ -28,3 +28,4 @@ openssh::setup_host_key: false
 openssh::ciphers: ~
 openssh::macs: ~
 openssh::kexalgorithms: ~
+openssh::setup_ed25519_key: true

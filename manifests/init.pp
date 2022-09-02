@@ -49,6 +49,7 @@ class openssh (
           $sshkey_options,
   Boolean $setup_host_key,
   String  $package_ensure,
+  Boolean $setup_ed25519_key,
   String  $client_package_ensure  = $package_ensure,
   String  $server_package_ensure  = $package_ensure,
   Integer $ssh_port               = $openssh::params::ssh_port,

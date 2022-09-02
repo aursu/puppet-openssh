@@ -4,6 +4,10 @@
 #
 # @example
 #   include openssh::config
+#
+# @param setup_ed25519_key
+#   Whether to generate ed25519 ssh key by default (if absent) or not
+#
 class openssh::config (
   Stdlib::Unixpath
           $config                             = $openssh::config,
@@ -56,13 +60,14 @@ class openssh::config (
   ]       $kexalgorithms                      = $openssh::kexalgorithms,
   # whether to add HostKey directives into sshd_config or not
   Boolean $setup_host_key                     = $openssh::setup_host_key,
+  Boolean $setup_ed25519_key                  = $openssh::setup_ed25519_key,
 )
 {
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6'] {
     $ed25519_key_generate = false
   }
   else {
-    $ed25519_key_generate = true
+    $ed25519_key_generate = $setup_ed25519_key
   }
 
   file { $config:

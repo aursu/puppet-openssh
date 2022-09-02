@@ -55,6 +55,22 @@ describe 'openssh::config' do
               .with_content(%r{HostKey /etc/ssh/ssh_host_ed25519_key})
           }
         end
+
+        context 'when ed25519 key is not activated' do
+          let(:params) do
+            {
+              setup_host_key: true,
+              setup_ed25519_key: false,
+            }
+          end
+  
+          if ['centos-7-x86_64', 'centos-8-x86_64'].include?(os)
+            it {
+              is_expected.to contain_file('/etc/ssh/sshd_config')
+                .without_content(%r{ssh_host_ed25519_key})
+            }
+          end
+        end
       end
 
       context 'check UsePrivilegeSeparation is set properly' do
