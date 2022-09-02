@@ -162,3 +162,13 @@ All notable changes to this project will be documented in this file.
 * Fixed resource dependencies
 
 **Known Issues**
+
+## Release 0.6.8
+
+**Features**
+
+* Added ability to disable ed25519 key setup
+
+**Bugfixes**
+
+**Known Issues**
