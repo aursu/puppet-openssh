@@ -10,5 +10,5 @@ type Openssh::KexAlgorithms = Enum[
   'diffie-hellman-group-exchange-sha256',
   'ecdh-sha2-nistp256',
   'ecdh-sha2-nistp384',
-  'ecdh-sha2-nistp521'
+  'ecdh-sha2-nistp521',
 ]

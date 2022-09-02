@@ -61,8 +61,7 @@ class openssh::config (
   # whether to add HostKey directives into sshd_config or not
   Boolean $setup_host_key                     = $openssh::setup_host_key,
   Boolean $setup_ed25519_key                  = $openssh::setup_ed25519_key,
-)
-{
+) {
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6'] {
     $ed25519_key_generate = false
   }
@@ -71,7 +70,7 @@ class openssh::config (
   }
 
   file { $config:
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0640',

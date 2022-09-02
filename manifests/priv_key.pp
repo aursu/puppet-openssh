@@ -62,8 +62,7 @@ define openssh::priv_key (
   Boolean $generate_public = false,
   Optional[Pattern[/^[-a-z0-9]+$/]]
           $key_prefix      = undef,
-)
-{
+) {
   $sshkey_enable = ($sshkey_ensure == 'present')
 
   # compile user home directory

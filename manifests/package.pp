@@ -18,8 +18,7 @@ class openssh::package (
   Optional[
     Array[String]
   ]       $server_dependencies  = $openssh::server_dependencies,
-)
-{
+) {
   if $facts['os']['name'] in ['RedHat', 'CentOS'] {
     package { $package_name :
       ensure   => $package_ensure,

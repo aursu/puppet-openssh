@@ -39,7 +39,7 @@ class openssh::params {
           'aes128-gcm@openssh.com',
           'aes256-ctr',
           'aes192-ctr',
-          'aes128-ctr'
+          'aes128-ctr',
         ]
         $macs = [
           'hmac-sha2-512-etm@openssh.com',
@@ -108,6 +108,4 @@ class openssh::params {
   # specified with -f on the command line)
   $config          = '/etc/ssh/sshd_config'
   $ssh_port        = 22
-
-
 }

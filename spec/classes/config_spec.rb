@@ -63,7 +63,7 @@ describe 'openssh::config' do
               setup_ed25519_key: false,
             }
           end
-  
+
           if ['centos-7-x86_64', 'centos-8-x86_64'].include?(os)
             it {
               is_expected.to contain_file('/etc/ssh/sshd_config')

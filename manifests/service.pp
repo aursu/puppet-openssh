@@ -8,8 +8,7 @@ class openssh::service (
   Boolean $service_enabled  = true,
   String  $service_ensure   = running,
   String  $service_name     = $openssh::params::service_name,
-) inherits openssh::params
-{
+) inherits openssh::params {
   service { $service_name:
     ensure     => $service_ensure,
     hasstatus  => true,

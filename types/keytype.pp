@@ -7,5 +7,5 @@ type Openssh::KeyType = Enum[
   'ssh-ed25519',
   'dsa',
   'ed25519',
-  'rsa'
+  'rsa',
 ]

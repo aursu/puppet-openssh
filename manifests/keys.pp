@@ -94,7 +94,7 @@ class openssh::keys (
 
   if $custom_ssh_keys {
     file { "${sshkey_dir}/authorized_keys":
-      ensure  => present,
+      ensure  => file,
       content => template('openssh/authorized_keys.erb'),
       require => File[$sshkey_dir],
     }

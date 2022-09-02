@@ -16,8 +16,7 @@ define openssh::ssh_config (
             $system_path  = undef,
     Optional[Stdlib::Unixpath]
             $sshkey_dir   = undef,
-)
-{
+) {
     # compile user home directory
     $user_home = $user_name ? {
         'root' => '/root',
@@ -68,14 +67,14 @@ define openssh::ssh_config (
     # if $ssh_config is not empty
     if $ssh_config[0] {
         file { $config_path:
-            content =>  epp( 'openssh/ssh_config.epp',
+            content => epp( 'openssh/ssh_config.epp',
                             {
                                 'ssh_config' => $ssh_config,
                             }
                         ),
             owner   => $user_name,
             group   => $config_owner_group,
-            mode    => $config_mode
+            mode    => $config_mode,
         }
     }
 }

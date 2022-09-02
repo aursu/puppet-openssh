@@ -19,8 +19,7 @@ class openssh::ssh_keygen (
   Integer $sshkey_bits            = 2048,
   Boolean $root_key_export        = true,
   Boolean $sshkey_generate_enable = false,
-)
-{
+) {
   include openssh::keys
 
   # -t dsa | ecdsa | ed25519 | rsa

@@ -12,13 +12,12 @@
 #   include openssh::profile::server
 class openssh::profile::server (
   Optional[String]
-          $sshkey_name     = lookup({ 'name' => 'openssh::sshkey_name', 'default_value' => undef }),
+          $sshkey_name     = lookup( { 'name' => 'openssh::sshkey_name', 'default_value' => undef }),
   Optional[String]
-          $sshkey          = lookup({ 'name' => 'openssh::keys::sshkey', 'default_value' => undef }),
+          $sshkey          = lookup( { 'name' => 'openssh::keys::sshkey', 'default_value' => undef }),
   Optional[Array[Openssh::SshKey]]
-          $custom_ssh_keys = lookup({ 'name' => 'openssh::keys::custom_ssh_keys', 'default_value' => undef }),
-)
-{
+          $custom_ssh_keys = lookup( { 'name' => 'openssh::keys::custom_ssh_keys', 'default_value' => undef }),
+) {
   include openssh
   class { 'openssh::package':
     manage_client => true,

@@ -71,5 +71,5 @@ type Openssh::ClientOption = Enum[
     'UserKnownHostsFile',
     'VerifyHostKeyDNS',
     'VisualHostKey',
-    'XAuthLocation'
+    'XAuthLocation',
 ]
