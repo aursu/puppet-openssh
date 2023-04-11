@@ -142,7 +142,7 @@ define openssh::priv_key (
         owner   => $user_name,
         group   => $user_group,
         mode    => '0700',
-        require => Exec["${key_path}"],
+        require => Exec[$key_path],
       }
     }
   }
@@ -171,7 +171,7 @@ define openssh::priv_key (
 
     # add comment to public key
     # on CentOS 6 ssh-keygen could edit only RSA1 keys
-    if  $facts['os']['name'] in ['RedHat', 'CentOS'] and
+    if  $facts['os']['family'] == 'RedHat' and
         $facts['os']['release']['major'] in ['7', '8'] {
       file { "${key_path}.comm":
         ensure  => $sshkey_ensure,
