@@ -55,15 +55,17 @@ define openssh::priv_key (
   Enum['PEM', 'RFC4716', 'PKCS8']
           $sshkey_format   = 'PEM',
   Optional[String]
-          $user_group      = undef,
+          $user_group      = $user_name,
   # in order to support non standard .ssh directory locations
   Optional[Stdlib::Unixpath]
           $sshkey_dir      = undef,
   Boolean $generate_public = false,
   Optional[Pattern[/^[-a-z0-9]+$/]]
           $key_prefix      = undef,
+  Boolean $manage_ssh_dir  = false,
 ) {
   $sshkey_enable = ($sshkey_ensure == 'present')
+  $hostname = $facts['networking']['hostname']
 
   # compile user home directory
   $user_home = $user_name ? {
@@ -76,11 +78,6 @@ define openssh::priv_key (
   $ssh_dir = $sshkey_dir ? {
     Stdlib::Unixpath => $sshkey_dir,
     default          => $user_ssh_dir,
-  }
-
-  $key_owner_group = $user_group ? {
-    String  => $user_group,
-    default => $user_name,
   }
 
   $id_type = $sshkey_type ? {
@@ -101,7 +98,7 @@ define openssh::priv_key (
 
   $pub_key_name = $sshkey_name ? {
     String  => $sshkey_name,
-    default => "${user_name}@${::hostname}",
+    default => "${user_name}@${hostname}",
   }
 
   case $sshkey_format {
@@ -130,6 +127,7 @@ define openssh::priv_key (
   }
 
   if $sshkey_enable {
+    # to create full path to key
     exec { $key_path:
       command => "mkdir -p ${ssh_dir}",
       path    => '/usr/bin:/bin',
@@ -137,13 +135,23 @@ define openssh::priv_key (
       creates => $ssh_dir,
       before  => File[$key_path],
     }
+
+    if $manage_ssh_dir {
+      file { $ssh_dir:
+        ensure  => directory,
+        owner   => $user_name,
+        group   => $user_group,
+        mode    => '0700',
+        require => Exec["${key_path}"],
+      }
+    }
   }
 
   file { $key_path:
     ensure  => $sshkey_ensure,
     content => $key_data,
     owner   => $user_name,
-    group   => $key_owner_group,
+    group   => $user_group,
     mode    => '0600',
   }
 
@@ -169,7 +177,7 @@ define openssh::priv_key (
         ensure  => $sshkey_ensure,
         content => $key_data,
         owner   => $user_name,
-        group   => $key_owner_group,
+        group   => $user_group,
         mode    => '0600',
         require => File[$key_path],
       }
@@ -189,7 +197,7 @@ define openssh::priv_key (
     file { $pub_key:
       ensure => $sshkey_ensure,
       owner  => $user_name,
-      group  => $key_owner_group,
+      group  => $user_group,
       mode   => '0640',
     }
   }

@@ -2,9 +2,9 @@
   Array[Openssh::SshConfig] $ssh_config = [],
 | -%>
 <%
-$host_config = $ssh_config.filter |$config| { 'Host' in $config }
+$host_config = $ssh_config.filter |$config| { 'Host' in $config or 'Match' in $config }
 
-$global_config = $ssh_config.filter |$config| { !('Host' in $config) }
+$global_config = $ssh_config.filter |$config| { !('Host' in $config or 'Match' in $config) }
 
 $global_merged_config = $global_config.reduce({}) |$memo, $config| {
   $memo + $config
@@ -15,11 +15,22 @@ $global_merged_config = $global_config.reduce({}) |$memo, $config| {
 <% } -%>
 <%
 $host_config.each |$config| {
-  $host = join([$config['Host']].flatten, ' ')
-  $hostconfig = $config - ['Host']
--%>
+  if 'Host' in $config {
+    $host = join([$config['Host']].flatten, ' ')
+    $match = undef
+  }
+  else {
+    $host = undef
+    $match = join([$config['Match']].flatten, ' ')
+  }
 
+  $hostconfig = $config - ['Host', 'Match']
+-%>
+<% if $host { -%>
 Host <%= $host %>
+<% } else { -%>
+Match <%= $match %>
+<% } -%>
 <%
   $hostconfig.each |$opt, $val| {
 -%>

@@ -18,11 +18,11 @@ class openssh::package (
   Optional[
     Array[String]
   ]       $server_dependencies  = $openssh::server_dependencies,
-) {
-  if $facts['os']['name'] in ['RedHat', 'CentOS'] {
+) inherits openssh::params {
+  if $facts['os']['family'] == 'RedHat' {
     package { $package_name :
       ensure   => $package_ensure,
-      provider => 'yum',
+      provider => $openssh::params::package_provider,
     }
   }
 

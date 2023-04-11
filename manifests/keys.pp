@@ -78,8 +78,9 @@ class openssh::keys (
           $sshkey_target    = $openssh::sshkey_target,
   Array[String]
           $sshkey_options   = $openssh::sshkey_options,
-
 ) {
+  $fqdn = $facts['networking']['fqdn']
+
   $key_owner_group = $sshkey_group ? {
     String  => $sshkey_group,
     default => $sshkey_user,
@@ -100,8 +101,8 @@ class openssh::keys (
     }
 
     if $facts['ssh'] and $facts['ssh']['ecdsa'] {
-      @@sshkey { "${::fqdn}_root_known_host":
-        host_aliases => [$::hostname, $::fqdn, $::ipaddress],
+      @@sshkey { "${fqdn}_root_known_host":
+        host_aliases => [$facts['networking']['hostname'], $fqdn, $facts['networking']['ip']],
         key          => $facts['ssh']['ecdsa']['key'],
         target       => '/root/.ssh/known_hosts',
         type         => $facts['ssh']['ecdsa']['type'],

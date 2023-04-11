@@ -182,3 +182,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.7.0
+
+**Features**
+
+* Added Rocky Linux 8 support
+* Added user's ssh directory management in priv_key
+
+**Bugfixes**
+
+**Known Issues**

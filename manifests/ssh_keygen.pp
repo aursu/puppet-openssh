@@ -22,6 +22,8 @@ class openssh::ssh_keygen (
 ) {
   include openssh::keys
 
+  $fqdn = $facts['networking']['fqdn']
+
   # -t dsa | ecdsa | ed25519 | rsa
   $type = $sshkey_type ? {
     /-dss/    => 'dsa',
@@ -55,7 +57,7 @@ class openssh::ssh_keygen (
     }
     else {
       $sshkey_export = undef
-      warning("Can't parse root ssh public key from ${::fqdn}")
+      warning("Can't parse root ssh public key from ${fqdn}")
     }
 
     if $sshkey_export {

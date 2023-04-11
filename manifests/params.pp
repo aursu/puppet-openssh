@@ -7,14 +7,22 @@
 class openssh::params {
   $base_package_name = 'openssh'
 
-  if $facts['os']['name'] in ['RedHat', 'CentOS'] {
+  if $facts['os']['family'] == 'RedHat' {
     $server_package_name = 'openssh-server'
     $client_package_name = 'openssh-clients'
+
     if $facts['os']['release']['major'] == '7' {
       $openssh_server_dependencies = ['initscripts']
     }
     else {
       $openssh_server_dependencies = undef
+    }
+
+    if $facts['os']['release']['major'] == '8' {
+      $package_provider = 'dnf'
+    }
+    else {
+      $package_provider = 'yum'
     }
 
     case $facts['os']['release']['major'] {
@@ -94,7 +102,7 @@ class openssh::params {
     ]
   }
   else {
-    # if not RedHat - no support
+    # if not RedHat or Ubuntu - no support
     $server_package_name = undef
     $client_package_name = undef
     $openssh_server_dependencies = undef

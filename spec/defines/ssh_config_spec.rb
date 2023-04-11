@@ -92,6 +92,10 @@ describe 'openssh::ssh_config' do
                 'ServerAliveCountMax' => 1200,
                 'LogLevel' => 'ERROR',
               },
+              {
+                'Match' => ['host', 'serv3.domain.tld', 'user', 'root'],
+                'IdentityFile' => '~/.ssh/root_user',
+              },
             ],
           )
         end
@@ -108,6 +112,12 @@ describe 'openssh::ssh_config' do
             .with_content(%r{^Host serv1.domain.tld serv3.domain.tld serv1 serv3$})
             .with_content(%r{^\s+ControlPath ~/.ssh/master-%r@%h:%p$})
             .with_content(%r{^\s+ControlMaster auto$})
+        }
+
+        it {
+          is_expected.to contain_file('/root/.ssh/config')
+            .with_content(%r{^Match host serv3.domain.tld user root$})
+            .with_content(%r{^\s+IdentityFile ~/.ssh/root_user$})
         }
       end
 

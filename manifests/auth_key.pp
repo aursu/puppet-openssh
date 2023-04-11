@@ -60,6 +60,9 @@ define openssh::auth_key (
 ) {
   $sshkey_enable = ($sshkey_ensure == 'present')
 
+  $hostname = $facts['networking']['hostname']
+  $fqdn = $facts['networking']['fqdn']
+
   # find out user home directory
   $user_home = $sshkey_user ? {
     'root'  => '/root',
@@ -83,7 +86,7 @@ define openssh::auth_key (
 
   $pub_key_name = $sshkey_name ? {
     String  => $sshkey_name,
-    default => "${sshkey_user}@${::hostname}",
+    default => "${sshkey_user}@${hostname}",
   }
 
   if $manage_sshkey_target and $sshkey_enable {
@@ -114,8 +117,8 @@ define openssh::auth_key (
   }
 
   if $sshkey_export and $facts['ssh'] and $facts['ssh']['ecdsa'] {
-    @@sshkey { "${::fqdn}_${sshkey_user}_known_host":
-      host_aliases => [$::hostname, $::fqdn, $::ipaddress],
+    @@sshkey { "${fqdn}_${sshkey_user}_known_host":
+      host_aliases => [$hostname, $fqdn, $facts['networking']['ip']],
       key          => $facts['ssh']['ecdsa']['key'],
       target       => "${ssh_dir}/known_hosts",
       type         => $facts['ssh']['ecdsa']['type'],

@@ -20,7 +20,7 @@ openssh::server_package_ensure: installed
 openssh::sshkey_user: 'root'
 openssh::sshkey_group: 'root'
 openssh::sshkey_dir: '/root/.ssh'
-openssh::sshkey_name: root@%{facts.hostname}
+openssh::sshkey_name: root@%{facts.networking.hostname}
 openssh::sshkey_type: 'ssh-rsa'
 openssh::sshkey_target: '/root/.ssh/authorized_keys'
 openssh::sshkey_options: []

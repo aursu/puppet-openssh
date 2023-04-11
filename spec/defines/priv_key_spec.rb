@@ -88,6 +88,21 @@ describe 'openssh::priv_key' do
             .with_group('root')
             .that_requires('Exec[/root/.ssh/id_rsa]')
         }
+
+        context 'with user ssh directory mgmt' do
+          let(:params) do
+            super().merge(
+              'manage_ssh_dir' => true,
+            )
+          end
+
+          it {
+            is_expected.to contain_file('/root/.ssh')
+              .with_owner('root')
+              .with_group('root')
+              .that_requires('Exec[/root/.ssh/id_rsa]')
+          }
+        end
       end
 
       context 'with generating public key' do

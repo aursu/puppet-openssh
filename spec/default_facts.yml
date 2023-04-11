@@ -2,9 +2,10 @@
 #
 # Facts specified here will override the values provided by rspec-puppet-facts.
 ---
-ipaddress: "172.16.254.254"
-hostname: "securehost"
-fqdn: "securehost.securedomain"
+networking:
+  ip: "172.16.254.254"
+  hostname: "securehost"
+  fqdn: "securehost.securedomain"
 is_pe: false
 macaddress: "fa:16:3e:6c:00:00"
 ssh:
@@ -26,4 +27,3 @@ ssh:
       sha256: "SSHFP 1 2 169307ca63f7a0396666ed77824cb7f2482e3e364446e815b1458d9b050ff5be"
     key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQDGYJDZBWQusD5J1OhkepabbC/UpxFwL9EVZ8Jr66rNs0hbwTXDVjdhbvZirH0IrSvcjSBtNIMq7sIxfyhEhckJUBFa6XSkIy0oJsv2O1hHeiYM9+IvkavxRS3mPnc1EHD21XlvQECu8J85/9tPIRhRdhnArE5V0CtKFPra57Pt3LdRujZdkG3Z+zjlZ9oAz85WJhsNavvzQ0l2SCuC9n1fRXy/09lscUuwVy1wlQvVbx01AqNlgpH3OZ6MpyGnmLZQigfuG6yOjkEcEJm4eVGi5j8ND9UhUmq0gDVkm4nQYHCjbQJozOo5G0fTZmlq+auvFC0RTgRLcel4zxKe2xgZ"
     type: "ssh-rsa"
-

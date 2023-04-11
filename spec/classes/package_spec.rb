@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'openssh::package' do
   let(:pre_condition) do
     <<-PRECOND
-    class {'openssh': }
+    class { 'openssh': }
     PRECOND
   end
 
@@ -13,10 +13,18 @@ describe 'openssh::package' do
 
       it { is_expected.to compile }
 
-      it {
-        is_expected.to contain_package('openssh')
-          .with_ensure('installed')
-      }
+      if ['rocky-8-x86_64', 'centos-8-x86_64'].include?(os)
+        it {
+          is_expected.to contain_package('openssh')
+            .with_provider('dnf')
+        }
+      else
+        it {
+          is_expected.to contain_package('openssh')
+            .with_ensure('installed')
+            .with_provider('yum')
+        }
+      end
 
       context 'check client package management' do
         let(:params) do
