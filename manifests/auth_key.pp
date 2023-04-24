@@ -40,23 +40,17 @@
 #       string `<sshkey_user>@<hostname>`
 #
 define openssh::auth_key (
-  String  $sshkey_user,
-  Enum['present', 'absent']
-          $sshkey_ensure        = present,
-  Openssh::KeyType
-          $sshkey_type          = 'ssh-rsa',
-  Optional[String]
-          $sshkey_name          = $name,
-  Optional[Stdlib::Unixpath]
-          $sshkey_target        = undef,
+  String $sshkey_user,
+  Enum['present', 'absent'] $sshkey_ensure = present,
+  Openssh::KeyType $sshkey_type = 'ssh-rsa',
+  Optional[String] $sshkey_name = $name,
+  Optional[Stdlib::Unixpath] $sshkey_target = undef,
   Boolean $manage_sshkey_target = true,
-  Optional[Array[String]]
-          $sshkey_options       = undef,
-  Optional[Stdlib::Base64]
-          $sshkey               = undef,
-  Boolean $sshkey_propagate     = false,
-  Boolean $sshkey_export        = false,
-  String  $sshkey_export_tag    = 'sshkey',
+  Optional[Array[String]] $sshkey_options = undef,
+  Optional[Stdlib::Base64] $sshkey = undef,
+  Boolean $sshkey_propagate = false,
+  Boolean $sshkey_export = false,
+  String $sshkey_export_tag = 'sshkey',
 ) {
   $sshkey_enable = ($sshkey_ensure == 'present')
 

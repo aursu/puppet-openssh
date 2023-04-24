@@ -17,7 +17,7 @@ class openssh::service (
   }
 
   if  $facts['os']['family'] == 'RedHat' and
-      $facts['os']['release']['major'] in ['7', '8'] {
+  $facts['os']['release']['major'] in ['7', '8'] {
     systemd::dropin_file { 'sshd.service.d/override.conf':
       filename => 'override.conf',
       unit     => 'sshd.service',

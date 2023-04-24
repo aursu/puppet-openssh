@@ -56,28 +56,18 @@
 #   specified as an array.
 #
 class openssh::keys (
-  Optional[Array[Openssh::SshKey]]
-          $authorized       = undef,
-  Optional[Array[Openssh::SshKey]]
-          $custom_ssh_keys  = $authorized,
-  Optional[Stdlib::Base64]
-          $sshkey           = undef,
-  Enum['present', 'absent']
-          $sshkey_ensure    = present,
+  Optional[Array[Openssh::SshKey]] $authorized = undef,
+  Optional[Array[Openssh::SshKey]] $custom_ssh_keys = $authorized,
+  Optional[Stdlib::Base64] $sshkey = undef,
+  Enum['present', 'absent'] $sshkey_ensure = present,
   Boolean $sshkey_propagate = false,
-  Optional[String]
-          $sshkey_group     = $openssh::sshkey_group,
-  String  $sshkey_user      = $openssh::sshkey_user,
-  Openssh::KeyType
-          $sshkey_type      = $openssh::sshkey_type,
-  Optional[String]
-          $sshkey_name      = $openssh::sshkey_name,
-  Stdlib::Unixpath
-          $sshkey_dir       = $openssh::sshkey_dir,
-  Stdlib::Unixpath
-          $sshkey_target    = $openssh::sshkey_target,
-  Array[String]
-          $sshkey_options   = $openssh::sshkey_options,
+  Optional[String] $sshkey_group = $openssh::sshkey_group,
+  String $sshkey_user = $openssh::sshkey_user,
+  Openssh::KeyType $sshkey_type = $openssh::sshkey_type,
+  Optional[String] $sshkey_name = $openssh::sshkey_name,
+  Stdlib::Unixpath $sshkey_dir = $openssh::sshkey_dir,
+  Stdlib::Unixpath $sshkey_target = $openssh::sshkey_target,
+  Array[String] $sshkey_options = $openssh::sshkey_options,
 ) {
   $fqdn = $facts['networking']['fqdn']
 

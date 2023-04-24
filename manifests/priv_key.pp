@@ -46,22 +46,15 @@
 define openssh::priv_key (
   String  $user_name,
   String  $key_data,
-  Enum['present', 'absent']
-          $sshkey_ensure   = present,
-  Optional[String]
-          $sshkey_name     = $name,
-  Openssh::KeyType
-          $sshkey_type     = 'ssh-rsa',
-  Enum['PEM', 'RFC4716', 'PKCS8']
-          $sshkey_format   = 'PEM',
-  Optional[String]
-          $user_group      = $user_name,
+  Enum['present', 'absent'] $sshkey_ensure = present,
+  Optional[String] $sshkey_name = $name,
+  Openssh::KeyType $sshkey_type = 'ssh-rsa',
+  Enum['PEM', 'RFC4716', 'PKCS8'] $sshkey_format = 'PEM',
+  Optional[String] $user_group = $user_name,
   # in order to support non standard .ssh directory locations
-  Optional[Stdlib::Unixpath]
-          $sshkey_dir      = undef,
+  Optional[Stdlib::Unixpath] $sshkey_dir = undef,
   Boolean $generate_public = false,
-  Optional[Pattern[/^[-a-z0-9]+$/]]
-          $key_prefix      = undef,
+  Optional[Pattern[/^[-a-z0-9]+$/]] $key_prefix = undef,
   Boolean $manage_ssh_dir  = false,
 ) {
   $sshkey_enable = ($sshkey_ensure == 'present')
@@ -172,7 +165,7 @@ define openssh::priv_key (
     # add comment to public key
     # on CentOS 6 ssh-keygen could edit only RSA1 keys
     if  $facts['os']['family'] == 'RedHat' and
-        $facts['os']['release']['major'] in ['7', '8'] {
+    $facts['os']['release']['major'] in ['7', '8'] {
       file { "${key_path}.comm":
         ensure  => $sshkey_ensure,
         content => $key_data,

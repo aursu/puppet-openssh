@@ -7,14 +7,10 @@
 class openssh::ssh_keygen (
   String  $sshkey_name            = $openssh::sshkey_name,
   String  $sshkey_user            = $openssh::sshkey_user,
-  Openssh::KeyType
-          $sshkey_type            = $openssh::sshkey_type,
-  Stdlib::Unixpath
-          $sshkey_target          = $openssh::sshkey_target,
-  Stdlib::Unixpath
-          $sshkey_dir             = $openssh::sshkey_dir,
-  Array[String]
-          $sshkey_options         = $openssh::sshkey_options,
+  Openssh::KeyType $sshkey_type   = $openssh::sshkey_type,
+  Stdlib::Unixpath $sshkey_target = $openssh::sshkey_target,
+  Stdlib::Unixpath $sshkey_dir    = $openssh::sshkey_dir,
+  Array[String] $sshkey_options   = $openssh::sshkey_options,
   String  $sshkey_ensure          = present,
   Integer $sshkey_bits            = 2048,
   Boolean $root_key_export        = true,
