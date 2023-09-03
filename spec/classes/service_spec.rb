@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'openssh::service' do
   let(:pre_condition) do
     <<-PRECOND
-    class {'openssh': }
+    class { 'openssh': }
     PRECOND
   end
 
@@ -15,8 +15,7 @@ describe 'openssh::service' do
 
       context 'check service with default parameters' do
         let(:params) do
-          {
-          }
+          {}
         end
 
         it {

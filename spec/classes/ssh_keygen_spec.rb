@@ -58,13 +58,12 @@ describe 'openssh::ssh_keygen' do
       context 'when global Hiera in use' do
         let(:pre_condition) do
           <<-PRECOND
-          class {'openssh': }
-          class {'openssh::keys': }
+          class { 'openssh': }
+          class { 'openssh::keys': }
           PRECOND
         end
         let(:params) do
-          {
-          }
+          {}
         end
 
         context 'when openssh::sshkey_name is set' do
