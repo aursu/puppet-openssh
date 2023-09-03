@@ -3,6 +3,12 @@
 ---
 fixtures:
   forge_modules:
-    stdlib: "puppetlabs/stdlib"
-    systemd: "camptocamp/systemd"
-    sshkeys_core: "puppetlabs/sshkeys_core"
+    stdlib:
+      repo: "puppetlabs/stdlib"
+      ref: "8.4.0"
+    systemd:
+      repo: "puppet/systemd"
+      ref: "4.2.0"
+    sshkeys_core:
+      repo: "puppetlabs/sshkeys_core"
+      ref: "2.4.0"
