@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "source": "https://github.com/aursu/puppet-openssh.git",
   "project_page": "https://github.com/aursu/puppet-openssh",
+  "issues_url": "https://github.com/aursu/puppet-openssh/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
