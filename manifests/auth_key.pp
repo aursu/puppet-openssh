@@ -51,6 +51,7 @@ define openssh::auth_key (
   Boolean $sshkey_propagate = false,
   Boolean $sshkey_export = false,
   String $sshkey_export_tag = 'sshkey',
+  Array[String] $export_tags_extra = [],
 ) {
   $sshkey_enable = ($sshkey_ensure == 'present')
 
@@ -116,7 +117,7 @@ define openssh::auth_key (
       key          => $facts['ssh']['ecdsa']['key'],
       target       => "${ssh_dir}/known_hosts",
       type         => $facts['ssh']['ecdsa']['type'],
-      tag          => [$sshkey_export_tag, "${sshkey_user}_known_hosts", 'ecdsa'],
+      tag          => [$sshkey_export_tag, "${sshkey_user}_known_hosts", 'ecdsa'] + $export_tags_extra,
     }
   }
 }

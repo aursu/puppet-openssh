@@ -47,14 +47,35 @@ describe 'openssh::keys' do
         }
 
         it {
-          expect(exported_resources).to contain_sshkey('securehost.securedomain_root_known_host')
+          expect(exported_resources).to contain_sshkey('securehost.securedomain_root_known_hosts_ecdsa')
             .with(
               'host_aliases' => ['securehost', 'securehost.securedomain', '172.16.254.254'],
               'key'          => 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLzznbPhkm2Gvm8nDxINPImVpYU94Te4X8v5NP7lntGjth/NocvYmX9Yw99Nu0JAlD3l94PHfXHLpVelUQa4nGo=',
               'target'       => '/root/.ssh/known_hosts',
               'type'         => 'ecdsa-sha2-nistp256',
+              'tag'          => ['sshkey'],
             )
         }
+
+        context 'check export_tags_extra and sshkey_export_tag' do
+          let(:params) do
+            {
+              'sshkey_export_tag' => 'webserver',
+              'export_tags_extra' => ['c50', 'web'],
+            }
+          end
+
+          it {
+            expect(exported_resources).to contain_sshkey('securehost.securedomain_root_known_hosts_ecdsa')
+              .with(
+                'host_aliases' => ['securehost', 'securehost.securedomain', '172.16.254.254'],
+                'key'          => 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLzznbPhkm2Gvm8nDxINPImVpYU94Te4X8v5NP7lntGjth/NocvYmX9Yw99Nu0JAlD3l94PHfXHLpVelUQa4nGo=',
+                'target'       => '/root/.ssh/known_hosts',
+                'type'         => 'ecdsa-sha2-nistp256',
+                'tag'          => ['webserver', 'c50', 'web'],
+              )
+          }
+        end
       end
 
       context 'check custom_ssh_keys setup' do
@@ -110,14 +131,36 @@ describe 'openssh::keys' do
         }
 
         it {
-          expect(exported_resources).to contain_sshkey('securehost.securedomain_root_known_host')
+          expect(exported_resources).to contain_sshkey('securehost.securedomain_root_known_hosts_ecdsa')
             .with(
               'host_aliases' => ['securehost', 'securehost.securedomain', '172.16.254.254'],
               'key'          => 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLzznbPhkm2Gvm8nDxINPImVpYU94Te4X8v5NP7lntGjth/NocvYmX9Yw99Nu0JAlD3l94PHfXHLpVelUQa4nGo=',
               'target'       => '/root/.ssh/known_hosts',
               'type'         => 'ecdsa-sha2-nistp256',
+              'tag'          => ['sshkey', 'root_known_hosts', 'ecdsa'],
             )
         }
+
+        context 'check export_tags_extra and sshkey_export_tag' do
+          let(:params) do
+            {
+              'sshkey'            => sshkey,
+              'sshkey_export_tag' => 'webserver',
+              'export_tags_extra' => ['c50', 'web'],
+            }
+          end
+
+          it {
+            expect(exported_resources).to contain_sshkey('securehost.securedomain_root_known_hosts_ecdsa')
+              .with(
+                'host_aliases' => ['securehost', 'securehost.securedomain', '172.16.254.254'],
+                'key'          => 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLzznbPhkm2Gvm8nDxINPImVpYU94Te4X8v5NP7lntGjth/NocvYmX9Yw99Nu0JAlD3l94PHfXHLpVelUQa4nGo=',
+                'target'       => '/root/.ssh/known_hosts',
+                'type'         => 'ecdsa-sha2-nistp256',
+                'tag'          => ['webserver', 'root_known_hosts', 'ecdsa', 'c50', 'web'],
+              )
+          }
+        end
       end
     end
   end

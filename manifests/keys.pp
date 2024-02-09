@@ -55,6 +55,10 @@
 #   Key options; see sshd(8) for possible values. Multiple values should be
 #   specified as an array.
 #
+# @param export_tags_extra
+#   The list of additional tags, in addition to `sshkey_export_tag`, if you need
+#   to provide more than one tag.
+#
 class openssh::keys (
   Optional[Array[Openssh::SshKey]] $authorized = undef,
   Optional[Array[Openssh::SshKey]] $custom_ssh_keys = $authorized,
@@ -69,6 +73,7 @@ class openssh::keys (
   Stdlib::Unixpath $sshkey_target = $openssh::sshkey_target,
   Array[String] $sshkey_options = $openssh::sshkey_options,
   String $sshkey_export_tag = 'sshkey',
+  Array[String] $export_tags_extra = [],
   Boolean $sshkey_export = true,
 ) {
   $fqdn = $facts['networking']['fqdn']
@@ -98,7 +103,7 @@ class openssh::keys (
         key          => $facts['ssh']['ecdsa']['key'],
         target       => '/root/.ssh/known_hosts',
         type         => $facts['ssh']['ecdsa']['type'],
-        tag          => $sshkey_export_tag,
+        tag          => [$sshkey_export_tag] + $export_tags_extra,
       }
     }
   }
@@ -113,6 +118,7 @@ class openssh::keys (
       sshkey            => $sshkey,
       sshkey_export     => $sshkey_export,
       sshkey_export_tag => $sshkey_export_tag,
+      export_tags_extra => $export_tags_extra,
       require           => File[$sshkey_dir],
     }
   }

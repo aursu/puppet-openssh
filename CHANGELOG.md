@@ -218,7 +218,8 @@ All notable changes to this project will be documented in this file.
 
 **Features**
 
-* Added sshkey_export_tag into openssh::keys
+* Added `sshkey_export_tag` into openssh::keys
+* Added `export_tags_extra` for an additional list of tags
 
 **Bugfixes**
 
