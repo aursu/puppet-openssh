@@ -9,6 +9,7 @@ class openssh::package (
   String $client_ensure = $openssh::client_package_ensure,
   String $server_ensure = $openssh::server_package_ensure,
   String $package_name = $openssh::base_package_name,
+  String $install_options = $openssh::install_options,
   Boolean $manage_client = $openssh::manage_client_package,
   Optional[String] $client_package = $openssh::client_package_name,
   Boolean $manage_server = $openssh::manage_server_package,
@@ -17,14 +18,17 @@ class openssh::package (
 ) inherits openssh::params {
   if $facts['os']['family'] == 'RedHat' {
     package { $package_name :
-      ensure   => $package_ensure,
-      provider => $openssh::params::package_provider,
+      ensure          => $package_ensure,
+      provider        => $openssh::params::package_provider,
+      install_options => $install_options,
     }
   }
 
   if $manage_client and $client_package {
     package { $client_package:
-      ensure => $client_ensure,
+      ensure          => $client_ensure,
+      provider        => $openssh::params::package_provider,
+      install_options => $install_options,
     }
   }
 
@@ -35,7 +39,9 @@ class openssh::package (
       }
     }
     package { $server_package:
-      ensure => $server_ensure,
+      ensure          => $server_ensure,
+      provider        => $openssh::params::package_provider,
+      install_options => $install_options,
     }
   }
 }

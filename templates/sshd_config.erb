@@ -72,3 +72,6 @@ MACs <%= Array(@macs).join(',') %>
 <% if @ciphers %>
 Ciphers <%= Array(@ciphers).join(',') %>
 <% end %>
+<% if @hostkeyalgorithms %>
+HostKeyAlgorithms <%= Array(@hostkeyalgorithms).join(',') %>
+<% end %>
