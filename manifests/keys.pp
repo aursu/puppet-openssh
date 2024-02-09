@@ -68,6 +68,8 @@ class openssh::keys (
   Stdlib::Unixpath $sshkey_dir = $openssh::sshkey_dir,
   Stdlib::Unixpath $sshkey_target = $openssh::sshkey_target,
   Array[String] $sshkey_options = $openssh::sshkey_options,
+  String $sshkey_export_tag = 'sshkey',
+  Boolean $sshkey_export = true,
 ) {
   $fqdn = $facts['networking']['fqdn']
 
@@ -90,26 +92,28 @@ class openssh::keys (
       require => File[$sshkey_dir],
     }
 
-    if $facts['ssh'] and $facts['ssh']['ecdsa'] {
-      @@sshkey { "${fqdn}_root_known_host":
+    if $facts['ssh'] and $facts['ssh']['ecdsa'] and $sshkey_export {
+      @@sshkey { "${fqdn}_root_known_hosts_ecdsa":
         host_aliases => [$facts['networking']['hostname'], $fqdn, $facts['networking']['ip']],
         key          => $facts['ssh']['ecdsa']['key'],
         target       => '/root/.ssh/known_hosts',
         type         => $facts['ssh']['ecdsa']['type'],
+        tag          => $sshkey_export_tag,
       }
     }
   }
   elsif $sshkey_name {
     openssh::auth_key { $sshkey_name:
-      sshkey_ensure    => $sshkey_ensure,
-      sshkey_user      => $sshkey_user,
-      sshkey_type      => $sshkey_type,
-      sshkey_target    => $sshkey_target,
-      sshkey_options   => $sshkey_options,
-      sshkey_propagate => $sshkey_propagate,
-      sshkey           => $sshkey,
-      sshkey_export    => true,
-      require          => File[$sshkey_dir],
+      sshkey_ensure     => $sshkey_ensure,
+      sshkey_user       => $sshkey_user,
+      sshkey_type       => $sshkey_type,
+      sshkey_target     => $sshkey_target,
+      sshkey_options    => $sshkey_options,
+      sshkey_propagate  => $sshkey_propagate,
+      sshkey            => $sshkey,
+      sshkey_export     => $sshkey_export,
+      sshkey_export_tag => $sshkey_export_tag,
+      require           => File[$sshkey_dir],
     }
   }
 }
