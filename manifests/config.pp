@@ -31,6 +31,7 @@ class openssh::config (
   Optional[Variant[String, Array[Openssh::MACs]]] $macs = $openssh::macs,
   Optional[Variant[String, Array[Openssh::Ciphers]]] $ciphers = $openssh::ciphers,
   Optional[Variant[String, Array[Openssh::KexAlgorithms]]] $kexalgorithms = $openssh::kexalgorithms,
+  Optional[Array[String]] $hostkeyalgorithms = $openssh::hostkeyalgorithms,
   # whether to add HostKey directives into sshd_config or not
   Boolean $setup_host_key = $openssh::setup_host_key,
   Boolean $setup_ed25519_key = $openssh::setup_ed25519_key,

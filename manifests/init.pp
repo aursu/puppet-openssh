@@ -41,6 +41,7 @@ class openssh (
   Array[String] $sshkey_options,
   Boolean $setup_host_key,
   String $package_ensure,
+  String  $install_options = '',
   Boolean $setup_ed25519_key,
   String $client_package_ensure = $package_ensure,
   String $server_package_ensure = $package_ensure,
@@ -68,4 +69,6 @@ class openssh (
       Array[Openssh::KexAlgorithms]
     ]
   ]       $kexalgorithms,
+  Optional[Array[String]]
+          $hostkeyalgorithms = undef,
 ) inherits openssh::params {}
