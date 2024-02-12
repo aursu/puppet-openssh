@@ -76,6 +76,10 @@ class openssh (
       Array[Openssh::KexAlgorithms]
     ]
   ]       $kexalgorithms,
-  Optional[Array[String]]
-          $hostkeyalgorithms = undef,
+  Optional[
+    Variant[
+      String,
+      Array[Openssh::HostKeyAlgorithms]
+    ]
+  ]       $hostkeyalgorithms,
 ) inherits openssh::params {}

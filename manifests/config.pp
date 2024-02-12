@@ -8,6 +8,14 @@
 # @param setup_ed25519_key
 #   Whether to generate ed25519 ssh key by default (if absent) or not
 #
+# @param hostkeyalgorithms
+#   Specifies the host key signature algorithms that the server offers.
+#   The defaults (OpenSSH 7.3) are: ecdsa-sha2-nistp256-cert-v01@openssh.com,
+#   ecdsa-sha2-nistp384-cert-v01@openssh.com, ecdsa-sha2-nistp521-cert-v01@openssh.com,
+#   ssh-ed25519-cert-v01@openssh.com, ssh-rsa-cert-v01@openssh.com,
+#   ssh-dss-cert-v01@openssh.com, ecdsa-sha2-nistp256, ecdsa-sha2-nistp384,
+#   ecdsa-sha2-nistp521, ssh-ed25519, ssh-rsa, ssh-dss.
+#
 class openssh::config (
   Stdlib::Unixpath $config = $openssh::config,
   Stdlib::Port $ssh_port = $openssh::ssh_port,
@@ -31,7 +39,7 @@ class openssh::config (
   Optional[Variant[String, Array[Openssh::MACs]]] $macs = $openssh::macs,
   Optional[Variant[String, Array[Openssh::Ciphers]]] $ciphers = $openssh::ciphers,
   Optional[Variant[String, Array[Openssh::KexAlgorithms]]] $kexalgorithms = $openssh::kexalgorithms,
-  Optional[Array[String]] $hostkeyalgorithms = $openssh::hostkeyalgorithms,
+  Optional[Variant[String, Array[Openssh::HostKeyAlgorithms]]] $hostkeyalgorithms = $openssh::hostkeyalgorithms,
   # whether to add HostKey directives into sshd_config or not
   Boolean $setup_host_key = $openssh::setup_host_key,
   Boolean $setup_ed25519_key = $openssh::setup_ed25519_key,

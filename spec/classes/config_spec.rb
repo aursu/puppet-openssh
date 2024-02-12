@@ -111,6 +111,19 @@ describe 'openssh::config' do
           }
         end
       end
+
+      context 'when HostKeyAlgorithms are specified' do
+        let(:params) do
+          {
+            hostkeyalgorithms: ['ssh-ed25519', 'ecdsa-sha2-nistp384'],
+          }
+        end
+
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{^HostKeyAlgorithms ssh-ed25519,ecdsa-sha2-nistp384$})
+        }
+      end
     end
   end
 end

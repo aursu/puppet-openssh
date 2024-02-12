@@ -224,3 +224,14 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.9.3
+
+**Features**
+
+* Added `install_options` to pass to package installations
+* Added `HostKeyAlgorithms` into openssh sshd_config
+
+**Bugfixes**
+
+**Known Issues**
