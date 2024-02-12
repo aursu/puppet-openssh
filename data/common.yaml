@@ -29,3 +29,4 @@ openssh::ciphers: ~
 openssh::macs: ~
 openssh::kexalgorithms: ~
 openssh::setup_ed25519_key: true
+openssh::install_options: ~

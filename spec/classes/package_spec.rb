@@ -37,6 +37,20 @@ describe 'openssh::package' do
           is_expected.to contain_package('openssh-clients')
             .with_ensure('installed')
         }
+
+        context 'and custom repo is added for dependencies' do
+          let(:params) do
+            super().merge(
+              'install_options' => [{ '--enablerepo' => 'corp' }],
+            )
+          end
+  
+  
+          it {
+            is_expected.to contain_package('openssh-clients')
+              .with('install_options' => [{ '--enablerepo' => 'corp' }])
+          }
+        end
       end
 
       context 'check server package management' do

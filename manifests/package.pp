@@ -9,7 +9,14 @@ class openssh::package (
   String $client_ensure = $openssh::client_package_ensure,
   String $server_ensure = $openssh::server_package_ensure,
   String $package_name = $openssh::base_package_name,
-  String $install_options = $openssh::install_options,
+  Optional[
+    Array[
+      Variant[
+        String,
+        Hash[String, String]
+      ]
+    ]
+  ] $install_options = $openssh::install_options,
   Boolean $manage_client = $openssh::manage_client_package,
   Optional[String] $client_package = $openssh::client_package_name,
   Boolean $manage_server = $openssh::manage_server_package,
