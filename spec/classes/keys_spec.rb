@@ -57,6 +57,17 @@ describe 'openssh::keys' do
             )
         }
 
+        it {
+          expect(exported_resources).to contain_sshkey('securehost.securedomain_root_known_hosts_ed25519')
+            .with(
+              'host_aliases' => ['securehost', 'securehost.securedomain', '172.16.254.254'],
+              'key'          => 'AAAAC3NzaC1lZDI1NTE5AAAAIMhF9WDnRBzWaZSuAy2KUmDbcn0Qq7jgPruGLE+7bfdj',
+              'target'       => '/root/.ssh/known_hosts',
+              'type'         => 'ssh-ed25519',
+              'tag'          => ['sshkey'],
+            )
+        }
+
         context 'check export_tags_extra and sshkey_export_tag' do
           let(:params) do
             {
@@ -138,6 +149,17 @@ describe 'openssh::keys' do
               'target'       => '/root/.ssh/known_hosts',
               'type'         => 'ecdsa-sha2-nistp256',
               'tag'          => ['sshkey', 'root_known_hosts', 'ecdsa'],
+            )
+        }
+
+        it {
+          expect(exported_resources).to contain_sshkey('securehost.securedomain_root_known_hosts_ed25519')
+            .with(
+              'host_aliases' => ['securehost', 'securehost.securedomain', '172.16.254.254'],
+              'key'          => 'AAAAC3NzaC1lZDI1NTE5AAAAIMhF9WDnRBzWaZSuAy2KUmDbcn0Qq7jgPruGLE+7bfdj',
+              'target'       => '/root/.ssh/known_hosts',
+              'type'         => 'ssh-ed25519',
+              'tag'          => ['sshkey', 'root_known_hosts', 'ed25519'],
             )
         }
 
