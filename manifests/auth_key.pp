@@ -119,7 +119,7 @@ define openssh::auth_key (
           key          => $key_info['key'],
           target       => '/root/.ssh/known_hosts',
           type         => $key_info['type'],
-          tag          => [$sshkey_export_tag] + $export_tags_extra,
+          tag          => [$sshkey_export_tag, "${sshkey_user}_known_hosts", $key_type] + $export_tags_extra,
         }
       }
     }
