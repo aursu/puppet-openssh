@@ -235,3 +235,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.9.4
+
+**Features**
+
+* Added `sshkey` export resources for all existing host keys
+
+**Bugfixes**
+
+**Known Issues**
