@@ -20,7 +20,7 @@ ssh:
       sha1: "SSHFP 4 1 2ddf94ba8d460906242d570e4e75e78cc94799f2"
       sha256: "SSHFP 4 2 bb01f3691699c8b4bf92432fe62a598984086f92896bff3d63dba7bcd5685be3"
     key: "AAAAC3NzaC1lZDI1NTE5AAAAIMhF9WDnRBzWaZSuAy2KUmDbcn0Qq7jgPruGLE+7bfdj"
-    type": "ssh-ed25519"
+    type: "ssh-ed25519"
   rsa:
     fingerprints:
       sha1: "SSHFP 1 1 c1d09f0bd720b7cace4b531a427b1dc775760aa6"

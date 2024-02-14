@@ -97,13 +97,17 @@ class openssh::keys (
       require => File[$sshkey_dir],
     }
 
-    if $facts['ssh'] and $facts['ssh']['ecdsa'] and $sshkey_export {
-      @@sshkey { "${fqdn}_root_known_hosts_ecdsa":
-        host_aliases => [$facts['networking']['hostname'], $fqdn, $facts['networking']['ip']],
-        key          => $facts['ssh']['ecdsa']['key'],
-        target       => '/root/.ssh/known_hosts',
-        type         => $facts['ssh']['ecdsa']['type'],
-        tag          => [$sshkey_export_tag] + $export_tags_extra,
+    if $facts['ssh'] and $sshkey_export {
+      $facts['ssh'].each |$key_type, $key_info| {
+        if $key_info {
+          @@sshkey { "${fqdn}_root_known_hosts_${key_type}":
+            host_aliases => [$facts['networking']['hostname'], $fqdn, $facts['networking']['ip']],
+            key          => $key_info['key'],
+            target       => '/root/.ssh/known_hosts',
+            type         => $key_info['type'],
+            tag          => [$sshkey_export_tag] + $export_tags_extra,
+          }
+        }
       }
     }
   }

@@ -44,8 +44,7 @@ describe 'openssh::package' do
               'install_options' => [{ '--enablerepo' => 'corp' }],
             )
           end
-  
-  
+
           it {
             is_expected.to contain_package('openssh-clients')
               .with('install_options' => [{ '--enablerepo' => 'corp' }])
