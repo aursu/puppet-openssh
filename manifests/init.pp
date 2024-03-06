@@ -42,11 +42,6 @@ class openssh (
   Boolean $setup_host_key,
   String $package_ensure,
   Boolean $setup_ed25519_key,
-  String $client_package_ensure = $package_ensure,
-  String $server_package_ensure = $package_ensure,
-  Integer $ssh_port = $openssh::params::ssh_port,
-  String $config = $openssh::params::config,
-  String $base_package_name = $openssh::params::base_package_name,
   Optional[
     Array[
       Variant[
@@ -55,9 +50,6 @@ class openssh (
       ]
     ]
   ] $install_options,
-  Optional[String] $server_package_name = $openssh::params::server_package_name,
-  Optional[String] $client_package_name = $openssh::params::client_package_name,
-  Optional[Array[String]] $server_dependencies = $openssh::params::openssh_server_dependencies,
   Optional[
     Variant[
       String,
@@ -82,4 +74,12 @@ class openssh (
       Array[Openssh::HostKeyAlgorithms]
     ]
   ]       $hostkeyalgorithms,
+  String $client_package_ensure = $package_ensure,
+  String $server_package_ensure = $package_ensure,
+  Integer $ssh_port = $openssh::params::ssh_port,
+  String $config = $openssh::params::config,
+  String $base_package_name = $openssh::params::base_package_name,
+  Optional[String] $server_package_name = $openssh::params::server_package_name,
+  Optional[String] $client_package_name = $openssh::params::client_package_name,
+  Optional[Array[String]] $server_dependencies = $openssh::params::openssh_server_dependencies,
 ) inherits openssh::params {}
