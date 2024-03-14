@@ -23,12 +23,10 @@ class openssh::package (
   Optional[String] $server_package = $openssh::server_package_name,
   Optional[Array[String]] $server_dependencies = $openssh::server_dependencies,
 ) inherits openssh::params {
-  if $facts['os']['family'] == 'RedHat' {
-    package { $package_name :
-      ensure          => $package_ensure,
-      provider        => $openssh::params::package_provider,
-      install_options => $install_options,
-    }
+  package { $package_name :
+    ensure          => $package_ensure,
+    provider        => $openssh::params::package_provider,
+    install_options => $install_options,
   }
 
   if $manage_client and $client_package {

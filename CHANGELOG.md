@@ -245,3 +245,13 @@ All notable changes to this project will be documented in this file.
 **Bugfixes**
 
 **Known Issues**
+
+## Release 0.9.5
+
+**Features**
+
+**Bugfixes**
+
+* Corrected `base_package_name` and `package_provider` for Ubuntu OS
+
+**Known Issues**

@@ -5,9 +5,8 @@
 # @example
 #   include openssh::params
 class openssh::params {
-  $base_package_name = 'openssh'
-
   if $facts['os']['family'] == 'RedHat' {
+    $base_package_name = 'openssh'
     $server_package_name = 'openssh-server'
     $client_package_name = 'openssh-clients'
 
@@ -68,8 +67,11 @@ class openssh::params {
     }
   }
   elsif $facts['os']['name'] == 'Ubuntu' {
+    $base_package_name = 'ssh'
     $server_package_name = 'openssh-server'
     $client_package_name = 'openssh-client'
+    $package_provider = undef
+
     $openssh_server_dependencies = undef
     $ciphers = [
       'chacha20-poly1305@openssh.com',
@@ -102,6 +104,8 @@ class openssh::params {
     ]
   }
   else {
+    $base_package_name = 'openssh'
+    $package_provider = undef
     # if not RedHat or Ubuntu - no support
     $server_package_name = undef
     $client_package_name = undef

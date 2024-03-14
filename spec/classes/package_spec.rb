@@ -13,16 +13,25 @@ describe 'openssh::package' do
 
       it { is_expected.to compile }
 
-      if ['rocky-8-x86_64', 'centos-8-x86_64'].include?(os)
+      case os_facts[:os]['family']
+      when 'RedHat'
+        if os_facts[:os]['release']['major'] == '7'
+          it {
+            is_expected.to contain_package('openssh')
+              .with_ensure('installed')
+              .with_provider('yum')
+          }
+        else
+          it {
+            is_expected.to contain_package('openssh')
+              .with_provider('dnf')
+          }
+        end
+      when 'Debian'
         it {
-          is_expected.to contain_package('openssh')
-            .with_provider('dnf')
-        }
-      else
-        it {
-          is_expected.to contain_package('openssh')
+          is_expected.to contain_package('ssh')
             .with_ensure('installed')
-            .with_provider('yum')
+            .without_provider
         }
       end
 
@@ -33,10 +42,19 @@ describe 'openssh::package' do
           }
         end
 
-        it {
-          is_expected.to contain_package('openssh-clients')
-            .with_ensure('installed')
-        }
+        case os_facts[:os]['family']
+        when 'RedHat'
+          it {
+            is_expected.to contain_package('openssh-clients')
+              .with_ensure('installed')
+          }
+        when 'Debian'
+          it {
+            is_expected.to contain_package('openssh-client')
+              .with_ensure('installed')
+              .without_provider
+          }
+        end
 
         context 'and custom repo is added for dependencies' do
           let(:params) do
@@ -45,10 +63,19 @@ describe 'openssh::package' do
             )
           end
 
-          it {
-            is_expected.to contain_package('openssh-clients')
-              .with('install_options' => [{ '--enablerepo' => 'corp' }])
-          }
+          case os_facts[:os]['family']
+          when 'RedHat'
+            it {
+              is_expected.to contain_package('openssh-clients')
+                .with('install_options' => [{ '--enablerepo' => 'corp' }])
+            }
+          when 'Debian'
+            it {
+              is_expected.to contain_package('openssh-client')
+                .with('install_options' => [{ '--enablerepo' => 'corp' }])
+                .without_provider
+            }
+          end
         end
       end
 
@@ -64,7 +91,7 @@ describe 'openssh::package' do
             .with_ensure('installed')
         }
 
-        if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+        if os_facts[:os]['family'] == 'RedHat' && os_facts[:os]['release']['major'] == '7'
           it {
             is_expected.to contain_package('initscripts')
               .with_ensure('present')
@@ -80,7 +107,7 @@ describe 'openssh::package' do
             PRECOND
           end
 
-          if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+          if os_facts[:os]['family'] == 'RedHat' && os_facts[:os]['release']['major'] == '7'
             it {
               is_expected.not_to contain_package('initscripts')
             }
