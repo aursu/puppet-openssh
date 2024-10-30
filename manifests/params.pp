@@ -9,6 +9,7 @@ class openssh::params {
     $base_package_name = 'openssh'
     $server_package_name = 'openssh-server'
     $client_package_name = 'openssh-clients'
+    $service_name = 'sshd'
 
     if $facts['os']['release']['major'] == '7' {
       $openssh_server_dependencies = ['initscripts']
@@ -17,11 +18,11 @@ class openssh::params {
       $openssh_server_dependencies = undef
     }
 
-    if $facts['os']['release']['major'] == '8' {
-      $package_provider = 'dnf'
+    if $facts['os']['release']['major'] == '7' {
+      $package_provider = 'yum'
     }
     else {
-      $package_provider = 'yum'
+      $package_provider = 'dnf'
     }
 
     case $facts['os']['release']['major'] {
@@ -71,6 +72,7 @@ class openssh::params {
     $server_package_name = 'openssh-server'
     $client_package_name = 'openssh-client'
     $package_provider = undef
+    $service_name = 'ssh'
 
     $openssh_server_dependencies = undef
     $ciphers = [
@@ -113,9 +115,9 @@ class openssh::params {
     $ciphers = undef
     $macs = undef
     $kexalgorithms = undef
+    $service_name = 'sshd'
   }
 
-  $service_name    = 'sshd'
   # sshd(8) reads configuration data from /etc/ssh/sshd_config (or the file
   # specified with -f on the command line)
   $config          = '/etc/ssh/sshd_config'

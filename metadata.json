@@ -1,6 +1,6 @@
 {
   "name": "aursu-openssh",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "author": "aursu",
   "summary": "Manage OpenSSH server/client/keys",
   "license": "Apache-2.0",
@@ -21,21 +21,21 @@
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "7"
       ]
     },
     {
       "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "20.04",
-        "22.04"
+        "22.04",
+        "24.04"
       ]
     }
   ],

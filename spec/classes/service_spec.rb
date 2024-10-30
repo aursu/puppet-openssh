@@ -18,11 +18,20 @@ describe 'openssh::service' do
           {}
         end
 
-        it {
-          is_expected.to contain_service('sshd')
-            .with_ensure('running')
-            .with_enable(true)
-        }
+        case os_facts[:os]['family']
+        when 'Debian'
+          it {
+            is_expected.to contain_service('ssh')
+              .with_ensure('running')
+              .with_enable(true)
+          }
+        else
+          it {
+            is_expected.to contain_service('sshd')
+              .with_ensure('running')
+              .with_enable(true)
+          }
+        end
       end
 
       if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)

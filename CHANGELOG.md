@@ -255,3 +255,13 @@ All notable changes to this project will be documented in this file.
 * Corrected `base_package_name` and `package_provider` for Ubuntu OS
 
 **Known Issues**
+
+## Release 0.9.6
+
+**Features**
+
+**Bugfixes**
+
+* Corrected service name for Ubuntu OS
+
+**Known Issues**
