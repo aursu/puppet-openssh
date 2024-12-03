@@ -18,7 +18,7 @@ class openssh::params {
       $openssh_server_dependencies = undef
     }
 
-    if $facts['os']['release']['major'] == '7' {
+    if $facts['os']['release']['major'] in ['6', '7'] {
       $package_provider = 'yum'
     }
     else {

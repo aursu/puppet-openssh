@@ -256,12 +256,13 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.9.6
+## Release 0.9.7
 
 **Features**
 
 **Bugfixes**
 
 * Corrected service name for Ubuntu OS
+* Pacakge installation on CentOS 6
 
 **Known Issues**
