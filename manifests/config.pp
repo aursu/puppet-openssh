@@ -20,7 +20,7 @@ class openssh::config (
   Stdlib::Unixpath $config = $openssh::config,
   Stdlib::Port $ssh_port = $openssh::ssh_port,
   Optional[Integer[1,2]] $protocol = $openssh::protocol,
-  String $config_template = $openssh::config_template,
+  Optional[String] $config_template = $openssh::config_template,
   Variant[Enum['none'], Stdlib::Unixpath] $banner = $openssh::banner,
   Optional[String] $keys_file = $openssh::keys_file,
   Enum['yes', 'no', 'all', 'local', 'remote']
@@ -51,12 +51,22 @@ class openssh::config (
     $ed25519_key_generate = $setup_ed25519_key
   }
 
-  file { $config:
-    ensure  => file,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0640',
-    content => template($config_template),
+  if $config_template {
+    file { $config:
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0640',
+      content => template($config_template),
+    }
+  }
+  else {
+    file { $config:
+      ensure => file,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0640',
+    }
   }
 
   if $setup_host_key {

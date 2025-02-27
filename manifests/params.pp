@@ -10,6 +10,7 @@ class openssh::params {
     $server_package_name = 'openssh-server'
     $client_package_name = 'openssh-clients'
     $service_name = 'sshd'
+    $config_template = 'openssh/sshd_config.redhat.erb'
 
     if $facts['os']['release']['major'] == '7' {
       $openssh_server_dependencies = ['initscripts']
@@ -73,6 +74,7 @@ class openssh::params {
     $client_package_name = 'openssh-client'
     $package_provider = undef
     $service_name = 'ssh'
+    $config_template = 'openssh/sshd_config.ubuntu.erb'
 
     $openssh_server_dependencies = undef
     $ciphers = [
@@ -116,6 +118,7 @@ class openssh::params {
     $macs = undef
     $kexalgorithms = undef
     $service_name = 'sshd'
+    $config_template = undef
   }
 
   # sshd(8) reads configuration data from /etc/ssh/sshd_config (or the file

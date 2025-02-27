@@ -15,7 +15,7 @@ describe 'openssh::package' do
 
       case os_facts[:os]['family']
       when 'RedHat'
-        if os_facts[:os]['release']['major'] == '7'
+        if os_facts[:os]['release']['major'] in ['6', '7']
           it {
             is_expected.to contain_package('openssh')
               .with_ensure('installed')

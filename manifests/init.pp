@@ -23,7 +23,6 @@ class openssh (
   String $gss_api_authentication,
   String $hostbased_authentication,
   Openssh::Switch $challenge_response_authentication,
-  String $config_template,
   Optional[String] $use_privilege_separation,
   Optional[Integer[1,2]] $protocol,
   String $permit_tunnel,
@@ -82,4 +81,5 @@ class openssh (
   Optional[String] $server_package_name = $openssh::params::server_package_name,
   Optional[String] $client_package_name = $openssh::params::client_package_name,
   Optional[Array[String]] $server_dependencies = $openssh::params::openssh_server_dependencies,
+  Optional[String] $config_template = $openssh::params::config_template,
 ) inherits openssh::params {}

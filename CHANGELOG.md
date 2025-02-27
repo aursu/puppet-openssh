@@ -256,7 +256,7 @@ All notable changes to this project will be documented in this file.
 
 **Known Issues**
 
-## Release 0.9.7
+## Release 0.9.8
 
 **Features**
 
@@ -264,5 +264,6 @@ All notable changes to this project will be documented in this file.
 
 * Corrected service name for Ubuntu OS
 * Pacakge installation on CentOS 6
+* SFTP on Ubuntu OS
 
 **Known Issues**

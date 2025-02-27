@@ -9,7 +9,7 @@ openssh::password_authentication: 'yes'
 openssh::use_privilege_separation: ~
 openssh::protocol: ~
 openssh::permit_tunnel: 'no'
-openssh::config_template: openssh/sshd_config.erb
+openssh::config_template: ~
 openssh::keys_file: .ssh/authorized_keys
 openssh::banner: 'none'
 openssh::manage_server_package: false
