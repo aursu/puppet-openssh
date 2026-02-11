@@ -109,15 +109,15 @@ Banner <%= @banner %>
 # override default of no subsystems
 Subsystem       sftp    /usr/libexec/openssh/sftp-server
 
-<% if @kexalgorithms %>
+<% if Array(@kexalgorithms).any? %>
 KexAlgorithms <%= Array(@kexalgorithms).join(',') %>
 <% end %>
-<% if @macs %>
+<% if Array(@macs).any? %>
 MACs <%= Array(@macs).join(',') %>
 <% end %>
-<% if @ciphers %>
+<% if Array(@ciphers).any? %>
 Ciphers <%= Array(@ciphers).join(',') %>
 <% end %>
-<% if @hostkeyalgorithms %>
+<% if Array(@hostkeyalgorithms).any? %>
 HostKeyAlgorithms <%= Array(@hostkeyalgorithms).join(',') %>
 <% end %>
