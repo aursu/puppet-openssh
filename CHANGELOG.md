@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.9.9
+
+**Features**
+
+* PDK upgrade to 3.6.1
+
+**Bugfixes**
+
+* Bugfix for empty settings' array
+
+**Known Issues**
+
 ## Release 0.1.0
 
 **Features**

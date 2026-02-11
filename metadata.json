@@ -1,6 +1,6 @@
 {
   "name": "aursu-openssh",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "author": "aursu",
   "summary": "Manage OpenSSH server/client/keys",
   "license": "Apache-2.0",
@@ -46,7 +46,7 @@
       "version_requirement": ">= 5.5.0 < 9.0.0"
     }
   ],
-  "pdk-version": "3.0.0",
+  "pdk-version": "3.6.1",
   "template-url": "https://github.com/puppetlabs/pdk-templates#main",
-  "template-ref": "heads/main-0-g017b84e"
+  "template-ref": "tags/3.6.1-0-gb9426e5"
 }
