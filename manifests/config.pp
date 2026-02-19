@@ -40,10 +40,19 @@ class openssh::config (
   Optional[Variant[String, Array[Openssh::Ciphers]]] $ciphers = $openssh::ciphers,
   Optional[Variant[String, Array[Openssh::KexAlgorithms]]] $kexalgorithms = $openssh::kexalgorithms,
   Optional[Variant[String, Array[Openssh::HostKeyAlgorithms]]] $hostkeyalgorithms = $openssh::hostkeyalgorithms,
+  Optional[Tuple[Integer[0], Integer[0, 100], Integer[0]]] $max_startups = $openssh::max_startups,
+  Integer[1] $max_sessions = $openssh::max_sessions,
+  Openssh::Switch $use_dns = $openssh::use_dns,
   # whether to add HostKey directives into sshd_config or not
   Boolean $setup_host_key = $openssh::setup_host_key,
   Boolean $setup_ed25519_key = $openssh::setup_ed25519_key,
 ) {
+  if $max_startups {
+    if $max_startups[2] < $max_startups[0] {
+      fail("MaxStartups: 'full' value (${max_startups[2]}) must be >= 'start' value (${max_startups[0]})")
+    }
+  }
+
   if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6'] {
     $ed25519_key_generate = false
   }

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.10.0
+
+**Features**
+
+* Added MaxStartups parameter with validation (start:rate:full format)
+* Added MaxSessions parameter with default value of 5
+* Added UseDNS parameter with default value of 'no'
+* Added comprehensive RSpec tests for all new parameters
+* Added runtime validation for MaxStartups to ensure full >= start
+
+**Bugfixes**
+
+**Known Issues**
+
 ## Release 0.9.9
 
 **Features**

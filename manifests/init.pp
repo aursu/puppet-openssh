@@ -73,6 +73,8 @@ class openssh (
       Array[Openssh::HostKeyAlgorithms]
     ]
   ]       $hostkeyalgorithms,
+  Integer[1] $max_sessions = 5,
+  Openssh::Switch $use_dns = false,
   String $client_package_ensure = $package_ensure,
   String $server_package_ensure = $package_ensure,
   Integer $ssh_port = $openssh::params::ssh_port,
@@ -82,4 +84,5 @@ class openssh (
   Optional[String] $client_package_name = $openssh::params::client_package_name,
   Optional[Array[String]] $server_dependencies = $openssh::params::openssh_server_dependencies,
   Optional[String] $config_template = $openssh::params::config_template,
+  Optional[Tuple[Integer[0], Integer[0, 100], Integer[0]]] $max_startups = undef,
 ) inherits openssh::params {}
