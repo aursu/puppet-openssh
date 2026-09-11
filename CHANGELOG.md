@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.11.0
+
+**Features**
+
+* Added ListenAddress parameter, so sshd can be bound to specific addresses instead of the
+  wildcard. Accepts an array and emits one ListenAddress directive per entry, which is what
+  sshd expects - it takes repeated directives rather than a joined list.
+* Defaults to undef, which emits nothing and leaves sshd on the wildcard address. Existing
+  consumers are unaffected, and a spec asserts the commented-out defaults still render so an
+  upgrade cannot silently start restricting where sshd listens.
+* Typed as Stdlib::IP::Address::Nosubnet rather than Stdlib::IP::Address, which rejects a
+  prefix length at catalogue time. `10.0.0.10/24` is the likeliest mistake, because the value
+  is usually copied from an interface definition or `ip addr` output, and sshd refuses to
+  start on a malformed ListenAddress. An empty array is rejected for the same reason - it
+  would be indistinguishable from undef while reading like an intent to restrict.
+* Added RSpec coverage for rendering (none, single, several, IPv6) and for the rejected forms.
+
+**Bugfixes**
+
+**Known Issues**
+
+* This parameter can lock you out of a host. sshd binds only what is listed, so an address
+  that is not present on the machine, or one that your route to the host does not use, removes
+  access at the next restart. Verify against the running interfaces and keep a second session
+  open. The module deliberately does not validate the address against node facts: an address
+  configured earlier in the same run would not yet appear in them, and failing that case would
+  be worse than the problem it prevents.
+
 ## Release 0.10.0
 
 **Features**

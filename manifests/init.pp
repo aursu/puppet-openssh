@@ -14,8 +14,31 @@
 #   is "yes".
 #   see also https://access.redhat.com/solutions/336773
 #
+# @param listen_address
+#   Addresses sshd listens on, one ListenAddress directive per entry. Undef
+#   (the default) emits none, leaving sshd on the wildcard address, which is
+#   its own default and the previous behaviour of this module.
+#
+#   Use it to keep sshd off interfaces it has no business on - a host with
+#   container bridges answers SSH on every one of them by default.
+#
+#   Addresses must carry no prefix length: `10.0.0.10`, not `10.0.0.10/24`.
+#   The type enforces that, because the value is usually copied from somewhere
+#   that writes CIDR - an interface definition or `ip addr` output - and sshd
+#   refuses to start on a malformed ListenAddress.
+#
+#   Setting this can lock you out of a host. sshd binds only what is listed, so
+#   an address that does not exist on the machine, or one that your own route
+#   to the host does not use, removes your access at the next restart. Verify
+#   against the running interfaces first, and keep a second session open.
+#
 # @example
 #   include openssh
+#
+# @example Bind sshd to two internal addresses
+#   class { 'openssh':
+#     listen_address => ['10.100.16.12', '10.100.17.12'],
+#   }
 class openssh (
   String $allow_tcp_forwarding,
   String $permit_root_login,
@@ -85,4 +108,5 @@ class openssh (
   Optional[Array[String]] $server_dependencies = $openssh::params::openssh_server_dependencies,
   Optional[String] $config_template = $openssh::params::config_template,
   Optional[Tuple[Integer[0], Integer[0, 100], Integer[0]]] $max_startups = undef,
+  Optional[Array[Stdlib::IP::Address::Nosubnet, 1]] $listen_address = undef,
 ) inherits openssh::params {}

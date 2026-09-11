@@ -43,6 +43,7 @@ class openssh::config (
   Optional[Tuple[Integer[0], Integer[0, 100], Integer[0]]] $max_startups = $openssh::max_startups,
   Integer[1] $max_sessions = $openssh::max_sessions,
   Openssh::Switch $use_dns = $openssh::use_dns,
+  Optional[Array[Stdlib::IP::Address::Nosubnet, 1]] $listen_address = $openssh::listen_address,
   # whether to add HostKey directives into sshd_config or not
   Boolean $setup_host_key = $openssh::setup_host_key,
   Boolean $setup_ed25519_key = $openssh::setup_ed25519_key,

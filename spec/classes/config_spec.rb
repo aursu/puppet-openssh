@@ -210,6 +210,73 @@ describe 'openssh::config' do
             .with_content(%r{^UseDNS no$})
         }
       end
+
+      context 'when ListenAddress is not specified (default)' do
+        # The wildcard bind is sshd's own default, and staying on it is what
+        # every existing consumer of this module already has. Assert the
+        # commented lines survive, so an upgrade cannot silently start
+        # restricting where sshd listens.
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{^#ListenAddress 0\.0\.0\.0$})
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{^#ListenAddress ::$})
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .without_content(%r{^ListenAddress})
+        }
+      end
+
+      context 'when ListenAddress is a single IPv4 address' do
+        let(:params) do
+          {
+            listen_address: ['10.100.16.12'],
+          }
+        end
+
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{^ListenAddress 10\.100\.16\.12$})
+        }
+
+        # The commented defaults must go: leaving them is harmless to sshd but
+        # tells a reader the host is still on the wildcard when it is not.
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .without_content(%r{^#ListenAddress})
+        }
+      end
+
+      context 'when ListenAddress has several addresses' do
+        let(:params) do
+          {
+            listen_address: ['10.100.16.12', '10.100.17.12'],
+          }
+        end
+
+        # sshd takes one directive per address rather than a joined list, so
+        # each entry has to render on its own line.
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{^ListenAddress 10\.100\.16\.12$})
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{^ListenAddress 10\.100\.17\.12$})
+        }
+      end
+
+      context 'when ListenAddress is IPv6' do
+        let(:params) do
+          {
+            listen_address: ['::1', '2001:db8::1'],
+          }
+        end
+
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{^ListenAddress ::1$})
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{^ListenAddress 2001:db8::1$})
+        }
+      end
     end
   end
 
@@ -349,6 +416,70 @@ describe 'openssh::config' do
       end
 
       it { is_expected.to compile.and_raise_error(%r{expects an Openssh::Switch = Variant\[Boolean, Enum\['no', 'yes'\]\] value, got Integer}) }
+    end
+
+    # ListenAddress is a lockout-class parameter: sshd binds only what is
+    # listed and refuses to start on a malformed entry, so the type has to
+    # reject bad input at catalogue time rather than at service start.
+    context 'when ListenAddress carries a prefix length' do
+      let(:params) do
+        {
+          listen_address: ['10.100.16.12/26'],
+        }
+      end
+
+      # The likeliest mistake by far, because the value is usually copied from
+      # an interface definition or `ip addr`, both of which write CIDR. sshd
+      # rejects it and then will not start at all.
+      it { is_expected.to compile.and_raise_error(%r{index 0 expects a Stdlib::IP::Address::Nosubnet}) }
+    end
+
+    context 'when ListenAddress is not an address' do
+      let(:params) do
+        {
+          listen_address: ['not-an-address'],
+        }
+      end
+
+      it { is_expected.to compile.and_raise_error(%r{index 0 expects a Stdlib::IP::Address::Nosubnet}) }
+    end
+
+    context 'when ListenAddress is a bare string instead of an array' do
+      let(:params) do
+        {
+          listen_address: '10.100.16.12',
+        }
+      end
+
+      it { is_expected.to compile.and_raise_error(%r{expects a value of type Undef or Array, got String}) }
+    end
+
+    context 'when ListenAddress is an empty array' do
+      let(:params) do
+        {
+          listen_address: [],
+        }
+      end
+
+      # An empty array would render no directives at all, which is
+      # indistinguishable from undef but reads like an intent to restrict.
+      # Rejecting it keeps "no ListenAddress" spelled exactly one way.
+      it { is_expected.to compile.and_raise_error(%r{expects size to be at least 1, got 0}) }
+    end
+
+    context 'when ListenAddress is explicitly set to undef' do
+      let(:params) do
+        {
+          listen_address: :undef,
+        }
+      end
+
+      it { is_expected.to compile }
+
+      it {
+        is_expected.to contain_file('/etc/ssh/sshd_config')
+          .with_content(%r{^#ListenAddress 0\.0\.0\.0$})
+      }
     end
   end
 end

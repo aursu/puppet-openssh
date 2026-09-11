@@ -15,8 +15,14 @@ Include /etc/ssh/sshd_config.d/*.conf
 
 Port <%= @ssh_port %>
 #AddressFamily any
+<% if @listen_address -%>
+<% @listen_address.each do |addr| -%>
+ListenAddress <%= addr %>
+<% end -%>
+<% else -%>
 #ListenAddress 0.0.0.0
 #ListenAddress ::
+<% end -%>
 
 <% if @setup_host_key %>
 HostKey /etc/ssh/ssh_host_rsa_key
