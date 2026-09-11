@@ -211,6 +211,18 @@ describe 'openssh::config' do
         }
       end
 
+      # Any sshd_config change reloads the systemd manager, because that is
+      # what re-runs sshd-socket-generator. Notified on every change, not on
+      # ListenAddress alone - the generator reads Port too.
+      context 'sshd_config notifies the systemd reload' do
+        it { is_expected.to contain_class('bsys::systemctl::daemon_reload') }
+
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .that_notifies('Class[bsys::systemctl::daemon_reload]')
+        }
+      end
+
       context 'when ListenAddress is not specified (default)' do
         # The wildcard bind is sshd's own default, and staying on it is what
         # every existing consumer of this module already has. Assert the

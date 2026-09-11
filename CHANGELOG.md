@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.12.0
+
+**Bugfixes**
+
+* **`listen_address` now reaches the listener on socket-activated hosts.** 0.11.0 wrote
+  `ListenAddress` into sshd_config and reloaded the service, which on Ubuntu 22.10 and newer
+  changes nothing: sshd does not perform the bind there. systemd owns the socket, and its
+  addresses come from a unit fragment that `sshd-socket-generator` derives from sshd_config.
+  That generator only re-runs on `systemctl daemon-reload`, and the socket has to be restarted
+  afterwards to bind what it produced. The result was a restriction that `sshd -T` reported and
+  `ss` contradicted - it read as applied and was not. Measured on Ubuntu 24.04.
+
+**Features**
+
+* `openssh::config` notifies `bsys::systemctl::daemon_reload` on **any** sshd_config change, and
+  `openssh::service` restarts the socket unit after it. Two steps rather than one command,
+  because they are two different things: the reload re-runs the generator, the restart binds
+  what it wrote.
+* Notified on every change rather than on `ListenAddress` alone. The generator reads `Port` too,
+  and a reload is cheap and harmless where nothing is socket-activated - which also means no
+  comparison of old and new addresses has to be computed or kept correct.
+* New parameters `openssh::service::manage_socket` (default true) and
+  `openssh::params::socket_name` (`ssh.socket` on Debian, `sshd.socket` elsewhere).
+* The restart Exec is titled `restart-<unit>-1b7dac3`, where the digest is
+  `sha256('openssh::service')[0,7]`, matching the convention in
+  `bsys::systemctl::daemon_reload`. A plain "restart ssh.socket" is the title another module
+  would reasonably choose for the same unit, and the second one to do so would be a duplicate
+  declaration. The digest is written out rather than computed - the input is a literal, so the
+  value never varies.
+* The restart is guarded by **`systemctl is-enabled`** at apply time, not by a fact at catalogue
+  time. That keeps it a no-op on hosts without socket activation, and it is also what makes a
+  first run correct: the check runs after the package resource, so there is no compile-time
+  guess to be wrong about and nothing left to converge on a second run.
+
+**Notes**
+
+* **No drop-in is written.** An earlier draft wrote `ssh.socket.d/listen-address.conf` by hand.
+  That was unnecessary and wrong: the distribution already generates exactly that file,
+  including the `ListenStream=` reset needed to clear the inherited wildcard, and a hand-written
+  copy would compete with it on every `daemon-reload`. The generator stays the source of truth.
+* Adds a dependency on `aursu/bsys` for `bsys::systemctl::daemon_reload`.
+
 ## Release 0.11.0
 
 **Features**

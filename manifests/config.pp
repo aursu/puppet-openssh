@@ -79,6 +79,17 @@ class openssh::config (
     }
   }
 
+  # Any change to sshd_config reloads the systemd manager, which re-runs
+  # sshd-socket-generator. On a socket-activated host that generator is what
+  # turns ListenAddress into the addresses systemd binds, so without the
+  # reload the file changes and the listener does not.
+  #
+  # Notified on every change rather than on ListenAddress alone: the generator
+  # reads Port as well, and the reload is cheap and harmless where nothing is
+  # socket-activated. openssh::service restarts the socket afterwards.
+  include bsys::systemctl::daemon_reload
+  File[$config] ~> Class['bsys::systemctl::daemon_reload']
+
   if $setup_host_key {
     # https://access.redhat.com/solutions/1486393
     exec {

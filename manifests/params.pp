@@ -172,4 +172,16 @@ class openssh::params {
   # specified with -f on the command line)
   $config          = '/etc/ssh/sshd_config'
   $ssh_port        = 22
+
+  # Socket unit to refresh when SSH is socket-activated. Only a fallback: the
+  # ssh_socket_unit fact reports the unit that is actually active and is
+  # preferred, because it reflects the host rather than an assumption about
+  # it. This value is used when manage_socket is forced true on a host where
+  # the fact found nothing - a first run, before the package is installed.
+  if $facts['os']['family'] == 'Debian' {
+    $socket_name = 'ssh.socket'
+  }
+  else {
+    $socket_name = 'sshd.socket'
+  }
 }

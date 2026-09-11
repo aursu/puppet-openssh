@@ -12,3 +12,7 @@ fixtures:
     sshkeys_core:
       repo: "puppetlabs/sshkeys_core"
       ref: "2.4.0"
+  repositories:
+    bsys:
+      repo: "https://github.com/aursu/puppet-bsys.git"
+      ref: "tags/v0.13.1"
