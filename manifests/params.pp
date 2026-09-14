@@ -173,6 +173,9 @@ class openssh::params {
   $config          = '/etc/ssh/sshd_config'
   $ssh_port        = 22
 
+  # Drop-in directory pulled in by the Include at the top of sshd_config.
+  $config_dir      = '/etc/ssh/sshd_config.d'
+
   # Socket unit to refresh when SSH is socket-activated. Only a fallback: the
   # ssh_socket_unit fact reports the unit that is actually active and is
   # preferred, because it reflects the host rather than an assumption about

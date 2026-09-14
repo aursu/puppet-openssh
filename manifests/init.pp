@@ -32,6 +32,32 @@
 #   to the host does not use, removes your access at the next restart. Verify
 #   against the running interfaces first, and keep a second session open.
 #
+# @param config_dir
+#   Drop-in directory that sshd_config pulls in with an Include.
+#
+# @param manage_config_dir
+#   Whether to manage that directory as a resource.
+#
+# @param purge_config_dir
+#   Whether to remove files in config_dir that Puppet does not manage.
+#
+#   Default true, and that is a deliberate reversal of the usual caution about
+#   purging. sshd takes the FIRST occurrence of a keyword, and the Include sits
+#   at the top of the file this module writes - so any drop-in silently
+#   overrides everything below it. A stray file there does not merely add
+#   settings, it defeats them, and the configuration still reads as applied.
+#
+#   Measured on a live estate: cloud-init writes
+#   `50-cloud-init.conf` containing `PasswordAuthentication yes`, which
+#   overrode this module's `PasswordAuthentication no` on every cloud-imaged
+#   host. Nothing in sshd_config revealed it; only `sshd -T` did.
+#
+#   Set false where drop-ins are managed by something else on purpose. Before
+#   turning it on for the first time, read what is in the directory - a
+#   purge cannot distinguish a vendor default from a deliberate local setting,
+#   and anything worth keeping should move into this module's parameters
+#   rather than survive as a file.
+#
 # @example
 #   include openssh
 #
@@ -109,4 +135,7 @@ class openssh (
   Optional[String] $config_template = $openssh::params::config_template,
   Optional[Tuple[Integer[0], Integer[0, 100], Integer[0]]] $max_startups = undef,
   Optional[Array[Stdlib::IP::Address::Nosubnet, 1]] $listen_address = undef,
+  Stdlib::Absolutepath $config_dir = $openssh::params::config_dir,
+  Boolean $manage_config_dir = true,
+  Boolean $purge_config_dir = true,
 ) inherits openssh::params {}

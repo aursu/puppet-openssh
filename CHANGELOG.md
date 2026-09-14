@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.13.0
+
+**Features**
+
+* **The sshd_config.d drop-in directory is now managed and purged by default.** New parameters
+  `config_dir`, `manage_config_dir` and `purge_config_dir`.
+
+**Bugfixes**
+
+* **A drop-in silently defeated this module's configuration.** sshd honours the FIRST occurrence
+  of a keyword, and the `Include` sits at the top of the file this module writes - so a file in
+  `sshd_config.d` does not supplement the settings below it, it overrides them. Measured on a
+  live estate: cloud-init ships `50-cloud-init.conf` with `PasswordAuthentication yes`, which
+  beat this module's `PasswordAuthentication no` on every cloud-imaged host. Nothing in
+  sshd_config showed it - only `sshd -T` did.
+
+**Notes**
+
+* Purging is on by default deliberately, against the usual caution. The failure it prevents is
+  not an untidy directory but a configuration that reads as applied and is not, which is the
+  same class of defect as the socket-activation bug fixed in 0.12.0.
+* **Read the directory before enabling it on an existing estate.** A purge cannot tell a vendor
+  default from a deliberate local setting. Anything worth keeping belongs in this module's
+  parameters, not in a file that survives by exception - `AllowTcpForwarding` was found being
+  set this way on one host and had to move to `openssh::allow_tcp_forwarding` first.
+* The `Include` in the Debian template now follows `config_dir`, so the directory Puppet purges
+  and the directory sshd reads cannot drift apart.
+* The purge notifies the same reload and socket restart as an sshd_config edit, because removing
+  a drop-in changes the effective configuration exactly as editing the file does.
+* RedHat is unaffected in practice: that template carries no `Include`, so drop-ins were never
+  read there.
+
 ## Release 0.12.0
 
 **Bugfixes**

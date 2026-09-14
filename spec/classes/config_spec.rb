@@ -223,6 +223,62 @@ describe 'openssh::config' do
         }
       end
 
+      # The drop-in directory is purged by default. sshd honours the FIRST
+      # occurrence of a keyword and the Include sits above everything this
+      # module writes, so an unmanaged file there overrides the configuration
+      # rather than extending it.
+      context 'the drop-in directory by default' do
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config.d')
+            .with_ensure('directory')
+            .with_purge(true)
+            .with_recurse(true)
+        }
+
+        # purge does nothing without recurse, so the pairing is asserted
+        # rather than assumed.
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config.d')
+            .that_notifies('Class[bsys::systemctl::daemon_reload]')
+        }
+      end
+
+      context 'when purge_config_dir is false' do
+        let(:params) { { purge_config_dir: false } }
+
+        it { is_expected.to compile }
+
+        # Still managed, just not emptied - and recurse must drop with it.
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config.d')
+            .with_ensure('directory')
+            .with_purge(false)
+            .with_recurse(false)
+        }
+      end
+
+      context 'when manage_config_dir is false' do
+        let(:params) { { manage_config_dir: false } }
+
+        it { is_expected.to compile }
+        it { is_expected.not_to contain_file('/etc/ssh/sshd_config.d') }
+      end
+
+      context 'when config_dir is moved' do
+        let(:params) { { config_dir: '/opt/ssh/sshd_config.d' } }
+
+        it { is_expected.to contain_file('/opt/ssh/sshd_config.d').with_purge(true) }
+
+        # The Include has to follow the parameter, or Puppet purges one
+        # directory while sshd reads another.
+        if os_facts[:os]['family'] == 'Debian'
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .with_content(%r{^Include /opt/ssh/sshd_config\.d/\*\.conf$})
+          }
+        end
+      end
+
       context 'when ListenAddress is not specified (default)' do
         # The wildcard bind is sshd's own default, and staying on it is what
         # every existing consumer of this module already has. Assert the

@@ -44,6 +44,9 @@ class openssh::config (
   Integer[1] $max_sessions = $openssh::max_sessions,
   Openssh::Switch $use_dns = $openssh::use_dns,
   Optional[Array[Stdlib::IP::Address::Nosubnet, 1]] $listen_address = $openssh::listen_address,
+  Stdlib::Absolutepath $config_dir = $openssh::config_dir,
+  Boolean $manage_config_dir = $openssh::manage_config_dir,
+  Boolean $purge_config_dir = $openssh::purge_config_dir,
   # whether to add HostKey directives into sshd_config or not
   Boolean $setup_host_key = $openssh::setup_host_key,
   Boolean $setup_ed25519_key = $openssh::setup_ed25519_key,
@@ -79,6 +82,27 @@ class openssh::config (
     }
   }
 
+  # The drop-in directory the Include at the top of sshd_config pulls in.
+  #
+  # Purged by default, and the reason is the Include's position: sshd honours
+  # the FIRST occurrence of a keyword, so a file here does not supplement the
+  # settings written below it, it overrides them. An unmanaged drop-in turns
+  # this module's configuration into a suggestion while leaving it looking
+  # applied - the file says one thing and `sshd -T` reports another.
+  #
+  # recurse is required for purge to do anything; without it the parameter is
+  # silently inert.
+  if $manage_config_dir {
+    file { $config_dir:
+      ensure  => directory,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      recurse => $purge_config_dir,
+      purge   => $purge_config_dir,
+    }
+  }
+
   # Any change to sshd_config reloads the systemd manager, which re-runs
   # sshd-socket-generator. On a socket-activated host that generator is what
   # turns ListenAddress into the addresses systemd binds, so without the
@@ -89,6 +113,12 @@ class openssh::config (
   # socket-activated. openssh::service restarts the socket afterwards.
   include bsys::systemctl::daemon_reload
   File[$config] ~> Class['bsys::systemctl::daemon_reload']
+
+  # Removing a drop-in changes the effective configuration exactly as editing
+  # sshd_config does, so a purge has to reach the same reload and restart.
+  if $manage_config_dir and $purge_config_dir {
+    File[$config_dir] ~> Class['bsys::systemctl::daemon_reload']
+  }
 
   if $setup_host_key {
     # https://access.redhat.com/solutions/1486393
