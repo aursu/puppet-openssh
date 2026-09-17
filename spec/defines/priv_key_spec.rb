@@ -121,7 +121,7 @@ describe 'openssh::priv_key' do
             .that_subscribes_to('File[/root/.ssh/id_rsa]')
         }
 
-        if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+        if os.start_with?('rocky-8')
           it {
             is_expected.to contain_exec('add /root/.ssh/id_rsa.pub comment')
               .with_command('ssh-keygen -f /root/.ssh/id_rsa.comm -o -c -C root@web0c0')
@@ -163,7 +163,7 @@ describe 'openssh::priv_key' do
             .with_command('ssh-keygen -f /root/.ssh/id_dsa -y > /root/.ssh/id_dsa.pub')
             .that_subscribes_to('File[/root/.ssh/id_dsa]')
         }
-        if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+        if os.start_with?('rocky-8')
           it {
             is_expected.to contain_exec('add /root/.ssh/id_dsa.pub comment')
               .with_command('ssh-keygen -f /root/.ssh/id_dsa.comm -o -c -C root@web0c0')
@@ -197,7 +197,7 @@ describe 'openssh::priv_key' do
             .with_command('ssh-keygen -f /var/lib/jenkins/.ssh/id_rsa -y > /var/lib/jenkins/.ssh/id_rsa.pub')
             .that_subscribes_to('File[/var/lib/jenkins/.ssh/id_rsa]')
         }
-        if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+        if os.start_with?('rocky-8')
           it {
             is_expected.to contain_exec('add /var/lib/jenkins/.ssh/id_rsa.pub comment')
               .with_command('ssh-keygen -f /var/lib/jenkins/.ssh/id_rsa.comm -o -c -C jenkins@web0c0')
@@ -227,7 +227,7 @@ describe 'openssh::priv_key' do
             .with_command('ssh-keygen -f /var/lib/jenkins/.ssh/gitlab.id_rsa -y > /var/lib/jenkins/.ssh/gitlab.id_rsa.pub')
             .that_subscribes_to('File[/var/lib/jenkins/.ssh/gitlab.id_rsa]')
         }
-        if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+        if os.start_with?('rocky-8')
           it {
             is_expected.to contain_exec('add /var/lib/jenkins/.ssh/gitlab.id_rsa.pub comment')
               .with_command('ssh-keygen -f /var/lib/jenkins/.ssh/gitlab.id_rsa.comm -o -c -C jenkins@web0c0')
@@ -276,7 +276,7 @@ describe 'openssh::priv_key' do
             .that_requires('Exec[generate /home/jenkins/.ssh/id_rsa.pub]')
         }
 
-        if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+        if os.start_with?('rocky-8')
           it {
             is_expected.to contain_exec('add /home/jenkins/.ssh/id_rsa.pub comment')
               .with_command('ssh-keygen -f /home/jenkins/.ssh/id_rsa.comm -o -c -C jenkins@web0c0')

@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.14.0
+
+**Breaking changes**
+
+* **CentOS 6 and CentOS 7 are no longer supported.** They left
+  `operatingsystem_support`, and with them went `data/os/RedHat/CentOS/7.yaml`,
+  the `initscripts` server dependency, the `yum` package provider, the EL6
+  cipher/MAC/KEX lists, and the EL5/EL6 branch that disabled ed25519 host keys.
+  The systemd drop-in in `openssh::service` and the public-key comment file in
+  `openssh::priv_key` were gated on releases 7 and 8; they are now EL8 only.
+* **Three class parameters are removed**: `protocol`,
+  `use_privilege_separation` and `challenge_response_authentication`. The
+  directives they rendered were dropped from the templates in 0.13.0, so the
+  parameters have been inert since then. `Protocol` and
+  `UsePrivilegeSeparation` were removed from OpenSSH in 7.4 and 7.5; no
+  supported release accepts them. Hiera keys still setting them are simply not
+  read any more - nothing fails
+
+**Features**
+
+* **Rocky Linux 10 is declared supported.** The configuration this module
+  renders was checked against the release's own `openssh-server-9.9p1`: `sshd -t`
+  accepts it without a warning
+
+**Bugfixes**
+
+**Known Issues**
+
 ## Release 0.13.0
 
 **Features**

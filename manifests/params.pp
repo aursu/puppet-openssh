@@ -12,35 +12,10 @@ class openssh::params {
     $service_name = 'sshd'
     $config_template = 'openssh/sshd_config.redhat.erb'
 
-    if $facts['os']['release']['major'] == '7' {
-      $openssh_server_dependencies = ['initscripts']
-    }
-    else {
-      $openssh_server_dependencies = undef
-    }
-
-    if $facts['os']['release']['major'] in ['6', '7'] {
-      $package_provider = 'yum'
-    }
-    else {
-      $package_provider = 'dnf'
-    }
+    $openssh_server_dependencies = undef
+    $package_provider = 'dnf'
 
     case $facts['os']['release']['major'] {
-      '6': {
-        $ciphers = [
-          'aes256-ctr',
-          'aes192-ctr',
-          'aes128-ctr',
-        ]
-        $macs = [
-          'hmac-sha2-512',
-          'hmac-sha2-256',
-        ]
-        $kexalgorithms = [
-          'diffie-hellman-group-exchange-sha256',
-        ]
-      }
       '10': {
         $ciphers = [
           'chacha20-poly1305@openssh.com',

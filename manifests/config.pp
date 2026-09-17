@@ -19,7 +19,6 @@
 class openssh::config (
   Stdlib::Unixpath $config = $openssh::config,
   Stdlib::Port $ssh_port = $openssh::ssh_port,
-  Optional[Integer[1,2]] $protocol = $openssh::protocol,
   Optional[String] $config_template = $openssh::config_template,
   Variant[Enum['none'], Stdlib::Unixpath] $banner = $openssh::banner,
   Optional[String] $keys_file = $openssh::keys_file,
@@ -30,10 +29,7 @@ class openssh::config (
   Enum['yes', 'no'] $strict_modes = $openssh::strict_modes,
   Enum['yes', 'no'] $gss_api_authentication = $openssh::gss_api_authentication,
   Enum['yes', 'no'] $hostbased_authentication = $openssh::hostbased_authentication,
-  Openssh::Switch $challenge_response_authentication = $openssh::challenge_response_authentication,
   Openssh::Switch $password_authentication = $openssh::password_authentication,
-  Optional[Enum['yes', 'no', 'sandbox']]
-  $use_privilege_separation = $openssh::use_privilege_separation,
   Enum['yes', 'point-to-point', 'ethernet', 'no']
   $permit_tunnel = $openssh::permit_tunnel,
   Optional[Variant[String, Array[Openssh::MACs]]] $macs = $openssh::macs,
@@ -57,12 +53,7 @@ class openssh::config (
     }
   }
 
-  if $facts['os']['name'] in ['RedHat', 'CentOS'] and $facts['os']['release']['major'] in ['5', '6'] {
-    $ed25519_key_generate = false
-  }
-  else {
-    $ed25519_key_generate = $setup_ed25519_key
-  }
+  $ed25519_key_generate = $setup_ed25519_key
 
   if $config_template {
     file { $config:

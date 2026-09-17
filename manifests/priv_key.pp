@@ -163,9 +163,8 @@ define openssh::priv_key (
     }
 
     # add comment to public key
-    # on CentOS 6 ssh-keygen could edit only RSA1 keys
     if  $facts['os']['family'] == 'RedHat' and
-    $facts['os']['release']['major'] in ['7', '8'] {
+    $facts['os']['release']['major'] == '8' {
       file { "${key_path}.comm":
         ensure  => $sshkey_ensure,
         content => $key_data,

@@ -38,7 +38,7 @@ describe 'openssh::service' do
         end
       end
 
-      if ['redhat-7-x86_64', 'centos-7-x86_64'].include?(os)
+      if os.start_with?('rocky-8')
         context 'check service with default parameters' do
           it {
             is_expected.to contain_file('/etc/systemd/system/sshd.service.d/override.conf')

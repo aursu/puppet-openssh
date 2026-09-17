@@ -49,12 +49,10 @@ describe 'openssh::config' do
             .with_content(%r{HostKey /etc/ssh/ssh_host_ecdsa_key})
         }
 
-        if ['centos-7-x86_64', 'centos-8-x86_64'].include?(os)
-          it {
-            is_expected.to contain_file('/etc/ssh/sshd_config')
-              .with_content(%r{HostKey /etc/ssh/ssh_host_ed25519_key})
-          }
-        end
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{HostKey /etc/ssh/ssh_host_ed25519_key})
+        }
 
         context 'when ed25519 key is not activated' do
           let(:params) do
@@ -64,12 +62,10 @@ describe 'openssh::config' do
             }
           end
 
-          if ['centos-7-x86_64', 'centos-8-x86_64'].include?(os)
-            it {
-              is_expected.to contain_file('/etc/ssh/sshd_config')
-                .without_content(%r{ssh_host_ed25519_key})
-            }
-          end
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .without_content(%r{ssh_host_ed25519_key})
+          }
         end
       end
 
@@ -353,9 +349,9 @@ describe 'openssh::config' do
       {
         os: {
           family: 'RedHat',
-          name: 'CentOS',
+          name: 'Rocky',
           release: {
-            major: '7',
+            major: '9',
           },
         },
       }
