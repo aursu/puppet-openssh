@@ -219,38 +219,72 @@ describe 'openssh::config' do
         }
       end
 
-      # The drop-in directory is purged by default. sshd honours the FIRST
-      # occurrence of a keyword and the Include sits above everything this
-      # module writes, so an unmanaged file there overrides the configuration
-      # rather than extending it.
-      context 'the drop-in directory by default' do
-        it {
-          is_expected.to contain_file('/etc/ssh/sshd_config.d')
-            .with_ensure('directory')
-            .with_purge(true)
-            .with_recurse(true)
-        }
+      # The drop-in directory is managed, and purged, by default only where the
+      # rendered configuration reads it. Where it does, purging is the point:
+      # sshd honours the FIRST occurrence of a keyword and the Include sits
+      # above everything this module writes, so an unmanaged file there
+      # overrides the configuration rather than extending it. The Debian
+      # template opens with that Include; the RedHat one has none, so a drop-in
+      # there is never read and deleting the distribution's own files would be
+      # a change with nothing to justify it.
+      if os_facts[:os]['family'] == 'Debian'
+        context 'the drop-in directory by default' do
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config.d')
+              .with_ensure('directory')
+              .with_purge(true)
+              .with_recurse(true)
+          }
 
-        # purge does nothing without recurse, so the pairing is asserted
-        # rather than assumed.
-        it {
-          is_expected.to contain_file('/etc/ssh/sshd_config.d')
-            .that_notifies('Class[bsys::systemctl::daemon_reload]')
-        }
-      end
+          # purge does nothing without recurse, so the pairing is asserted
+          # rather than assumed.
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config.d')
+              .that_notifies('Class[bsys::systemctl::daemon_reload]')
+          }
+        end
 
-      context 'when purge_config_dir is false' do
-        let(:params) { { purge_config_dir: false } }
+        context 'when purge_config_dir is false' do
+          let(:params) { { purge_config_dir: false } }
 
-        it { is_expected.to compile }
+          it { is_expected.to compile }
 
-        # Still managed, just not emptied - and recurse must drop with it.
-        it {
-          is_expected.to contain_file('/etc/ssh/sshd_config.d')
-            .with_ensure('directory')
-            .with_purge(false)
-            .with_recurse(false)
-        }
+          # Still managed, just not emptied - and recurse must drop with it.
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config.d')
+              .with_ensure('directory')
+              .with_purge(false)
+              .with_recurse(false)
+          }
+        end
+      else
+        context 'the drop-in directory by default' do
+          it { is_expected.to compile }
+
+          # Nothing at all: not created, and above all not purged.
+          it { is_expected.not_to contain_file('/etc/ssh/sshd_config.d') }
+
+          # The distribution ships 40-redhat-crypto-policies.conf and
+          # 50-redhat.conf here. They stop being read the moment this module
+          # writes its own sshd_config, and they must still not be removed.
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .without_content(%r{^Include})
+          }
+        end
+
+        context 'when managing the drop-in directory is asked for anyway' do
+          let(:params) { { manage_config_dir: true } }
+
+          it { is_expected.to compile }
+
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config.d')
+              .with_ensure('directory')
+              .with_purge(true)
+              .with_recurse(true)
+          }
+        end
       end
 
       context 'when manage_config_dir is false' do
@@ -261,7 +295,7 @@ describe 'openssh::config' do
       end
 
       context 'when config_dir is moved' do
-        let(:params) { { config_dir: '/opt/ssh/sshd_config.d' } }
+        let(:params) { { config_dir: '/opt/ssh/sshd_config.d', manage_config_dir: true } }
 
         it { is_expected.to contain_file('/opt/ssh/sshd_config.d').with_purge(true) }
 

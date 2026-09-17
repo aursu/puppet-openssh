@@ -75,11 +75,13 @@ class openssh::config (
 
   # The drop-in directory the Include at the top of sshd_config pulls in.
   #
-  # Purged by default, and the reason is the Include's position: sshd honours
-  # the FIRST occurrence of a keyword, so a file here does not supplement the
-  # settings written below it, it overrides them. An unmanaged drop-in turns
-  # this module's configuration into a suggestion while leaving it looking
-  # applied - the file says one thing and `sshd -T` reports another.
+  # Managed by default only where the rendered configuration actually reads
+  # it - see openssh::params::config_include. Purged by default there, and
+  # the reason is the Include's position: sshd honours the FIRST occurrence
+  # of a keyword, so a file here does not supplement the settings written
+  # below it, it overrides them. An unmanaged drop-in turns this module's
+  # configuration into a suggestion while leaving it looking applied - the
+  # file says one thing and `sshd -T` reports another.
   #
   # recurse is required for purge to do anything; without it the parameter is
   # silently inert.

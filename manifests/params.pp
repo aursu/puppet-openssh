@@ -151,6 +151,20 @@ class openssh::params {
   # Drop-in directory pulled in by the Include at the top of sshd_config.
   $config_dir      = '/etc/ssh/sshd_config.d'
 
+  # Whether the configuration this module renders reads that directory. It
+  # tracks the templates: the Debian one opens with an Include, the RedHat one
+  # has none, so on RedHat a drop-in is never read no matter what it contains.
+  #
+  # This is what decides whether the directory is managed by default. Purging
+  # exists to stop a drop-in overriding the settings below the Include; where
+  # nothing is included there is nothing to override, and deleting the
+  # distribution's own files - 40-redhat-crypto-policies.conf among them -
+  # would be a change with no effect to justify it.
+  $config_include  = $facts['os']['family'] ? {
+    'Debian' => true,
+    default  => false,
+  }
+
   # Socket unit to refresh when SSH is socket-activated. Only a fallback: the
   # ssh_socket_unit fact reports the unit that is actually active and is
   # preferred, because it reflects the host rather than an assumption about

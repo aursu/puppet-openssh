@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.15.0
+
+**Bugfixes**
+
+* **The drop-in directory is no longer purged where the configuration does not
+  read it.** `manage_config_dir` now defaults to whether the rendered
+  sshd_config carries an `Include` at all - true on Debian, false on RedHat,
+  whose template has none. 0.13.0 turned purging on for everyone, and the note
+  there was right that RedHat is unaffected in practice because the drop-ins
+  are never read; it did not follow that through to deletion. Rocky 10 ships
+  `40-redhat-crypto-policies.conf` and `50-redhat.conf` in that directory, and
+  a purge removed both. Nothing broke while this module owned sshd_config, but
+  `40-redhat-crypto-policies.conf` is how the system-wide crypto policy reaches
+  sshd, so a host that later returned to the distribution's configuration - a
+  package reinstall, this module removed, a hand edit during an incident -
+  would have lost that integration silently.
+
+**Notes**
+
+* Purging remains on by default where the Include exists, which is what it was
+  introduced for: a drop-in that precedes the settings below it overrides them.
+  Where nothing is included there is nothing to override.
+* `manage_config_dir: true` still turns management on explicitly, purge and
+  all, on any platform.
+* The new `openssh::params::config_include` exists so this tracks the templates
+  rather than a second opinion about them.
+
 ## Release 0.14.0
 
 **Breaking changes**
