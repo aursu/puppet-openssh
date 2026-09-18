@@ -261,16 +261,72 @@ describe 'openssh::config' do
         context 'the drop-in directory by default' do
           it { is_expected.to compile }
 
-          # Nothing at all: not created, and above all not purged.
+          # Nothing at all: not created, and above all not purged. The
+          # distribution ships 40-redhat-crypto-policies.conf and
+          # 50-redhat.conf here and they are its files, not this module's.
           it { is_expected.not_to contain_file('/etc/ssh/sshd_config.d') }
 
-          # The distribution ships 40-redhat-crypto-policies.conf and
-          # 50-redhat.conf here. They stop being read the moment this module
-          # writes its own sshd_config, and they must still not be removed.
+          # RHEL grew the Include in release 9. On 8 there is no such
+          # directory and the crypto policy arrives through /etc/sysconfig/sshd.
+          if os_facts[:os]['release']['major'].to_i >= 9
+            it {
+              is_expected.to contain_file('/etc/ssh/sshd_config')
+                .with_content(%r{^Include /etc/ssh/sshd_config\.d/\*\.conf$})
+            }
+          else
+            it {
+              is_expected.to contain_file('/etc/ssh/sshd_config')
+                .without_content(%r{^Include})
+            }
+          end
+
+          # With the policy in charge sshd takes the algorithms from the
+          # Include, so this module writes none of them.
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .without_content(%r{^Ciphers })
+              .without_content(%r{^MACs })
+              .without_content(%r{^KexAlgorithms })
+              .without_content(%r{^HostKeyAlgorithms })
+          }
+        end
+
+        context 'when disable_policy takes the algorithms away from the distribution' do
+          let(:params) { { disable_policy: true } }
+
+          it { is_expected.to compile }
+
+          # No Include, so nothing in the drop-in directory can reach sshd -
+          # which is what makes writing the lists here meaningful.
           it {
             is_expected.to contain_file('/etc/ssh/sshd_config')
               .without_content(%r{^Include})
           }
+
+          # The per-release snapshots from openssh::params, SHA-1 removed.
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .with_content(%r{^Ciphers .*aes256-gcm@openssh\.com})
+              .with_content(%r{^MACs .*hmac-sha2-256-etm@openssh\.com})
+              .with_content(%r{^KexAlgorithms .*curve25519-sha256})
+              .with_content(%r{^HostKeyAlgorithms .*ssh-ed25519})
+          }
+
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .without_content(%r{^MACs .*hmac-sha1})
+              .without_content(%r{^KexAlgorithms .*sha1})
+          }
+
+          # An explicit setting still wins over the snapshot.
+          context 'and a cipher list is given explicitly' do
+            let(:params) { { disable_policy: true, ciphers: ['aes256-ctr'] } }
+
+            it {
+              is_expected.to contain_file('/etc/ssh/sshd_config')
+                .with_content(%r{^Ciphers aes256-ctr$})
+            }
+          end
         end
 
         context 'when managing the drop-in directory is asked for anyway' do

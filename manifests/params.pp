@@ -15,11 +15,110 @@ class openssh::params {
     $openssh_server_dependencies = undef
     $package_provider = 'dnf'
 
+    # Snapshots of what `update-crypto-policies` renders for the DEFAULT policy
+    # on each release, with the SHA-1 MACs and key exchanges removed. They are
+    # only rendered when disable_policy asks this module to own the algorithm
+    # lists instead of the distribution; see openssh::disable_policy.
+    #
+    # Taken from /etc/crypto-policies/back-ends/opensshserver.config on 2026-09-18.
+    # They date: re-take them when the distribution's policy moves.
     case $facts['os']['release']['major'] {
+      '8': {
+        $ciphers = [
+          'aes256-gcm@openssh.com',
+          'chacha20-poly1305@openssh.com',
+          'aes256-ctr',
+          'aes256-cbc',
+          'aes128-gcm@openssh.com',
+          'aes128-ctr',
+          'aes128-cbc',
+        ]
+        $macs = [
+          'hmac-sha2-256-etm@openssh.com',
+          'umac-128-etm@openssh.com',
+          'hmac-sha2-512-etm@openssh.com',
+          'hmac-sha2-256',
+          'umac-128@openssh.com',
+          'hmac-sha2-512',
+        ]
+        $kexalgorithms = [
+          'curve25519-sha256',
+          'curve25519-sha256@libssh.org',
+          'ecdh-sha2-nistp256',
+          'ecdh-sha2-nistp384',
+          'ecdh-sha2-nistp521',
+          'diffie-hellman-group-exchange-sha256',
+          'diffie-hellman-group14-sha256',
+          'diffie-hellman-group16-sha512',
+          'diffie-hellman-group18-sha512',
+        ]
+        $hostkeyalgorithms = [
+          'ecdsa-sha2-nistp256',
+          'ecdsa-sha2-nistp256-cert-v01@openssh.com',
+          'ecdsa-sha2-nistp384',
+          'ecdsa-sha2-nistp384-cert-v01@openssh.com',
+          'ecdsa-sha2-nistp521',
+          'ecdsa-sha2-nistp521-cert-v01@openssh.com',
+          'ssh-ed25519',
+          'ssh-ed25519-cert-v01@openssh.com',
+          'rsa-sha2-256',
+          'rsa-sha2-256-cert-v01@openssh.com',
+          'rsa-sha2-512',
+          'rsa-sha2-512-cert-v01@openssh.com',
+          'ssh-rsa',
+          'ssh-rsa-cert-v01@openssh.com',
+        ]
+      }
+      '9': {
+        $ciphers = [
+          'aes256-gcm@openssh.com',
+          'chacha20-poly1305@openssh.com',
+          'aes256-ctr',
+          'aes128-gcm@openssh.com',
+          'aes128-ctr',
+        ]
+        $macs = [
+          'hmac-sha2-256-etm@openssh.com',
+          'umac-128-etm@openssh.com',
+          'hmac-sha2-512-etm@openssh.com',
+          'hmac-sha2-256',
+          'umac-128@openssh.com',
+          'hmac-sha2-512',
+        ]
+        $kexalgorithms = [
+          'curve25519-sha256',
+          'curve25519-sha256@libssh.org',
+          'ecdh-sha2-nistp256',
+          'ecdh-sha2-nistp384',
+          'ecdh-sha2-nistp521',
+          'diffie-hellman-group-exchange-sha256',
+          'diffie-hellman-group14-sha256',
+          'diffie-hellman-group16-sha512',
+          'diffie-hellman-group18-sha512',
+        ]
+        $hostkeyalgorithms = [
+          'ecdsa-sha2-nistp256',
+          'ecdsa-sha2-nistp256-cert-v01@openssh.com',
+          'sk-ecdsa-sha2-nistp256@openssh.com',
+          'sk-ecdsa-sha2-nistp256-cert-v01@openssh.com',
+          'ecdsa-sha2-nistp384',
+          'ecdsa-sha2-nistp384-cert-v01@openssh.com',
+          'ecdsa-sha2-nistp521',
+          'ecdsa-sha2-nistp521-cert-v01@openssh.com',
+          'ssh-ed25519',
+          'ssh-ed25519-cert-v01@openssh.com',
+          'sk-ssh-ed25519@openssh.com',
+          'sk-ssh-ed25519-cert-v01@openssh.com',
+          'rsa-sha2-256',
+          'rsa-sha2-256-cert-v01@openssh.com',
+          'rsa-sha2-512',
+          'rsa-sha2-512-cert-v01@openssh.com',
+        ]
+      }
       '10': {
         $ciphers = [
-          'chacha20-poly1305@openssh.com',
           'aes256-gcm@openssh.com',
+          'chacha20-poly1305@openssh.com',
           'aes256-ctr',
           'aes128-gcm@openssh.com',
           'aes128-ctr',
@@ -34,6 +133,8 @@ class openssh::params {
         ]
         $kexalgorithms = [
           'mlkem768x25519-sha256',
+          'mlkem768nistp256-sha256',
+          'mlkem1024nistp384-sha384',
           'curve25519-sha256',
           'curve25519-sha256@libssh.org',
           'ecdh-sha2-nistp256',
@@ -65,27 +166,48 @@ class openssh::params {
       }
       default: {
         $ciphers = [
-          'chacha20-poly1305@openssh.com',
           'aes256-gcm@openssh.com',
-          'aes128-gcm@openssh.com',
+          'chacha20-poly1305@openssh.com',
           'aes256-ctr',
-          'aes192-ctr',
+          'aes128-gcm@openssh.com',
           'aes128-ctr',
         ]
         $macs = [
-          'hmac-sha2-512-etm@openssh.com',
           'hmac-sha2-256-etm@openssh.com',
           'umac-128-etm@openssh.com',
-          'hmac-sha2-512',
+          'hmac-sha2-512-etm@openssh.com',
           'hmac-sha2-256',
           'umac-128@openssh.com',
+          'hmac-sha2-512',
         ]
         $kexalgorithms = [
+          'curve25519-sha256',
           'curve25519-sha256@libssh.org',
-          'ecdh-sha2-nistp521',
-          'ecdh-sha2-nistp384',
           'ecdh-sha2-nistp256',
+          'ecdh-sha2-nistp384',
+          'ecdh-sha2-nistp521',
           'diffie-hellman-group-exchange-sha256',
+          'diffie-hellman-group14-sha256',
+          'diffie-hellman-group16-sha512',
+          'diffie-hellman-group18-sha512',
+        ]
+        $hostkeyalgorithms = [
+          'ecdsa-sha2-nistp256',
+          'ecdsa-sha2-nistp256-cert-v01@openssh.com',
+          'sk-ecdsa-sha2-nistp256@openssh.com',
+          'sk-ecdsa-sha2-nistp256-cert-v01@openssh.com',
+          'ecdsa-sha2-nistp384',
+          'ecdsa-sha2-nistp384-cert-v01@openssh.com',
+          'ecdsa-sha2-nistp521',
+          'ecdsa-sha2-nistp521-cert-v01@openssh.com',
+          'ssh-ed25519',
+          'ssh-ed25519-cert-v01@openssh.com',
+          'sk-ssh-ed25519@openssh.com',
+          'sk-ssh-ed25519-cert-v01@openssh.com',
+          'rsa-sha2-256',
+          'rsa-sha2-256-cert-v01@openssh.com',
+          'rsa-sha2-512',
+          'rsa-sha2-512-cert-v01@openssh.com',
         ]
       }
     }
@@ -151,16 +273,22 @@ class openssh::params {
   # Drop-in directory pulled in by the Include at the top of sshd_config.
   $config_dir      = '/etc/ssh/sshd_config.d'
 
-  # Whether the configuration this module renders reads that directory. It
-  # tracks the templates: the Debian one opens with an Include, the RedHat one
-  # has none, so on RedHat a drop-in is never read no matter what it contains.
-  #
-  # This is what decides whether the directory is managed by default. Purging
-  # exists to stop a drop-in overriding the settings below the Include; where
-  # nothing is included there is nothing to override, and deleting the
-  # distribution's own files - 40-redhat-crypto-policies.conf among them -
-  # would be a change with no effect to justify it.
-  $config_include  = $facts['os']['family'] ? {
+  # Whether sshd on this platform reads the drop-in directory at all. RHEL grew
+  # the Include in release 9; on 8 the directory does not exist and the crypto
+  # policy arrives through /etc/sysconfig/sshd instead.
+  $config_dir_supported = $facts['os']['family'] ? {
+    'Debian' => true,
+    'RedHat' => versioncmp($facts['os']['release']['major'], '9') >= 0,
+    default  => false,
+  }
+
+  # Whether the directory's contents are this module's to manage, and so to
+  # purge. On Debian it is where site configuration and cloud images drop their
+  # files, and an unmanaged one overrides everything below the Include. On
+  # RedHat the distribution owns it - 40-redhat-crypto-policies.conf carries the
+  # system-wide crypto policy and 50-redhat.conf the distribution's defaults -
+  # so it is left alone.
+  $manage_config_dir = $facts['os']['family'] ? {
     'Debian' => true,
     default  => false,
   }

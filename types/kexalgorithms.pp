@@ -11,5 +11,10 @@ type Openssh::KexAlgorithms = Enum[
   'ecdh-sha2-nistp256',
   'ecdh-sha2-nistp384',
   'ecdh-sha2-nistp521',
-  'sntrup4591761x25519-sha512@tinyssh.org'
+  'sntrup4591761x25519-sha512@tinyssh.org',
+  'sntrup761x25519-sha512',
+  'sntrup761x25519-sha512@openssh.com',
+  'mlkem768x25519-sha256',
+  'mlkem768nistp256-sha256',
+  'mlkem1024nistp384-sha384',
 ]

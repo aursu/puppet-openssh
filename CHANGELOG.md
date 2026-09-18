@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.16.0
+
+**Features**
+
+* **`disable_policy`, default false.** It decides who owns the algorithm lists.
+  Left alone, the distribution does: sshd_config carries the `Include` that
+  reads the drop-in directory - on RHEL 9 and later that is where
+  `40-redhat-crypto-policies.conf` points sshd at the system-wide crypto policy
+  - and this module writes no `Ciphers`, `MACs`, `KexAlgorithms` or
+  `HostKeyAlgorithms` unless one was set explicitly. Set true, the Include is
+  dropped and the per-release lists in `openssh::params` are rendered instead.
+  An explicit setting still wins over the snapshot either way.
+* The RedHat template gained that Include; it had none, which is why the crypto
+  policy never reached sshd on a host this module configures.
+
+**Bugfixes**
+
+* **The per-release algorithm lists were never reachable.** `openssh::ciphers`,
+  `macs`, `kexalgorithms` and `hostkeyalgorithms` are declared without defaults
+  and resolve through `data/common.yaml`, where all four are `~`, so nothing
+  ever read `openssh::params::ciphers` and the lists there have been dead code.
+  They are now rendered, but only under `disable_policy`.
+* **The type aliases rejected what current policies contain.**
+  `Openssh::KexAlgorithms` had no `mlkem*` entry and `Openssh::HostKeyAlgorithms`
+  no `rsa-sha2-*` or `sk-*`, so the EL10 lists added in February would have
+  failed validation had anything used them. Both are extended, along with
+  `sntrup761x25519-sha512`.
+* **The lists are re-taken from the distributions themselves**, for releases 8,
+  9 and 10 separately, from `/etc/crypto-policies/back-ends/opensshserver.config`
+  under the DEFAULT policy on 2026-09-18, with the SHA-1 MACs and key exchanges
+  removed. EL10 keeps all three post-quantum hybrids. What this renders was
+  checked with `sshd -t` against Rocky 10's own openssh-server 9.9p1.
+
+**Notes**
+
+* `openssh::params::config_include`, introduced one release ago, is replaced by
+  two values that were doing its job badly as one: `config_dir_supported` (does
+  sshd on this platform read the directory - RHEL grew the Include in 9) and
+  `manage_config_dir` (are its contents this module's to purge - Debian yes,
+  RedHat no).
+* The lists are a dated snapshot and will drift. Re-take them when a
+  distribution's policy moves; the date is recorded beside them.
+* `ssh-rsa` is kept in the EL8 list, where the distribution still offers it.
+  Removing it is a decision about which clients can connect, not a cleanup.
+
 ## Release 0.15.0
 
 **Bugfixes**

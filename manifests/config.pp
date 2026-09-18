@@ -43,6 +43,8 @@ class openssh::config (
   Stdlib::Absolutepath $config_dir = $openssh::config_dir,
   Boolean $manage_config_dir = $openssh::manage_config_dir,
   Boolean $purge_config_dir = $openssh::purge_config_dir,
+  Boolean $disable_policy = $openssh::disable_policy,
+  Boolean $config_dir_supported = $openssh::params::config_dir_supported,
   # whether to add HostKey directives into sshd_config or not
   Boolean $setup_host_key = $openssh::setup_host_key,
   Boolean $setup_ed25519_key = $openssh::setup_ed25519_key,
@@ -54,6 +56,30 @@ class openssh::config (
   }
 
   $ed25519_key_generate = $setup_ed25519_key
+
+  # The Include is how the distribution's own drop-ins reach sshd - on RedHat
+  # that is the crypto policy. It is dropped only where this module has been
+  # asked to own the algorithm lists itself, and only on RedHat: on Debian the
+  # directory carries site configuration that has nothing to do with crypto.
+  $config_include = $config_dir_supported and
+  ($facts['os']['family'] == 'Debian' or !$disable_policy)
+
+  # With the policy in charge these stay unset unless a consumer asked for one
+  # explicitly, so sshd takes the algorithms from the Include. With
+  # disable_policy they fall back to the per-release snapshots in
+  # openssh::params, and an explicit setting still wins over those.
+  if $disable_policy {
+    $config_ciphers           = pick_default($ciphers, $openssh::params::ciphers)
+    $config_macs              = pick_default($macs, $openssh::params::macs)
+    $config_kexalgorithms     = pick_default($kexalgorithms, $openssh::params::kexalgorithms)
+    $config_hostkeyalgorithms = pick_default($hostkeyalgorithms, $openssh::params::hostkeyalgorithms)
+  }
+  else {
+    $config_ciphers           = $ciphers
+    $config_macs              = $macs
+    $config_kexalgorithms     = $kexalgorithms
+    $config_hostkeyalgorithms = $hostkeyalgorithms
+  }
 
   if $config_template {
     file { $config:

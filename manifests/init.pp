@@ -36,9 +36,16 @@
 #   Drop-in directory that sshd_config pulls in with an Include.
 #
 # @param manage_config_dir
-#   Defaults to whether the rendered configuration reads config_dir at all:
-#   true on Debian, false on RedHat, whose template carries no Include.
-#   Whether to manage that directory as a resource.
+#   Whether to manage that directory as a resource. Defaults to whether its
+#   contents belong to this module: true on Debian, false on RedHat, where the
+#   distribution owns the files in it.
+#
+# @param disable_policy
+#   Whether this module owns the algorithm lists instead of the distribution.
+#   False by default, which leaves the crypto policy in charge: sshd_config
+#   carries the Include that reads it, and Ciphers, MACs, KexAlgorithms and
+#   HostKeyAlgorithms are not written unless they are set explicitly. True drops
+#   the Include and renders the per-release lists from openssh::params.
 #
 # @param purge_config_dir
 #   Whether to remove files in config_dir that Puppet does not manage.
@@ -135,6 +142,7 @@ class openssh (
   Optional[Tuple[Integer[0], Integer[0, 100], Integer[0]]] $max_startups = undef,
   Optional[Array[Stdlib::IP::Address::Nosubnet, 1]] $listen_address = undef,
   Stdlib::Absolutepath $config_dir = $openssh::params::config_dir,
-  Boolean $manage_config_dir = $openssh::params::config_include,
+  Boolean $manage_config_dir = $openssh::params::manage_config_dir,
+  Boolean $disable_policy = false,
   Boolean $purge_config_dir = true,
 ) inherits openssh::params {}
