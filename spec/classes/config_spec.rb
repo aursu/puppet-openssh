@@ -318,6 +318,16 @@ describe 'openssh::config' do
               .without_content(%r{^KexAlgorithms .*sha1})
           }
 
+          # ssh-rsa is the RSA host key signed with SHA-1, not the RSA key
+          # itself - rsa-sha2-256 and rsa-sha2-512 carry that. OpenSSH stopped
+          # offering it by default in 8.8; EL8's policy still does, and this
+          # module does not follow it there.
+          it {
+            is_expected.to contain_file('/etc/ssh/sshd_config')
+              .with_content(%r{^HostKeyAlgorithms .*rsa-sha2-512})
+              .without_content(%r{^HostKeyAlgorithms .*[,\s]ssh-rsa})
+          }
+
           # An explicit setting still wins over the snapshot.
           context 'and a cipher list is given explicitly' do
             let(:params) { { disable_policy: true, ciphers: ['aes256-ctr'] } }

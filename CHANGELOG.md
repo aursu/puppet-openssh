@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.17.0
+
+**Bugfixes**
+
+* **`ssh-rsa` is gone from the EL8 algorithm list.** It is the RSA host key
+  signed with SHA-1, not the RSA key itself - `rsa-sha2-256` and `rsa-sha2-512`
+  carry that and stay. OpenSSH stopped offering it by default in 8.8 over the
+  chosen-prefix attacks on SHA-1; RHEL 9 and 10 dropped it from their policies,
+  RHEL 8 still offers it, and 0.16.0 copied that. Keeping it while the SHA-1
+  MACs and key exchanges were being removed from the same snapshot was
+  inconsistent.
+
+**Notes**
+
+* Only reachable under `disable_policy`, and not at all on EL8 by default: that
+  release has no drop-in directory and takes its policy through
+  /etc/sysconfig/sshd.
+* What this affects is how the server proves its identity, not how users
+  authenticate - user keys are governed by `PubkeyAcceptedAlgorithms`, which
+  this module does not manage. A client that can only verify an RSA host key
+  with a SHA-1 signature stops connecting; anything since OpenSSH 7.2 can use
+  SHA-2, and ed25519 and ecdsa host keys are offered as well.
+
 ## Release 0.16.0
 
 **Features**
