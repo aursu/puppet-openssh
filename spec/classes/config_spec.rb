@@ -219,14 +219,12 @@ describe 'openssh::config' do
         }
       end
 
-      # The drop-in directory is managed, and purged, by default only where the
-      # rendered configuration reads it. Where it does, purging is the point:
-      # sshd honours the FIRST occurrence of a keyword and the Include sits
-      # above everything this module writes, so an unmanaged file there
-      # overrides the configuration rather than extending it. The Debian
-      # template opens with that Include; the RedHat one has none, so a drop-in
-      # there is never read and deleting the distribution's own files would be
-      # a change with nothing to justify it.
+      # sshd honours the FIRST occurrence of a keyword, so where the Include
+      # sits decides who wins. The Debian template opens with it, and there the
+      # directory is managed and purged: nothing unmanaged can override this
+      # module. The RedHat template closes with it instead, and the directory
+      # is left alone - it holds the distribution's own files, which then only
+      # fill in what this module leaves unset.
       if os_facts[:os]['family'] == 'Debian'
         context 'the drop-in directory by default' do
           it {
@@ -258,6 +256,12 @@ describe 'openssh::config' do
           }
         end
       else
+        # sshd's messages belong in /var/log/secure, not /var/log/messages.
+        it {
+          is_expected.to contain_file('/etc/ssh/sshd_config')
+            .with_content(%r{^SyslogFacility AUTHPRIV$})
+        }
+
         context 'the drop-in directory by default' do
           it { is_expected.to compile }
 
@@ -272,6 +276,13 @@ describe 'openssh::config' do
             it {
               is_expected.to contain_file('/etc/ssh/sshd_config')
                 .with_content(%r{^Include /etc/ssh/sshd_config\.d/\*\.conf$})
+            }
+
+            # The last line, so no keyword this module writes can be preceded
+            # by one from 50-redhat.conf or 01-permitrootlogin.conf.
+            it {
+              is_expected.to contain_file('/etc/ssh/sshd_config')
+                .with_content(%r{^Include /etc/ssh/sshd_config\.d/\*\.conf\n\z})
             }
           else
             it {
