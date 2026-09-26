@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.18.0
+
+**Bugfixes**
+
+* ⚠ **On RHEL 9 and later this module's settings win again.** 0.16.0 put the
+  drop-in `Include` at the top of the RedHat template, and sshd takes the
+  first value it reads for a keyword - so everything in
+  `/etc/ssh/sshd_config.d`, a directory this module does not manage on RedHat,
+  overrode what it wrote. Measured on Rocky 10 with `sshd -T`:
+  `50-redhat.conf` turned `X11Forwarding` to `yes` and
+  `GSSAPICleanupCredentials` to `no`, and an installer's
+  `01-permitrootlogin.conf` (anaconda, `rootpw --allow-ssh`) turned
+  `PermitRootLogin` to `yes`. The Include is now the last line. The crypto
+  policy still applies, because this module writes no algorithm keywords
+  unless `disable_policy` is set, and the drop-ins now fill in only what the
+  template leaves unset.
+* **`SyslogFacility AUTHPRIV` on RedHat**, as the distribution ships it:
+  rsyslog there routes `authpriv.*` to `/var/log/secure` and keeps it out of
+  `/var/log/messages`. The template said `AUTH`, a Debian value. The Ubuntu
+  template keeps `AUTH`.
+
+**Notes**
+
+* **Effective settings change on EL9 and EL10 hosts** that ran 0.16.0 or
+  0.17.0: `X11Forwarding` goes back to `no`, `GSSAPICleanupCredentials` to
+  `yes`, and `PermitRootLogin` follows this module even where the installer
+  left a drop-in. sshd keeps logging to `/var/log/secure`, as it has since
+  0.16.0. EL8 has no Include and is unaffected apart from `SyslogFacility`,
+  which moves its sshd log from `/var/log/messages` to `/var/log/secure`.
+* `sshd -t` accepted the broken layout; it only checks that the file parses.
+  Check a change to this template with `sshd -T`, which prints the values in
+  force.
+* The spec has no Rocky 10 examples: `facterdb ~> 3.0` carries no rocky-10
+  factset. The EL10 behaviour was verified in a `rockylinux/rockylinux:10`
+  container against `openssh-server-9.9p1-27.el10_2`.
+
 ## Release 0.17.0
 
 **Bugfixes**
